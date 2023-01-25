@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Page d'accueil</title>
+<link rel="stylesheet" type="text/css" href="../static/MonFichierStyle.css">
+<script type="text/javascript" src="../static/MonFichierCode.js"></script>
+</head>
+<body onload="SupprimerContenu()"> 
+
+<p class="centre">Bonjour. Vous devez vous identifier.</p>
+<form action="login" method="post">
+<p>Votre courriel: <input type="text" name="courriel"><br>
+Votre mot de passe: <input type="password" name="motpasse">
+</p><br>
+<input type="submit" value="Identification" name="soumettre"> 
+</form>
+
+{% if message %}
+<div id="cadre">{{ message }}"</div>
+{% endif %}
+
+</body>
+</html>

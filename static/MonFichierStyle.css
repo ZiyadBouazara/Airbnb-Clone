@@ -1,0 +1,22 @@
+body {
+	background-color:#0025AA
+}
+
+p {
+	font-family: "Times New Roman";
+	color: black;
+	margin-left: 80px;
+	font-weight: bold;	
+}
+
+.centre {
+	text-align: center;
+	color: red;
+}
+
+#cadre {
+	border-style: dashed;
+	border-color: red;
+	background-color: yellow;
+	text-transform: uppercase;
+}
