@@ -15,16 +15,16 @@ def login():
     courriel = '"'+request.form.get('courriel')+'"'
     passe = request.form.get('motpasse')
 
-    conn= pymysql.connect(host='localhost',user='root',                                                                 password='sirius3',db='testdb')
-    cmd='SELECT motpasse FROM utilisateurs WHERE courriel='+courriel+';'
-    cur=conn.cursor()
+    conn = pymysql.connect(host='localhost',user='root', password='sirius3',db='testdb')
+    cmd ='SELECT motpasse FROM utilisateurs WHERE courriel='+courriel+';'
+    cur = conn.cursor()
     cur.execute(cmd)
     passeVrai = cur.fetchone()
 
-    if (passeVrai!=None) and (passe==passeVrai[0]):
+    if (passeVrai != None) and (passe==passeVrai[0]):
 
-        cmd='SELECT * FROM utilisateurs WHERE courriel='+courriel+';'
-        cur=conn.cursor()
+        cmd = 'SELECT * FROM utilisateurs WHERE courriel='+courriel+';'
+        cur = conn.cursor()
         cur.execute(cmd)
         info = cur.fetchone()
 
