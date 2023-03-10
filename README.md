@@ -13,6 +13,13 @@ Vérifier que Node est installé avec la commande:
 npm -v
 ```
 
+## Installation
+
+```bash
+# install dependencies
+npm install
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
