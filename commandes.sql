@@ -1,12 +1,15 @@
+CREATE database glo_2005_webapp;
 USE glo_2005_webapp;
 
-CREATE TABLE IF NOT EXISTS Immeuble(address VARCHAR(30), secteur VARCHAR(20), nom VARCHAR(50),
-type ENUM('Condo/Loft', 'Appartements', 'Commercial'), hot_water TINYINT, electricity TINYINT,
-wifi TINYINT, parking TINYINT, gym TINYINT, backyard TINYINT, elevator TINYINT, pool TINYINT, ev_charger TINYINT,
-air_conditioner TINYINT, terrasse TINYINT,
+#### TABLES ####
+
+CREATE TABLE IF NOT EXISTS Immeuble(address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20), nom VARCHAR(50),
+type ENUM('Condo/Loft', 'Appartements', 'Commercial'), hot_water TINYINT(1), electricity TINYINT(1),
+wifi TINYINT(1), parking TINYINT(1), gym TINYINT(1), backyard TINYINT(1), elevator TINYINT(1), pool TINYINT(1), ev_charger TINYINT(1),
+air_conditioner TINYINT(1), terrasse TINYINT(1),
 PRIMARY KEY(address));
 
-CREATE TABLE IF NOT EXISTS Logement(id_logement VARCHAR(50), contient varchar(30) NOT NULL, available TINYINT, pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER,
+CREATE TABLE IF NOT EXISTS Logement(id_logement VARCHAR(50), contient varchar(30) NOT NULL, available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER,
 UNIQUE(contient, numero),
 PRIMARY KEY(id_logement),
 FOREIGN KEY (contient) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE);
@@ -40,6 +43,13 @@ PRIMARY KEY(address, id_logement),
 FOREIGN KEY (address) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE,
 FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);
 
+#### PROCEDURES ####
+
+# Todo
+
+
+##### TRIGGERS #####
+
 DELIMITER //
 CREATE TRIGGER AjoutLocataire
 AFTER INSERT ON Locataire
@@ -60,7 +70,7 @@ CREATE TRIGGER EndOfLocation
     FOR EACH ROW
     BEGIN
         UPDATE Logement
-            SET available = TRUE
+            SET available = 1
             WHERE Logement.id_logement = OLD.id_logement;
 
         IF (SELECT COUNT (*) FROM Louer WHERE id = OLD.id) = 1
@@ -79,15 +89,35 @@ CREATE TRIGGER AjoutImmeuble
     AFTER INSERT ON Immeuble
     FOR EACH ROW
     BEGIN
-        INSERT INTO Contient(address)
-            VALUES (NEW.address);
+        DECLARE counter INT;
+        SET counter = 1;
+
+        boucleCounter: WHILE (counter != (NEW.nombre_logements + 1)) DO
+            INSERT INTO Logement(id_logement, contient, available, pieces, taille, numero)
+            VALUES (createIDLogement(NEW.address, counter), NEW.address, 1, getPieces(), getTaille(), counter);
+
+            SET counter = counter + 1;
+            END WHILE boucleCounter ;
     END //
     DELIMITER ;
-# Cette trigger ajoute immediatement un tuple dans Contient lorsque un tuple Immeuble est ajoute.
-# L'ajoute de la maniere suivant : (address, null, null)
-# Donc il reste a aller chercher le id_logement de Logement et le prix reste a etre fixe
+# Cette trigger ajoute immediatement des tuples (selon le nombre_logement) dans Logement lorsque un tuple Immeuble est ajoute.
+# Donc plus simplement, elle ajoute les logements de l'immeuble numerote de 1 au nombre_logement.
 
-show tables;
+
+DELIMITER //
+CREATE TRIGGER AjoutLogement
+    AFTER INSERT ON Logement
+    FOR EACH ROW
+    BEGIN
+        INSERT INTO Contient(address, id_logement, price) VALUES (NEW.contient, NEW.id_logement, getPrice());
+    END //
+    DELIMITER ;
+# Cette trigger ajoute immediatement apres un ajout de logement le tuple unique de ce logement a Contient
+# Donc AjoutImmeuble et AjoutLogement travaillent ensemble
+# exemple :
+# on ajoute un nouvel immeuble -> Trigger AjoutImmeuble ajoute les logements a Logement
+# -> pour chaque ajout de logement AjoutLogement ajoute le tuple a Contient
+
 
 DELIMITER //
 CREATE TRIGGER AucunLogementVerif
@@ -106,9 +136,28 @@ CREATE TRIGGER AucunLogementVerif
 #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
 # renovations et enlever des logements. Donc c'est une precaution.
 
-#Pour Locataire/Louer et Immeuble/Contient: Solution avec gachette de Participation Totale
+DELIMITER //
+CREATE TRIGGER ImmeubleExisteVerif
+    BEFORE INSERT ON Contient
+    FOR EACH ROW
+    BEGIN
 
-# Avant supression d'un tuple dans Louer on regarde si il existe un autre tuple pour le locataire.
-# Si c'est le dernier et que son bail est fini, on le supprime de Locataire et Louer et le tuple de Logement redevient available
+        IF (SELECT COUNT (*) FROM Immeuble WHERE Immeuble.address = NEW.address) = 0
+        THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cette immeuble nexiste pas.';
+        END IF ;
+    END //
+    DELIMITER ;
+#Avant d'ajouter un tuple a Contient, on s'assure que l'immeuble pour lequel on ajoute ces tuples existes. On ne doit jamais avoir des logements sans Immeuble.
+# ADD ORDER : 1-Immeuble, 2-Contient, 3-Logements
+# DELETE ORDER: 1-Immeuble -> Cascade (Les tuples dans contient et logements seront automatiquement supprime)
+# Si on supprime un Logement, les tuples dans Contient de ce logement seront supprime automatiquement
 
-# Il faut stocker les MDP des Users dans une nouvelle relation completement a part entiere
+
+
+# TODO: Fonction qui cree un id_logement a laquelle on peut faire appel. Par exemple, une fois qu'on ajoute un immeuble a 36 logements,
+#  la trigger AjoutImmeuble doit ajoute automatique tout les tuples a Logement ENSUITE a Contient et les logements numerote de 1 a 36 avec des tailles, pieces, random et tous available.
+#  Pour le id_logement, on fera appel a la fonction qui les cree pour chacun en utilisant l'adresse du logement et le numero du logement (adresse, numero)
+# *TO DO: Create the following functions : createIDLogement(address, numero), getPieces(), getTaille(), getPrice()
+# createID()

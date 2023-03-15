@@ -25,7 +25,7 @@ header li a
     color: #333;
     text-decoration: none;
     padding: 13px;
-    transition: .2s ;
+    transition: .2s;
 }
 
 header li a:hover
@@ -51,6 +51,14 @@ header ul #contact a
 header li img
 {
     width: 60px;
+    float: left;
+    margin-top: -20px ;
+    margin-left: -30px;
+}
+
+header ul #logo a
+{
+    width: 20px;
     float: left;
     margin-top: -20px ;
     margin-left: -30px;
