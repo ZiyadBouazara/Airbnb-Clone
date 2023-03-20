@@ -5,8 +5,6 @@ import Home from "./views/Home";
 import About from "./views/About";
 import NotFound from "./views/NotFound";
 
-
-
 function App() {
   return (
     <div>
