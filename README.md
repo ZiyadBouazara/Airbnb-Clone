@@ -14,7 +14,7 @@ Vérifier que npm est installé avec la commande:
 npm -v
 ```
 
-#### Installation
+### Installation
 
 
 ```bash
@@ -22,7 +22,7 @@ npm -v
 npm install
 ```
 
-#### Available Scripts
+### Available Scripts
 
 In the project directory, you can run:
 ```bash
