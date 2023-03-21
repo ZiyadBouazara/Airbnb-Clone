@@ -7,7 +7,7 @@ import Account from "./views/Account";
 import Contact from "./views/Contact";
 import NotFound from "./views/NotFound";
 
-function App() {
+function App(): JSX.Element {
   return (
     <div>
       <Header />

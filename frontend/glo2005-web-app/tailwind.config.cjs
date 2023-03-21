@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   content: [
     "./index.html",
@@ -7,8 +8,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'immofab': '#2596be',
+        "immofab": "#00aef0",
       },
+      fontFamily: {
+        "sans": ["'Raleway'", "sans-serif", ...defaultTheme.fontFamily.sans],
+      }
     },
   },
   plugins: [],
