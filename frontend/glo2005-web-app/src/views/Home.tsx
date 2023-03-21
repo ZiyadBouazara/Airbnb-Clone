@@ -8,7 +8,7 @@ const Home: React.FC = () => {
           <Search id="logement-search" placeholder="Rechercher un logement..." />
           <LogementCheckbox />
         </section>
-        <div>
+        <div className="mt-5">
           Home
         </div>
       </div>
