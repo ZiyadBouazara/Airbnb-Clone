@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div>
-      <ul>
+    <footer className="flex flex-col border md:px-10 lg:px-20">
+      <ul className="flex">
         <li>@ 2023 Immofab, Inc.</li>
         <li>·</li>
         <li>
@@ -13,8 +13,12 @@ const Footer = () => {
         <li>
           <Link to="/about">À propos</Link>
         </li>
+        <li>·</li>
+        <li>
+          <Link to="/contact">Contact</Link>
+        </li>
       </ul>
-    </div>
+    </footer>
   )
 }
 

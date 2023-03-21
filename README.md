@@ -24,7 +24,7 @@ npm install
 
 ### Available Scripts
 
-In the project directory, you can run:
+In the project frontend directory (from root: cd frontend/glo2005-web-app) , you can run:
 ```bash
 npm run dev
 ```
