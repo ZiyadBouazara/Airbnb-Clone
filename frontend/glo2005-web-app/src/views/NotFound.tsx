@@ -1,22 +1,14 @@
-import { Link } from "react-router-dom";
+import NotFoundList from "../components/NotFoundList";
 
 const NotFound: React.FC = () => {
     return (
-      <div>
-        <div>
-          <h1>On n'arrive pas à trouver la page que vous cherchez</h1>
-        </div>
-        <div>
-          Voici quelques liens utiles à la place:
-          <ul>
-            <li>
-              <Link to="/">Page d'accueil</Link>
-            </li>
-            <li>
-              <Link to="/about">À propos</Link>
-            </li>
-          </ul>
-        </div>
+      <div className="flex flex-col mx-3 md:px-10 lg:px-20 h-72 md:h-96">
+        <section className="mt-6 md:mt-12">
+          <div className="mb-8 md:mb-10">
+            <h1 className="font-semibold">On n'arrive pas à trouver la page que vous cherchez</h1>
+          </div>
+          <NotFoundList />
+        </section>
       </div>
     )
   }

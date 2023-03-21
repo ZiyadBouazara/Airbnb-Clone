@@ -2,7 +2,7 @@ import FooterList from "./FooterList"
 
 const Footer: React.FC = () => {
   return (
-    <footer className="flex flex-col border md:px-10 lg:px-20">
+    <footer className="flex flex-col border-t md:px-10 lg:px-20">
       <FooterList />
     </footer>
   )
