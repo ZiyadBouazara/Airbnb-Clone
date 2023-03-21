@@ -9,6 +9,7 @@ module.exports = {
     extend: {
       colors: {
         "immofab": "#00aef0",
+        "immofab-hover": "#008bc0",
       },
       fontFamily: {
         "sans": ["'Raleway'", "sans-serif", ...defaultTheme.fontFamily.sans],
