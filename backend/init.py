@@ -1,15 +1,19 @@
 import pymysql, pymysql.cursors
 import csv
 
-connection = pymysql.connect(
-    host="localhost",
-    user="root",
-    password="!@##@!Ziyo",
-    db="glo_2005_webapp",
-    autocommit=True
-)
 
-cursor = connection.cursor()
+def db_connection():
+    conn = pymysql.connect(
+        host="localhost",
+        user="root",
+        password="Caliss1925",
+        db="glo_2005_webapp",
+        autocommit=True
+    )
+    c = conn.cursor()
+    return conn, c
+
+
 def create_tables():
     r1 = "CREATE TABLE IF NOT EXISTS Immeuble(address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20)," \
          " nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), hot_water TINYINT(1)," \
@@ -56,6 +60,7 @@ def create_tables():
     cursor.execute(r5)
     cursor.execute(r6)
     cursor.execute(r7)
+
 
 def create_triggers():
     t1 = "DELIMITER //" \
@@ -167,6 +172,7 @@ def create_triggers():
     cursor.execute(t5)
     cursor.execute(t6)
 
+
 def init():
     immeubles = []
     with open('immeubles.csv', newline='') as csvfile:
@@ -200,7 +206,10 @@ def init():
     cursor.executemany(sqlLogements, logements)
     cursor.executemany(sqlUsers, users)
 
+
 if __name__ == '__main__':
+    connection, cursor = db_connection()
     create_tables()
     create_triggers()
     init()
+
