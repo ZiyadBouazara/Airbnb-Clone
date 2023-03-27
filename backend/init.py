@@ -26,16 +26,17 @@ def create_tables():
          " PRIMARY KEY(id_logement)," \
          " FOREIGN KEY (contient) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r3 = "CREATE TABLE IF NOT EXISTS User(id VARCHAR(50), email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50)," \
+    r3 = "CREATE TABLE IF NOT EXISTS User(id VARCHAR(50), email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255)," \
          " age INTEGER, UNIQUE(email), UNIQUE(nom, age), PRIMARY KEY(id), " \
          "CONSTRAINT age_legal CHECK ( age BETWEEN 18 AND 112));"
 
-    r4 = "CREATE TABLE IF NOT EXISTS Locataire(id VARCHAR(50), email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50)," \
+    r4 = "CREATE TABLE IF NOT EXISTS Locataire(id VARCHAR(50), email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255)," \
          " age INTEGER,PRIMARY KEY (id),UNIQUE (email), UNIQUE (nom, age)," \
          "FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (email) REFERENCES User(email) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (phone) REFERENCES User(phone) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (nom) REFERENCES User(nom) ON UPDATE CASCADE ON DELETE CASCADE," \
+         "FOREIGN KEY (mdp) REFERENCES User(mdp) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (age) REFERENCES User(age) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     r5 = "CREATE TABLE Louer(id varchar(50), id_logement varchar(50), date_debut DATE, date_fin DATE," \
@@ -74,7 +75,7 @@ def create_triggers():
          "DELIMITER ;"
     # Cette trigger ajoute immediatement un tuple dans Louer lorsque un tuple Locataire est ajoute.
     # L'ajoute de la maniere suivant : (id_locataire, null, null, null)
-    # Donc il reste a aller chercher les dates de locations et le id_logement a ajouter au tuple
+    # Donc il reste a aller chercher les dates de locations (on peut randomize) et le id_logement a ajouter au tuple
 
     t2 = "DELIMITER //" \
          "CREATE TRIGGER EndOfLocation" \
@@ -95,20 +96,20 @@ def create_triggers():
     # Si il possede une autre location, alors on fait rien car il est encore un locataire
     # + On set a available le logement qui a ete libere par le locataire dans tout les cas
 
-    t3 ="DELIMITER //" \
-        "CREATE TRIGGER AjoutImmeuble" \
-        "    AFTER INSERT ON Immeuble" \
-        "    FOR EACH ROW" \
-        "    BEGIN" \
-        "        DECLARE counter INT;" \
-        "        SET counter = 1;" \
-        "        boucleCounter: WHILE (counter != (NEW.nombre_logements + 1)) DO" \
-        "            INSERT INTO Logement(id_logement, contient, available, pieces, taille, numero)" \
-        "            VALUES (createIDLogement(NEW.address, counter), NEW.address, 1, getPieces(), getTaille(), counter);" \
-        "            SET counter = counter + 1;" \
-        "            END WHILE boucleCounter ;" \
-        "    END //" \
-        "    DELIMITER ;"
+    # t3 ="DELIMITER //" \
+    #     "CREATE TRIGGER AjoutImmeuble" \
+    #     "    AFTER INSERT ON Immeuble" \
+    #     "    FOR EACH ROW" \
+    #     "    BEGIN" \
+    #     "        DECLARE counter INT;" \
+    #     "        SET counter = 1;" \
+    #     "        boucleCounter: WHILE (counter != (NEW.nombre_logements + 1)) DO" \
+    #     "            INSERT INTO Logement(id_logement, contient, available, pieces, taille, numero)" \
+    #     "            VALUES (createIDLogement(NEW.address, counter), NEW.address, 1, getPieces(), getTaille(), counter);" \
+    #     "            SET counter = counter + 1;" \
+    #     "            END WHILE boucleCounter ;" \
+    #     "    END //" \
+    #     "    DELIMITER ;"
     # Cette trigger ajoute immediatement des tuples (selon le nombre_logement) dans Logement lorsque un tuple Immeuble est ajoute.
     # Donc plus simplement, elle ajoute les logements de l'immeuble numerote de 1 au nombre_logement.
 
@@ -123,7 +124,7 @@ def create_triggers():
     # Cette trigger ajoute immediatement apres un ajout de logement le tuple unique de ce logement a Contient
     # Donc AjoutImmeuble et AjoutLogement travaillent ensemble
     # exemple :
-    # on ajoute un nouvel immeuble -> Trigger AjoutImmeuble ajoute les logements a Logement
+    # on ajoute un nouvel immeuble -> on ajoute les logements
     # -> pour chaque ajout de logement AjoutLogement ajoute le tuple a Contient
 
     t5 ="DELIMITER //" \
@@ -155,7 +156,7 @@ def create_triggers():
         "    END //" \
         "    DELIMITER ;"
     #Avant d'ajouter un tuple a Contient, on s'assure que l'immeuble pour lequel on ajoute ces tuples existes. On ne doit jamais avoir des logements sans Immeuble.
-    # ADD ORDER : 1-Immeuble, 2-Contient, 3-Logements
+    # ADD ORDER : 1-Immeuble, 2-Logements, 3-Contient
     # DELETE ORDER: 1-Immeuble -> Cascade (Les tuples dans contient et logements seront automatiquement supprime)
     # Si on supprime un Logement, les tuples dans Contient de ce logement seront supprime automatiquement
 
@@ -167,7 +168,7 @@ def create_triggers():
 
     cursor.execute(t1)
     cursor.execute(t2)
-    cursor.execute(t3)
+    #cursor.execute(t3)
     cursor.execute(t4)
     cursor.execute(t5)
     cursor.execute(t6)
