@@ -17,7 +17,7 @@ def db_connection():
 
 def create_tables():
     r1 = "CREATE TABLE IF NOT EXISTS Immeuble(address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20)," \
-         " nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), hot_water TINYINT(1)," \
+         " nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), photos VARCHAR(255), descriptif VARCHAR(500), hot_water TINYINT(1)," \
          " electricity TINYINT(1), wifi TINYINT(1), parking TINYINT(1), gym TINYINT(1), backyard TINYINT(1)," \
          " elevator TINYINT(1), pool TINYINT(1), ev_charger TINYINT(1), air_conditioner TINYINT(1)," \
          " terrasse TINYINT(1), PRIMARY KEY(address));"
