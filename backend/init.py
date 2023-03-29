@@ -1,5 +1,6 @@
 import pymysql, pymysql.cursors
 import csv
+import hashlib
 
 
 def db_connection():
@@ -31,7 +32,7 @@ def create_tables():
          "CONSTRAINT age_legal CHECK ( age BETWEEN 18 AND 112));"
 
     r4 = "CREATE TABLE IF NOT EXISTS Locataire(id VARCHAR(50), email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255)," \
-         " age INTEGER,PRIMARY KEY (id),UNIQUE (email), UNIQUE (nom, age)," \
+         " age INTEGER, PRIMARY KEY (id),UNIQUE (email), UNIQUE (nom, age)," \
          "FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (email) REFERENCES User(email) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (phone) REFERENCES User(phone) ON UPDATE CASCADE ON DELETE CASCADE," \
@@ -39,17 +40,17 @@ def create_tables():
          "FOREIGN KEY (mdp) REFERENCES User(mdp) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (age) REFERENCES User(age) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r5 = "CREATE TABLE Louer(id varchar(50), id_logement varchar(50), date_debut DATE, date_fin DATE," \
+    r5 = "CREATE TABLE IF NOT EXISTS Louer(id varchar(50), id_logement varchar(50), date_debut DATE, date_fin DATE," \
          "PRIMARY KEY(id_logement, id)," \
          "FOREIGN KEY (id) REFERENCES Locataire(id) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r6 = "CREATE TABLE Aime(id_logement varchar(50), id varchar(50)," \
+    r6 = "CREATE TABLE IF NOT EXISTS Aime(id_logement varchar(50), id varchar(50)," \
          "PRIMARY KEY(id_logement, id)," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r7 = "CREATE TABLE Contient(address varchar(50), id_logement varchar(50), price INTEGER," \
+    r7 = "CREATE TABLE IF NOT EXISTS Contient(address varchar(50), id_logement varchar(50), price INTEGER," \
          "PRIMARY KEY(address, id_logement)," \
          "FOREIGN KEY (address) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
@@ -198,10 +199,11 @@ def init():
     with open('users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
+            row[4] = hashlib.sha256(bytes(row[4], 'utf-8')).hexdigest()
             users.append(row)
 
-    sqlUsers = "INSERT INTO User (id, email, phone, nom, age) " \
-               "VALUES (%s, %s, %s, %s, %s)"
+    sqlUsers = "INSERT INTO User (id, email, phone, nom, mdp, age) " \
+               "VALUES (%s, %s, %s, %s, %s, %s)"
 
     cursor.executemany(sqlImmeubles, immeubles)
     cursor.executemany(sqlLogements, logements)
