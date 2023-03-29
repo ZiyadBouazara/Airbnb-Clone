@@ -2,7 +2,6 @@ import pymysql, pymysql.cursors
 import csv
 import hashlib
 
-
 def db_connection():
     conn = pymysql.connect(
         host="localhost",
@@ -23,7 +22,8 @@ def create_tables():
          " terrasse TINYINT(1), PRIMARY KEY(address));"
 
     r2 = "CREATE TABLE IF NOT EXISTS Logement(id_logement VARCHAR(50), contient varchar(30) NOT NULL," \
-         " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, UNIQUE(contient, numero)," \
+         " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER," \
+         " UNIQUE(contient, numero)," \
          " PRIMARY KEY(id_logement)," \
          " FOREIGN KEY (contient) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE);"
 
@@ -50,7 +50,7 @@ def create_tables():
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r7 = "CREATE TABLE IF NOT EXISTS Contient(address varchar(50), id_logement varchar(50), price INTEGER," \
+    r7 = "CREATE TABLE IF NOT EXISTS Contient(address varchar(50), id_logement varchar(50), " \
          "PRIMARY KEY(address, id_logement)," \
          "FOREIGN KEY (address) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
@@ -119,7 +119,7 @@ def create_triggers():
         "    AFTER INSERT ON Logement" \
         "    FOR EACH ROW" \
         "    BEGIN" \
-        "        INSERT INTO Contient(address, id_logement, price) VALUES (NEW.contient, NEW.id_logement, getPrice());" \
+        "        INSERT INTO Contient(address, id_logement) VALUES (NEW.contient, NEW.id_logement);" \
         "    END //" \
         "    DELIMITER ;"
     # Cette trigger ajoute immediatement apres un ajout de logement le tuple unique de ce logement a Contient
