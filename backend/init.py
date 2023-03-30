@@ -171,16 +171,29 @@ def init():
     with open('users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            if len(row) == 6:
-                row[4] = hashlib.sha256(bytes(row[4], 'utf-8')).hexdigest()
+            row[4] = hashlib.sha256(bytes(row[4], 'utf-8')).hexdigest()
             users.append(row)
 
     sqlUsers = "INSERT INTO User (id, email, phone, nom, mdp, age) " \
                "VALUES (%s, %s, %s, %s, %s, %s)"
 
+    louer = []
+    locataire = []
+    with open('louer.csv', newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',')
+        for row in spamreader:
+            louer.append(row)
+            locataire.append(row[0])
+
+    sqlLouer = "INSERT INTO Louer (id, id_logement, date_debut, date_fin) " \
+               "VALUES (%s, %s, %s, %s)"
+    sqlLocataire = "INSERT INTO Locataire (id) VALUES (%s)"
+
     cursor.executemany(sqlImmeubles, immeubles)
     cursor.executemany(sqlLogements, logements)
     cursor.executemany(sqlUsers, users)
+    cursor.executemany(sqlLocataire, locataire)
+    cursor.executemany(sqlLouer, louer)
 
 
 if __name__ == '__main__':
