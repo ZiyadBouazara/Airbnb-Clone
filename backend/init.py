@@ -154,12 +154,29 @@ def create_triggers():
     # Si on supprime un Logement, les tuples dans Contient de ce logement seront supprime automatiquement
 
 
+    t7 = """
+        CREATE TRIGGER AucunLogementVerif2
+        BEFORE DELETE ON Logement
+        FOR EACH ROW
+        BEGIN
+            IF (SELECT COUNT(*) FROM Logement WHERE contient = OLD.contient) = 1
+            THEN
+                SIGNAL SQLSTATE '45000'
+                SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus.';
+            END IF ;
+        END
+        """
+    #Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.
+    #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
+    # renovations et enlever des logements. Donc c'est une precaution. On defend ce type de suppression sur Logement et Contient
+
     cursor.execute(t1)
     cursor.execute(t2)
     cursor.execute(t3)
     cursor.execute(t4)
     cursor.execute(t5)
     cursor.execute(t6)
+    cursor.execute(t7)
 
 
 def init():
