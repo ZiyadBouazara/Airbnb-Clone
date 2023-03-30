@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="abcdef",
+        password="!@##@!Ziyo",
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -59,16 +59,17 @@ def create_tables():
 
 
 def create_triggers():
-    # t1 = """
-    # CREATE TRIGGER AjoutLocataire AFTER INSERT ON Locataire
-    # FOR EACH ROW
-    # BEGIN
-    #     INSERT INTO Louer(id) VALUES (NEW.id);
-    # END
-    # """
-    # Cette trigger ajoute immediatement un tuple dans Louer lorsque un tuple Locataire est ajoute.
-    # L'ajoute de la maniere suivant : (id_locataire, null, null, null)
-    # Donc il reste a aller chercher les dates de locations (on peut randomize) et le id_logement a ajouter au tuple
+    t1 = """
+    CREATE TRIGGER AjoutLouer AFTER INSERT ON Louer
+    FOR EACH ROW
+    BEGIN
+        UPDATE Logement
+        SET Logement.available = 0
+        WHERE NEW.id_logement = Logement.id_logement;
+    END
+    """
+    # Cette trigger set available a FALSE (0) lorsque l'on Loue un logement
+    # Donc le logement n'est plus disponible, il est loue
 
 
     t2 = """
@@ -140,7 +141,7 @@ def create_triggers():
     # Si on supprime un Logement, les tuples dans Contient de ce logement seront supprime automatiquement
 
 
-    #cursor.execute(t1)
+    cursor.execute(t1)
     cursor.execute(t2)
     cursor.execute(t4)
     cursor.execute(t5)
