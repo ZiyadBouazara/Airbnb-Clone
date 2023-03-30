@@ -1,6 +1,6 @@
 import pymysql, pymysql.cursors
 import csv
-import hashlib
+from passlib.hash import pbkdf2_sha256
 
 def db_connection():
     conn = pymysql.connect(
@@ -21,30 +21,30 @@ def create_tables():
          " elevator TINYINT(1), pool TINYINT(1), ev_charger TINYINT(1), air_conditioner TINYINT(1)," \
          " terrasse TINYINT(1), PRIMARY KEY(address));"
 
-    r2 = "CREATE TABLE IF NOT EXISTS Logement(id_logement VARCHAR(50), contient varchar(30) NOT NULL," \
+    r2 = "CREATE TABLE IF NOT EXISTS Logement(id_logement INT AUTO_INCREMENT, contient varchar(30) NOT NULL," \
          " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER," \
          " UNIQUE(contient, numero)," \
          " PRIMARY KEY(id_logement)," \
          " FOREIGN KEY (contient) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r3 = "CREATE TABLE IF NOT EXISTS User(id VARCHAR(50), email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255)," \
+    r3 = "CREATE TABLE IF NOT EXISTS User(id INT AUTO_INCREMENT, email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255)," \
          " age INTEGER, UNIQUE(email), UNIQUE(nom, age), PRIMARY KEY(id), " \
          "CONSTRAINT age_legal CHECK ( age BETWEEN 18 AND 112));"
 
-    r4 = "CREATE TABLE IF NOT EXISTS Locataire(id VARCHAR(50), " \
+    r4 = "CREATE TABLE IF NOT EXISTS Locataire(id  INT, " \
          "PRIMARY KEY (id), FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r5 = "CREATE TABLE IF NOT EXISTS Louer(id varchar(50), id_logement varchar(50), date_debut DATE, date_fin DATE," \
+    r5 = "CREATE TABLE IF NOT EXISTS Louer(id  INT, id_logement INT, date_debut DATE, date_fin DATE," \
          "PRIMARY KEY(id_logement, id)," \
          "FOREIGN KEY (id) REFERENCES Locataire(id) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r6 = "CREATE TABLE IF NOT EXISTS Aime(id_logement varchar(50), id varchar(50)," \
+    r6 = "CREATE TABLE IF NOT EXISTS Aime(id_logement INT, id INT," \
          "PRIMARY KEY(id_logement, id)," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r7 = "CREATE TABLE IF NOT EXISTS Contient(address varchar(50), id_logement varchar(50), " \
+    r7 = "CREATE TABLE IF NOT EXISTS Contient(address varchar(50), id_logement  INT, " \
          "PRIMARY KEY(address, id_logement)," \
          "FOREIGN KEY (address) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
@@ -162,20 +162,20 @@ def init():
     with open('logements.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            logements.append(row)
+            logements.append(row[1:7])
 
     sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price) " \
-                   "VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                   "VALUES (NULL, %s, %s, %s, %s, %s, %s)"
 
     users = []
     with open('users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            row[4] = hashlib.sha256(bytes(row[4], 'utf-8')).hexdigest()
-            users.append(row)
+            row[4] = pbkdf2_sha256.hash(row[4])
+            users.append(row[1:8])
 
     sqlUsers = "INSERT INTO User (id, email, phone, nom, mdp, age) " \
-               "VALUES (%s, %s, %s, %s, %s, %s)"
+               "VALUES (NULL, %s, %s, %s, %s, %s)"
 
     louer = []
     locataire = []
