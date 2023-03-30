@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="!@##@!Ziyo",
+        password="abcdef",
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -153,11 +153,11 @@ def init():
     with open('immeubles.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            immeubles.append(row)
+            immeubles.append(row[:1]+row[2:])
 
     sqlImmeubles = "INSERT INTO Immeuble (address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
                    "wifi, parking, gym, backyard, elevator, pool, ev_charger, air_conditioner, terrasse) " \
-                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                   "VALUES (%s, 0, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
     logements = []
     with open('logements.csv', newline='') as csvfile:
