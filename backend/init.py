@@ -59,6 +59,8 @@ def create_tables():
 
 
 def create_triggers():
+
+
     t1 = """
     CREATE TRIGGER AjoutLouer AFTER INSERT ON Louer
     FOR EACH ROW
@@ -91,6 +93,7 @@ def create_triggers():
     # Si il possede une autre location, alors on fait rien car il est encore un locataire
     # + On set a available le logement qui a ete libere par le locataire dans tout les cas
 
+
     t3 = """
     CREATE TRIGGER SupprimeLogement
     AFTER DELETE ON Logement
@@ -102,6 +105,7 @@ def create_triggers():
     END
     """
     # Cette trigger update le compte de nombre_logement apres suppression de logement en decrementant
+
 
     t4 = """
     CREATE TRIGGER AjoutLogement
@@ -128,13 +132,14 @@ def create_triggers():
         IF (SELECT COUNT(*) FROM Contient WHERE address = OLD.address) = 1
         THEN
             SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus.';
+            SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus si vous supprimez ces logements. Veuillez supprimer Immeuble voulue directement.';
         END IF ;
     END
     """
     #Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.
     #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
     # renovations et enlever des logements. Donc c'est une precaution.
+
 
     t6 = """
     CREATE TRIGGER ImmeubleExisteVerif
@@ -155,20 +160,21 @@ def create_triggers():
 
 
     t7 = """
-        CREATE TRIGGER AucunLogementVerif2
-        BEFORE DELETE ON Logement
-        FOR EACH ROW
-        BEGIN
-            IF (SELECT COUNT(*) FROM Logement WHERE contient = OLD.contient) = 1
-            THEN
-                SIGNAL SQLSTATE '45000'
-                SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus.';
-            END IF ;
-        END
-        """
+    CREATE TRIGGER AucunLogementVerif2
+    BEFORE DELETE ON Logement
+    FOR EACH ROW
+    BEGIN
+        IF (SELECT COUNT(*) FROM Logement WHERE contient = OLD.contient) = 1
+        THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus si vous supprimez ces logements. Veuillez supprimer Immeuble voulue directement.';
+        END IF ;
+    END
+    """
     #Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.
     #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
     # renovations et enlever des logements. Donc c'est une precaution. On defend ce type de suppression sur Logement et Contient
+
 
     cursor.execute(t1)
     cursor.execute(t2)
