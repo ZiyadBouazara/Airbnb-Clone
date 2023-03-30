@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="!@##@!Ziyo",
+        password="abcdef",
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -150,28 +150,29 @@ def create_triggers():
 def init():
     immeubles = []
     with open('immeubles.csv', newline='') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             immeubles.append(row)
 
-    sqlImmeubles = "INSERT INTO Immeuble (address, nombre_logements, secteur, nom, type, hot_water, electricity," \
+    sqlImmeubles = "INSERT INTO Immeuble (address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
                    "wifi, parking, gym, backyard, elevator, pool, ev_charger, air_conditioner, terrasse) " \
-                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                   "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
     logements = []
     with open('logements.csv', newline='') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             logements.append(row)
 
-    sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero) " \
-                   "VALUES (%s, %s, %s, %s, %s, %s)"
+    sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price) " \
+                   "VALUES (%s, %s, %s, %s, %s, %s, %s)"
 
     users = []
     with open('users.csv', newline='') as csvfile:
-        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            row[4] = hashlib.sha256(bytes(row[4], 'utf-8')).hexdigest()
+            if len(row) == 6:
+                row[4] = hashlib.sha256(bytes(row[4], 'utf-8')).hexdigest()
             users.append(row)
 
     sqlUsers = "INSERT INTO User (id, email, phone, nom, mdp, age) " \
