@@ -162,17 +162,17 @@ def init():
     with open('logements.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            logements.append(row[1:7])
+            logements.append(row[1:2]+row[3:])
 
     sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price) " \
-                   "VALUES (NULL, %s, %s, %s, %s, %s, %s)"
+                   "VALUES (NULL, %s, 1, %s, %s, %s, %s)"
 
     users = []
     with open('users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             row[4] = pbkdf2_sha256.hash(row[4])
-            users.append(row[1:8])
+            users.append(row[1:])
 
     sqlUsers = "INSERT INTO User (id, email, phone, nom, mdp, age) " \
                "VALUES (NULL, %s, %s, %s, %s, %s)"
