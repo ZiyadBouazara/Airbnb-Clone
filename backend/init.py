@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="abcdef",
+        password="!@##@!Ziyo",
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -91,20 +91,33 @@ def create_triggers():
     # Si il possede une autre location, alors on fait rien car il est encore un locataire
     # + On set a available le logement qui a ete libere par le locataire dans tout les cas
 
+    t3 = """
+    CREATE TRIGGER SupprimeLogement
+    AFTER DELETE ON Logement
+    FOR EACH ROW
+    BEGIN
+        UPDATE Immeuble
+        SET Immeuble.nombre_logements = Immeuble.nombre_logements - 1
+        WHERE OLD.contient = Immeuble.address;
+    END
+    """
+    # Cette trigger update le compte de nombre_logement apres suppression de logement en decrementant
 
     t4 = """
     CREATE TRIGGER AjoutLogement
     AFTER INSERT ON Logement
     FOR EACH ROW
     BEGIN
+        UPDATE Immeuble
+        SET Immeuble.nombre_logements = Immeuble.nombre_logements + 1
+        WHERE NEW.contient = Immeuble.address;
+        
         INSERT INTO Contient(address, id_logement) VALUES (NEW.contient, NEW.id_logement);
     END
     """
     # Cette trigger ajoute immediatement apres un ajout de logement le tuple unique de ce logement a Contient
-    # Donc AjoutImmeuble et AjoutLogement travaillent ensemble
-    # exemple :
-    # on ajoute un nouvel immeuble -> on ajoute les logements
-    # -> pour chaque ajout de logement AjoutLogement ajoute le tuple a Contient
+    # Update le compte de nombre_logement en incrementant (Voir t3 pour decrement)
+    # Pour chaque ajout de logement AjoutLogement ajoute le tuple a Contient
 
 
     t5 = """
@@ -143,6 +156,7 @@ def create_triggers():
 
     cursor.execute(t1)
     cursor.execute(t2)
+    cursor.execute(t3)
     cursor.execute(t4)
     cursor.execute(t5)
     cursor.execute(t6)
