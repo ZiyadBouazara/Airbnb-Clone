@@ -111,7 +111,7 @@ def create_triggers():
     BEFORE DELETE ON Contient
     FOR EACH ROW
     BEGIN
-        IF (SELECT COUNT (*) FROM Contient WHERE address = OLD.address) = 1
+        IF (SELECT COUNT(*) FROM Contient WHERE address = OLD.address) = 1
         THEN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus.';
@@ -127,7 +127,7 @@ def create_triggers():
     BEFORE INSERT ON Contient
     FOR EACH ROW
     BEGIN
-        IF (SELECT COUNT (*) FROM Immeuble WHERE Immeuble.address = NEW.address) = 0
+        IF (SELECT COUNT(*) FROM Immeuble WHERE Immeuble.address = NEW.address) = 0
         THEN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Cette immeuble nexiste pas.';
