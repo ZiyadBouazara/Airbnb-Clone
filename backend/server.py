@@ -38,7 +38,6 @@ def login():
         data = request.json
 
         email = data["username"]
-        mdp = data["password"]
         phone = data["phone"]
         nom = data["nom"]
         mdp = data["mdp"]
