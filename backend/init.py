@@ -15,6 +15,8 @@ def db_connection():
 
 
 def create_tables():
+    # Cette fonction crée les tables nécéssaires à la BD
+
     r1 = "CREATE TABLE IF NOT EXISTS Immeuble(address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20)," \
          " nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), photos VARCHAR(255), descriptif VARCHAR(500), hot_water TINYINT(1)," \
          " electricity TINYINT(1), wifi TINYINT(1), parking TINYINT(1), gym TINYINT(1), backyard TINYINT(1)," \
@@ -58,8 +60,9 @@ def create_tables():
     cursor.execute(r7)
 
 
-def create_triggers():
 
+def create_triggers():
+    # Cette fonction crée les triggers nécéssaires à la BD
 
     t1 = """
     CREATE TRIGGER AjoutLouer AFTER INSERT ON Louer
@@ -186,6 +189,7 @@ def create_triggers():
 
 
 def init():
+    # Cette fonction insere des données fictives dans la BD
     immeubles = []
     with open('immeubles.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
@@ -232,6 +236,7 @@ def init():
     cursor.executemany(sqlUsers, users)
     cursor.executemany(sqlLocataire, locataire)
     cursor.executemany(sqlLouer, louer)
+
 
 
 if __name__ == '__main__':

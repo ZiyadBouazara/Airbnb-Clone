@@ -10,17 +10,22 @@ connection = pymysql.connect(
 )
 
 cursor = connection.cursor()
+
 def insert_user(email, phone, nom, mdp, age):
+    # Cette fonction insère un nouvel utilisateur dans la table Users
     hashed_mdp = pbkdf2_sha256.hash(mdp)
-    sqlRequest = f"INSERT INTO users (id, email, phone, nom, mdp, age) VALUE (NULL, '{email}', '{phone}', '{nom}', '{hashed_mdp}', '{age}');"
+    sqlRequest = f"INSERT INTO User (id, email, phone, nom, mdp, age) VALUE (NULL, '{email}', '{phone}', '{nom}', '{hashed_mdp}', '{age}');"
     cursor.execute(sqlRequest)
 
 
+
 def check_user_mdp(email, mdp):
+    # Cette fonction valide le mot de passe d'un utilisateur
     sqlRequest = f"SELECT mdp FROM User WHERE email = '{email}';"
     cursor.execute(sqlRequest)
     hashed_mdp = cursor.fetchone()[0]
     return pbkdf2_sha256.verify(mdp, hashed_mdp)
+
 
 
 if __name__ == '__main__':

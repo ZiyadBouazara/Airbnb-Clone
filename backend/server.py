@@ -11,7 +11,7 @@ def index():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("index.html") # TODO retourner le bon template pour le login
     else:
 
         data = request.json
@@ -30,6 +30,7 @@ def login():
             }
 
         return jsonify(response)
+
 
 @app.route("/signin", methods=["POST"])
 def login():
