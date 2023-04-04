@@ -10,6 +10,10 @@ def index():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    # Valide le mot de passe d'un utilisateur
+    # Retourne : status : 200 pour un mot de passe valide
+    #            status : 403 pour un mot de passe non valide
+
     if request.method == "GET":
         return render_template("index.html") # TODO retourner le bon template pour le login
     else:
@@ -33,7 +37,9 @@ def login():
 
 
 @app.route("/signin", methods=["POST"])
-def login():
+def signin():
+    # Insère un nouvel utilisateur dans la base de données
+    # Retourne status : 200 pour un succès
     if request.method == "POST":
 
         data = request.json
