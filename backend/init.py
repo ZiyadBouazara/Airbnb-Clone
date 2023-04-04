@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="!@##@!Ziyo",
+        password="abcdef",
         db="glo_2005_webapp",
         autocommit=True
     )
