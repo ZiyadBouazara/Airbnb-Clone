@@ -1,6 +1,6 @@
 import { ENDPOINT } from "./endpoint"
 
-export const contact = async (name: string, email: string, subject: string, message: string) => {
+export const contact = async (name: string, email: string, subject: string, message: string): Promise<Response> => {
     const request = new Request(
         `${ENDPOINT}/contact`, {
             method: "POST",
