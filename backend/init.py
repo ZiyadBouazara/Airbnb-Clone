@@ -24,7 +24,7 @@ def create_tables():
          " terrasse TINYINT(1), PRIMARY KEY(iid), UNIQUE (address));"
 
     r2 = "CREATE TABLE IF NOT EXISTS Logement(id_logement INT AUTO_INCREMENT, contient INT NOT NULL," \
-         " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER," \
+         " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER, photos VARCHAR(255)," \
          " UNIQUE(contient, numero)," \
          " PRIMARY KEY(id_logement)," \
          " FOREIGN KEY (contient) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE);"
