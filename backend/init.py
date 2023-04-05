@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="!@##@!Ziyo",
+        password="abcdef",
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -194,21 +194,24 @@ def init():
     with open('immeubles.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            immeubles.append(row[:1]+row[2:])
+            immeubles.append(row[:1]+row[2:6]+row[7:])
 
-    sqlImmeubles = "INSERT INTO Immeuble (address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
+    sqlImmeubles = "INSERT INTO Immeuble (iid, address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
                    "wifi, parking, gym, backyard, elevator, pool, ev_charger, air_conditioner, terrasse) " \
-                   "VALUES (%s, 0, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                   "VALUES (NULL, %s, 0, %s, %s, %s, ""https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg""," \
+                   " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
     logements = []
+    liste_photos = """("https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg",""" \
+                    """"https://images.pexels.com/photos/275484/pexels-photo-275484.jpeg",""" \
+                    """"https://images.pexels.com/photos/1457847/pexels-photo-1457847.jpeg")"""
     with open('logements.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            logements.append(row[1:2]+row[3:])
+            logements.append(row)
 
-    sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price) " \
-                   "VALUES (NULL, %s, 1, %s, %s, %s, %s)"
-
+    sqlLogements = f"INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price, photos) " \
+                   f"VALUES (NULL, %s, 1, %s, %s, %s, %s, {liste_photos})"
     users = []
     with open('users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')

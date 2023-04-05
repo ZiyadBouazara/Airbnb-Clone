@@ -103,8 +103,8 @@ def getImmeubles():
             }
         return jsonify(response)
 
-@app.route("/immeubles/<immeuble_adresse>", methods=["GET"])
-def getImmeuble(immeuble_adresse):
+@app.route("/immeubles/<immeuble_id>", methods=["GET"])
+def getImmeuble(immeuble_id):
     # Fonction qui retourne le tuple d'un immeuble en fonction de son adresse
     # Retourne status : 200 pour un succès
     #          immeuble : tuples de l'immeuble
@@ -112,7 +112,7 @@ def getImmeuble(immeuble_adresse):
     #          status : 204 pour un succès, mais il n'y a pas d'immeuble a cette adresse
     #          immeuble : tuples de l'immeuble (vide)
     if request.method == "GET":
-        immeuble = get_immeubles(immeuble_adresse)
+        immeuble = get_immeubles(immeuble_id)
         if immeuble:
             response = {
                 "status": 200,

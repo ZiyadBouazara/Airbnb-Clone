@@ -33,10 +33,10 @@ def get_user_favorites(userId):
     logements_favoris = cursor.fetchone()[0]
     return logements_favoris
 
-def get_immeubles(immeubleAdresse=None):
+def get_immeubles(immeubleId=None):
     # Cette fonction retourne un ou plusieurs immeubles
     if immeubleAdresse is not None:
-        sqlRequest = f"SELECT * FROM Immeuble WHERE address = '{immeubleAdresse}';"
+        sqlRequest = f"SELECT * FROM Immeuble WHERE iid = '{immeubleId}';"
     else:
         sqlRequest = "SELECT * FROM Immeuble;"
     cursor.execute(sqlRequest)
