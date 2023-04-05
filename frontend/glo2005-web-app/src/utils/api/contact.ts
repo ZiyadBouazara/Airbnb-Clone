@@ -1,15 +1,17 @@
-import { ENDPOINT } from "./endpoint";
+import { ENDPOINT } from "./endpoint"
 
-export const signup = async (email: string, password: string): Promise<Response> => {
+export const contact = async (name: string, email: string, subject: string, message: string) => {
     const request = new Request(
-        `${ENDPOINT}/signup`, {
+        `${ENDPOINT}/contact`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
+                name: name,
                 email: email,
-                password: password,
+                subject: subject,
+                message: message,
             })
         }
     );

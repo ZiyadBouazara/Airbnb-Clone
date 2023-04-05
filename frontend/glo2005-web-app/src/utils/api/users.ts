@@ -1,8 +1,8 @@
-import { endpoint } from "./endpoint";
+import { ENDPOINT } from "./endpoint";
 
 export const getUsers = async (): Promise<Response> => {
     const request = new Request(
-        `${endpoint}/users`, {
+        `${ENDPOINT}/users`, {
             method: "GET",
         }
     );
@@ -12,7 +12,7 @@ export const getUsers = async (): Promise<Response> => {
 
 export const getUser = async (userId: string): Promise<Response> => {
     const request = new Request(
-        `${endpoint}/users/${userId}`, {
+        `${ENDPOINT}/users/${userId}`, {
             method: "GET",
         }
     );
@@ -22,7 +22,7 @@ export const getUser = async (userId: string): Promise<Response> => {
 
 export const getFavorites = async (userId: string): Promise<Response> => {
     const request = new Request(
-        `${endpoint}/users/${userId}/favorites`, {
+        `${ENDPOINT}/users/${userId}/favorites`, {
             method: "GET",
         }
     );

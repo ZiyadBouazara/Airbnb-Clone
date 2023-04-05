@@ -1,8 +1,8 @@
-import { endpoint } from "./endpoint";
+import { ENDPOINT } from "./endpoint";
 
 export const login = async (email: string, password: string): Promise<Response> => {
     const request: Request = new Request(
-        `${endpoint}/login`, {
+        `${ENDPOINT}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

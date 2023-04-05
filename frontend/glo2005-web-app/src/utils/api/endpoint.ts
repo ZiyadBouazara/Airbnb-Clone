@@ -1,1 +1,1 @@
-export const endpoint = "..."
+export const ENDPOINT = "..."
