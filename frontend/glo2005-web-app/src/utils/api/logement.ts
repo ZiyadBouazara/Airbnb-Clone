@@ -1,9 +1,19 @@
 import { ENDPOINT } from "./endpoint";
 
 namespace logement {
-    export const getLogements = async (ImmeubleId: string): Promise<Response> => {
+    export const getLogements = async (immeubleId: string): Promise<Response> => {
         const request = new Request(
-            `${ENDPOINT}/Immeubles/${ImmeubleId}`, {
+            `${ENDPOINT}/immeubles/${immeubleId}/logements`, {
+                method: "GET",
+            }
+        );
+        const response = await fetch(request);
+        return response;
+    }
+
+    export const getLogement = async (immeubleId: string, logementId: string): Promise<Response> => {
+        const request = new Request(
+            `${ENDPOINT}/immeubles/${immeubleId}/logements/${logementId}`, {
                 method: "GET",
             }
         );
