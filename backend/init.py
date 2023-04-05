@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="abcdef",
+        password="!@##@!Ziyo",
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -17,17 +17,17 @@ def db_connection():
 def create_tables():
     # Cette fonction crée les tables nécéssaires à la BD
 
-    r1 = "CREATE TABLE IF NOT EXISTS Immeuble(address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20)," \
+    r1 = "CREATE TABLE IF NOT EXISTS Immeuble(iid INT AUTO_INCREMENT, address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20)," \
          " nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), photos VARCHAR(255), descriptif VARCHAR(500), hot_water TINYINT(1)," \
          " electricity TINYINT(1), wifi TINYINT(1), parking TINYINT(1), gym TINYINT(1), backyard TINYINT(1)," \
          " elevator TINYINT(1), pool TINYINT(1), ev_charger TINYINT(1), air_conditioner TINYINT(1)," \
-         " terrasse TINYINT(1), PRIMARY KEY(address));"
+         " terrasse TINYINT(1), PRIMARY KEY(iid), UNIQUE (address));"
 
-    r2 = "CREATE TABLE IF NOT EXISTS Logement(id_logement INT AUTO_INCREMENT, contient varchar(30) NOT NULL," \
+    r2 = "CREATE TABLE IF NOT EXISTS Logement(id_logement INT AUTO_INCREMENT, contient INT NOT NULL," \
          " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER," \
          " UNIQUE(contient, numero)," \
          " PRIMARY KEY(id_logement)," \
-         " FOREIGN KEY (contient) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE);"
+         " FOREIGN KEY (contient) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     r3 = "CREATE TABLE IF NOT EXISTS User(id INT AUTO_INCREMENT, email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255)," \
          " age INTEGER, UNIQUE(email), UNIQUE(nom, age), PRIMARY KEY(id), " \
@@ -46,9 +46,9 @@ def create_tables():
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r7 = "CREATE TABLE IF NOT EXISTS Contient(address varchar(50), id_logement  INT, " \
-         "PRIMARY KEY(address, id_logement)," \
-         "FOREIGN KEY (address) REFERENCES Immeuble(address) ON UPDATE CASCADE ON DELETE CASCADE," \
+    r7 = "CREATE TABLE IF NOT EXISTS Contient(iid INT, id_logement  INT, " \
+         "PRIMARY KEY(iid, id_logement)," \
+         "FOREIGN KEY (iid) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     cursor.execute(r1)
@@ -104,7 +104,7 @@ def create_triggers():
     BEGIN
         UPDATE Immeuble
         SET Immeuble.nombre_logements = Immeuble.nombre_logements - 1
-        WHERE OLD.contient = Immeuble.address;
+        WHERE OLD.contient = Immeuble.iid;
     END
     """
     # Cette trigger update le compte de nombre_logement apres suppression de logement en decrementant
@@ -117,9 +117,9 @@ def create_triggers():
     BEGIN
         UPDATE Immeuble
         SET Immeuble.nombre_logements = Immeuble.nombre_logements + 1
-        WHERE NEW.contient = Immeuble.address;
+        WHERE NEW.contient = Immeuble.iid;
         
-        INSERT INTO Contient(address, id_logement) VALUES (NEW.contient, NEW.id_logement);
+        INSERT INTO Contient(iid, id_logement) VALUES (NEW.contient, NEW.id_logement);
     END
     """
     # Cette trigger ajoute immediatement apres un ajout de logement le tuple unique de ce logement a Contient
@@ -132,7 +132,7 @@ def create_triggers():
     BEFORE DELETE ON Contient
     FOR EACH ROW
     BEGIN
-        IF (SELECT COUNT(*) FROM Contient WHERE address = OLD.address) = 1
+        IF (SELECT COUNT(*) FROM Contient WHERE iid = OLD.iid) = 1
         THEN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus si vous supprimez ces logements. Veuillez supprimer Immeuble voulue directement.';
@@ -149,7 +149,7 @@ def create_triggers():
     BEFORE INSERT ON Contient
     FOR EACH ROW
     BEGIN
-        IF (SELECT COUNT(*) FROM Immeuble WHERE Immeuble.address = NEW.address) = 0
+        IF (SELECT COUNT(*) FROM Immeuble WHERE Immeuble.iid = NEW.iid) = 0
         THEN
             SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'Cette immeuble nexiste pas.';
