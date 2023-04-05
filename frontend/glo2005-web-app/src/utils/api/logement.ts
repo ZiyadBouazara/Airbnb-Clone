@@ -1,9 +1,9 @@
 import { ENDPOINT } from "./endpoint";
 
-namespace favorites {
-    export const getFavorites = async (userId: string): Promise<Response> => {
+namespace logement {
+    export const getLogements = async (ImmeubleId: string): Promise<Response> => {
         const request = new Request(
-            `${ENDPOINT}/users/${userId}/favorites`, {
+            `${ENDPOINT}/Immeubles/${ImmeubleId}`, {
                 method: "GET",
             }
         );
@@ -12,4 +12,4 @@ namespace favorites {
     }
 }
 
-export default favorites
+export default logement
