@@ -1,4 +1,5 @@
 import { ENDPOINT } from "./endpoint";
+import { getFavorites as getFavoritesFromUser } from "./favorites";
 
 export const getUsers = async (): Promise<Response> => {
     const request = new Request(
@@ -21,11 +22,5 @@ export const getUser = async (userId: string): Promise<Response> => {
 }
 
 export const getFavorites = async (userId: string): Promise<Response> => {
-    const request = new Request(
-        `${ENDPOINT}/users/${userId}/favorites`, {
-            method: "GET",
-        }
-    );
-    const response = await fetch(request);
-    return response;
+    return getFavoritesFromUser(userId);
 }
