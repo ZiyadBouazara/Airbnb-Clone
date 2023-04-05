@@ -9,3 +9,13 @@ export const getUsers = async (): Promise<Response> => {
     const response = await fetch(request);
     return response;
 }
+
+export const getUser = async (userId: string) => {
+    const request = new Request(
+        `${endpoint}/users/${userId}`, {
+            method: "GET"
+        }
+    );
+    const response = await fetch(request);
+    return response;
+}
