@@ -60,7 +60,7 @@ def getFavorites(user_id):
         return jsonify(response)
 
 @app.route("/signin", methods=["POST"])
-def signin():
+def signup():
     # Insère un nouvel utilisateur dans la base de données
     # Retourne status : 201 pour un succès
     if request.method == "POST":
@@ -213,6 +213,7 @@ def getUsers(user_id):
                 "immeuble": f"{user}"
             }
         return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run()
