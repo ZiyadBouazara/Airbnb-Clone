@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements
+from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements, get_users
 
 app = Flask(__name__)
 
@@ -105,11 +105,11 @@ def getImmeubles():
 
 @app.route("/immeubles/<immeuble_id>", methods=["GET"])
 def getImmeuble(immeuble_id):
-    # Fonction qui retourne le tuple d'un immeuble en fonction de son adresse
+    # Fonction qui retourne le tuple d'un immeuble en fonction de son id
     # Retourne status : 200 pour un succès
     #          immeuble : tuples de l'immeuble
     #               ou
-    #          status : 204 pour un succès, mais il n'y a pas d'immeuble a cette adresse
+    #          status : 204 pour un succès, mais il n'y a pas d'immeuble avec cet id
     #          immeuble : tuples de l'immeuble (vide)
     if request.method == "GET":
         immeuble = get_immeubles(immeuble_id)
@@ -149,12 +149,12 @@ def getLogements(immeuble_id):
 
 @app.route("/immeubles/$<immeuble_id>/logements/<logement_id>", methods=["GET"])
 def getImmeuble(immeuble_id, logement_id):
-    # Fonction qui retourne le tuple d'un immeuble en fonction de son adresse
+    # Fonction qui retourne le tuple d'un logement en fonction de son id
     # Retourne status : 200 pour un succès
-    #          immeuble : tuples de l'immeuble
+    #          logement : tuples du logement
     #               ou
-    #          status : 204 pour un succès, mais il n'y a pas d'immeuble a cette adresse
-    #          immeuble : tuples de l'immeuble (vide)
+    #          status : 204 pour un succès, mais il n'y a pas de logement avec cet id
+    #          logement : tuples du logement (vide)
     if request.method == "GET":
         logements = get_logements(immeuble_id, logement_id)
         if logements:
@@ -169,6 +169,50 @@ def getImmeuble(immeuble_id, logement_id):
             }
         return jsonify(response)
 
+
+@app.route("/users", methods=["GET"])
+def getUsers():
+    # Fonction qui retourne tous les users
+    # Retourne status : 200 pour un succès
+    #          users : tuples des users
+    #               ou
+    #          status : 204 pour un succès, mais il n'y a pas d'users
+    #          users : tuples des users (vide)
+    if request.method == "GET":
+        users = get_users()
+        if users:
+            response = {
+                "status": 200,
+                "users": f"{users}"
+            }
+        else:
+            response = {
+                "status": 204,
+                "users": f"{users}"
+            }
+        return jsonify(response)
+
+@app.route("/users/<userId>", methods=["GET"])
+def getUsers(user_id):
+    # Fonction qui retourne le tuple d'un user en fonction de son id
+    # Retourne status : 200 pour un succès
+    #          user : tuples de l'user
+    #               ou
+    #          status : 204 pour un succès, mais il n'y a pas d'user avec cet id
+    #          user : tuples de l'user (vide)
+    if request.method == "GET":
+        user = get_immeubles(user_id)
+        if user:
+            response = {
+                "status": 200,
+                "immeuble": f"{user}"
+            }
+        else:
+            response = {
+                "status": 204,
+                "immeuble": f"{user}"
+            }
+        return jsonify(response)
 
 if __name__ == '__main__':
     app.run()

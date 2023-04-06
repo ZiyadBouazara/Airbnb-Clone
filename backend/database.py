@@ -43,15 +43,25 @@ def get_immeubles(immeubleId=None):
     immeubles = cursor.fetchone()[0]
     return immeubles
 
-def get_immeubles(immeubleId, logementId=None):
+def get_logements(immeubleId, logementId=None):
     # Cette fonction retourne un ou plusieurs logements
     if logementId is not None:
-        sqlRequest = f"SELECT * FROM Immeuble WHERE contient = immeubleId AND id_logement = '{logementId}';"
+        sqlRequest = f"SELECT * FROM Immeuble WHERE contient = '{immeubleId}' AND id_logement = '{logementId}';"
     else:
-        sqlRequest = "SELECT * FROM Logement WHERE contient = immeubleId;"
+        sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}';"
     cursor.execute(sqlRequest)
     logements = cursor.fetchone()[0]
     return logements
+
+def get_users(userId=None):
+    # Cette fonction retourne un ou plusieurs users
+    if userId is not None:
+        sqlRequest = f"SELECT * FROM User WHERE id = '{userId}';"
+    else:
+        sqlRequest = "SELECT * FROM User;"
+    cursor.execute(sqlRequest)
+    users = cursor.fetchone()[0]
+    return users
 
 
 
