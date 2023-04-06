@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles
+from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements
 
 app = Flask(__name__)
 
@@ -122,6 +122,50 @@ def getImmeuble(immeuble_id):
             response = {
                 "status": 204,
                 "immeuble": f"{immeuble}"
+            }
+        return jsonify(response)
+
+@app.route("/immeubles/<immeuble_id>/logements", methods=["GET"])
+def getLogements(immeuble_id):
+    # Fonction qui retourne tous les logements d'un immeuble
+    # Retourne status : 200 pour un succès
+    #          logements : tuples des logements
+    #               ou
+    #          status : 204 pour un succès, mais il n'y a pas de logements
+    #          logements : tuples des logements (vide)
+    if request.method == "GET":
+        logements = get_logements(immeuble_id)
+        if logements:
+            response = {
+                "status": 200,
+                "logements": f"{logements}"
+            }
+        else:
+            response = {
+                "status": 204,
+                "logements": f"{logements}"
+            }
+        return jsonify(response)
+
+@app.route("/immeubles/$<immeuble_id>/logements/<logement_id>", methods=["GET"])
+def getImmeuble(immeuble_id, logement_id):
+    # Fonction qui retourne le tuple d'un immeuble en fonction de son adresse
+    # Retourne status : 200 pour un succès
+    #          immeuble : tuples de l'immeuble
+    #               ou
+    #          status : 204 pour un succès, mais il n'y a pas d'immeuble a cette adresse
+    #          immeuble : tuples de l'immeuble (vide)
+    if request.method == "GET":
+        logements = get_logements(immeuble_id, logement_id)
+        if logements:
+            response = {
+                "status": 200,
+                "logements": f"{logements}"
+            }
+        else:
+            response = {
+                "status": 204,
+                "logements": f"{logements}"
             }
         return jsonify(response)
 
