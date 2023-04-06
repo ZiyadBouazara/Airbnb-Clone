@@ -148,7 +148,7 @@ def getLogements(immeuble_id):
         return jsonify(response)
 
 @app.route("/immeubles/$<immeuble_id>/logements/<logement_id>", methods=["GET"])
-def getImmeuble(immeuble_id, logement_id):
+def getLogement(immeuble_id, logement_id):
     # Fonction qui retourne le tuple d'un logement en fonction de son id
     # Retourne status : 200 pour un succès
     #          logement : tuples du logement
