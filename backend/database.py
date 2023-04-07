@@ -17,7 +17,10 @@ def insert_user(email, phone, nom, mdp, age):
     sqlRequest = f"INSERT INTO User (id, email, phone, nom, mdp, age) VALUE (NULL, '{email}', '{phone}', '{nom}', '{hashed_mdp}', '{age}');"
     cursor.execute(sqlRequest)
 
-
+def insert_favorite(logement_id, user_id):
+    # Cette fonction insère un nouveau logement dans Aime
+    sqlRequest = f"INSERT INTO Aime (id_logement, id) VALUE ('{logement_id}', '{user_id}');"
+    cursor.execute(sqlRequest)
 
 def check_user_mdp(email, mdp):
     # Cette fonction valide le mot de passe d'un utilisateur
