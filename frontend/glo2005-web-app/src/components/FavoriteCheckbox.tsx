@@ -1,4 +1,4 @@
-const FavoriteCheckbox = () => {
+const FavoriteCheckbox: React.FC = () => {
   return (
     <>
         <input type="checkbox" className="checkbox" id="checkbox" />

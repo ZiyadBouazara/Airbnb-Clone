@@ -1,6 +1,6 @@
-import LogementCheckbox from "../components/LogementCheckbox"
+import LogementCheckbox from "../components/immeuble/ImmeubleTypeCheckbox"
 import Search from "../components/Search"
-import ImmeubleList from "../components/ImmeubleList"
+import ImmeubleList from "../components/immeuble/ImmeubleList"
 
 const Home: React.FC = () => {
     return (

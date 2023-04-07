@@ -1,5 +1,5 @@
-import AboutText from "../components/AboutText"
-import AboutContributors from "../components/AboutContributors"
+import AboutText from "../components/about/AboutText"
+import AboutContributors from "../components/about/AboutContributors"
 
 const About: React.FC = () => {
     return (

@@ -1,6 +1,6 @@
-import LogementCheckboxOption from "./LogementCheckboxOption"
+import LogementCheckboxOption from "./ImmeubleTypeCheckboxOption"
 
-const LogementCheckbox: React.FC = () => {
+const ImmeubleTypeCheckbox: React.FC = () => {
   return (
     <div>
         <ul className="grid w-full gap-3 md:grid-cols-3 mt-3">
@@ -12,4 +12,4 @@ const LogementCheckbox: React.FC = () => {
   )
 }
 
-export default LogementCheckbox
+export default ImmeubleTypeCheckbox
