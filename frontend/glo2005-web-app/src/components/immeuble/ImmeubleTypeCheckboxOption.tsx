@@ -3,7 +3,7 @@ interface Props {
     option: string;
 }  
 
-const LogementCheckboxOption: React.FC<Props> = ({ id, option }) => {
+const ImmeubleTypeCheckboxOption: React.FC<Props> = ({ id, option }) => {
   return (
     <li>
       <input type="checkbox" id={id} value="" className="hidden peer" required/>
@@ -14,4 +14,4 @@ const LogementCheckboxOption: React.FC<Props> = ({ id, option }) => {
   )
 }
 
-export default LogementCheckboxOption
+export default ImmeubleTypeCheckboxOption

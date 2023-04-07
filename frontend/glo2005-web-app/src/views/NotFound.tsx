@@ -1,4 +1,4 @@
-import NotFoundList from "../components/NotFoundList";
+import NotFoundList from "../components/notFound/NotFoundList";
 
 const NotFound: React.FC = () => {
     return (

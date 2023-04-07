@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Modal from "./Modal";
-import LogInModal from "./LoginModal";
-import SignUpModal from "./SignUpModal";
+import Modal from "../modal/Modal";
+import LogInModal from "../modal/LoginModal";
+import SignUpModal from "../modal/SignUpModal";
 
 interface Props {
   isLoggedIn: boolean;
