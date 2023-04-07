@@ -6,19 +6,11 @@ interface Props {
 }
 
 const FooterListItem: React.FC<Props> = ({ text, link }) => {
-  if (link) {
-    return (
-      <li>
-        <Link to={ link }><span className="hover:underline">{ text }</span></Link>
-      </li>
-    )
-  } else {
-    return (
-      <li>
-        <span>{ text }</span>
-      </li>
-    )
-  }
+  return (
+    <li>
+      {link ? <Link to={ link }><span className="hover:underline">{ text }</span></Link> : <span>{ text }</span>}
+    </li>
+  )
 }
 
 export default FooterListItem

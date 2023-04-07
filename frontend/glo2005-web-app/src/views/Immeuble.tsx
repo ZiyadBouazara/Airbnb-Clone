@@ -1,16 +1,6 @@
 import { useParams } from 'react-router-dom';
 import ImmeubleHeader from '../components/immeuble/ImmeubleHeader';
-import HotWaterLogo from '../components/logos/HotWaterLogo';
-import ElectricityLogo from '../components/logos/ElectricityLogo';
-import WifiLogo from '../components/logos/WifiLogo';
-import ParkingLogo from '../components/logos/ParkingLogo';
-import GymLogo from '../components/logos/GymLogo';
-import BackyardLogo from '../components/logos/BackyardLogo';
-import ElevatorLogo from '../components/logos/ElevatorLogo';
-import PoolLogo from '../components/logos/PoolLogo';
-import ElectricChargerLogo from '../components/logos/ElectricChargerLogo';
-import AirConditionerLogo from '../components/logos/AirConditionerLogo';
-import TerraceLogo from '../components/logos/TerraceLogo';
+import ImmeubleAmenities from '../components/immeuble/ImmeubleAmenities';
 
 const Immeuble: React.FC = () => {
 
@@ -24,7 +14,17 @@ const Immeuble: React.FC = () => {
       sector: "Watuagung",
       minPrice: 400,
       type: "Condo/Loft",
-      description: "Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque."
+      description: "Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
+      hasHotWater: true,
+      hasElectricity: true,
+      hasWifi: true,
+      hasParking: true,
+      hasGym: true,
+      hasBackyard: true,
+      hasElevator: true,
+      hasEVCharger: true,
+      hasAC: true,
+      hasTerrace: true
   }
 
   return (
@@ -38,20 +38,8 @@ const Immeuble: React.FC = () => {
           {immeuble.description}
         </div>
       </section>
-      <section className="flex flex-wrap items-start mt-6">
-        <div>
-            <HotWaterLogo />
-            <ElectricityLogo />
-            <WifiLogo />
-            <ParkingLogo />
-            <GymLogo />
-            <BackyardLogo />
-            <ElevatorLogo />
-            <PoolLogo />
-            <ElectricChargerLogo />
-            <AirConditionerLogo />
-            <TerraceLogo />
-          </div>
+      <section className="flex flex-col items-center gap-2 mt-3">
+        <ImmeubleAmenities hasHotWater={immeuble.hasHotWater} hasElectricity={immeuble.hasElectricity} hasWifi={immeuble.hasWifi} hasParking={immeuble.hasParking} hasGym={immeuble.hasGym} hasBackyard={immeuble.hasBackyard} hasElevator={immeuble.hasElevator} hasEVCharger={immeuble.hasEVCharger} hasAC={immeuble.hasAC} hasTerrace={immeuble.hasTerrace} />
       </section>
     </div>
   )

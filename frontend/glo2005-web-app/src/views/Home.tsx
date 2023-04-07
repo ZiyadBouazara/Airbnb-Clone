@@ -1,5 +1,5 @@
 import LogementCheckbox from "../components/immeuble/ImmeubleTypeCheckbox"
-import Search from "../components/Search"
+import Search from "../components/inputs/Search"
 import ImmeubleList from "../components/immeuble/ImmeubleList"
 
 const Home: React.FC = () => {

@@ -14,7 +14,7 @@ const ImmeubleHeader: React.FC<Props> = ({ name, photo, address, sector, type, m
           <h1 className="font-bold text-5xl">{name}</h1>
         </div>
         <div>
-          <ul className="flex gap-1">
+          <ul className="flex flex-wrap gap-1">
             <li>📍 {address}, {sector}</li>
             <li>·</li>
             <li>{type}</li>
