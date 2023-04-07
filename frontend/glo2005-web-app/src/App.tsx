@@ -7,6 +7,7 @@ import Account from "./views/Account";
 import Contact from "./views/Contact";
 import NotFound from "./views/NotFound";
 import Immeuble from "./views/Immeuble";
+import Logement from "./views/Logement";
 
 function App(): JSX.Element {
   return (
@@ -18,6 +19,7 @@ function App(): JSX.Element {
         <Route path="/account" element={<Account />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/immeubles/:immeubleId" element={<Immeuble />} ></Route>
+        <Route path="/immeubles/:immeubleId/logements/:logementId" element={<Logement />} ></Route>
         <Route path="*" element={<NotFound />}/>
       </Routes>
       <Footer />

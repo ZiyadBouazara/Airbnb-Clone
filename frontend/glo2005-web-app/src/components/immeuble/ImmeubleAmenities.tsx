@@ -27,7 +27,7 @@ const ImmeubleAmenities: React.FC<Props> = ({ hasHotWater, hasElectricity, hasWi
     hasGym, hasBackyard, hasElevator, hasEVCharger, hasAC, hasTerrace }) => {
   return (
     <>
-        <h1 className="font-semibold text-xl">Amenities</h1>
+        <h1 className="font-semibold text-xl">Services et commodités</h1>
         <ul className="flex flex-wrap gap-1">
             {hasHotWater ? <ImmeubleAmentiesItem name="Eau chaude" logo={<HotWaterLogo />} /> : null}
             {hasElectricity ? <ImmeubleAmentiesItem name="Électricité" logo={<ElectricityLogo />} /> : null}

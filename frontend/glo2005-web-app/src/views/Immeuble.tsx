@@ -1,6 +1,8 @@
 import { useParams } from 'react-router-dom';
 import ImmeubleHeader from '../components/immeuble/ImmeubleHeader';
 import ImmeubleAmenities from '../components/immeuble/ImmeubleAmenities';
+import LogementList from '../components/logement/LogementList';
+import Search from '../components/inputs/Search';
 
 const Immeuble: React.FC = () => {
 
@@ -28,7 +30,7 @@ const Immeuble: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col items-center mx-3 md:px-10 lg:px-20">
+    <div className="flex flex-col mx-3 md:px-10 lg:px-20">
       <section className="flex flex-col items-start mt-6">
         <ImmeubleHeader name={immeuble.name} photo={immeuble.photo} address={immeuble.address} sector={immeuble.sector} type={immeuble.type} minPrice={immeuble.minPrice} />
       </section>
@@ -40,6 +42,11 @@ const Immeuble: React.FC = () => {
       </section>
       <section className="flex flex-col items-center gap-2 mt-3">
         <ImmeubleAmenities hasHotWater={immeuble.hasHotWater} hasElectricity={immeuble.hasElectricity} hasWifi={immeuble.hasWifi} hasParking={immeuble.hasParking} hasGym={immeuble.hasGym} hasBackyard={immeuble.hasBackyard} hasElevator={immeuble.hasElevator} hasEVCharger={immeuble.hasEVCharger} hasAC={immeuble.hasAC} hasTerrace={immeuble.hasTerrace} />
+      </section>
+      <section className="mt-2 md:mt-4">
+        <h1 className="font-semibold text-xl">Logements</h1>
+        <Search id="logement-search" placeholder="Rechercher un logement..." />
+        <LogementList />
       </section>
     </div>
   )
