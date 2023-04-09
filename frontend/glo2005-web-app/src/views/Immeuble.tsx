@@ -44,9 +44,15 @@ const Immeuble: React.FC = () => {
         <ImmeubleAmenities hasHotWater={immeuble.hasHotWater} hasElectricity={immeuble.hasElectricity} hasWifi={immeuble.hasWifi} hasParking={immeuble.hasParking} hasGym={immeuble.hasGym} hasBackyard={immeuble.hasBackyard} hasElevator={immeuble.hasElevator} hasEVCharger={immeuble.hasEVCharger} hasAC={immeuble.hasAC} hasTerrace={immeuble.hasTerrace} />
       </section>
       <section className="mt-2 md:mt-4">
-        <h1 className="font-semibold text-xl">Logements</h1>
-        <Search id="logement-search" placeholder="Rechercher un logement..." />
-        <LogementList />
+        <div className="flex flex-col">
+          <div className="mb-2 md:mb-4">
+            <h1 className="font-semibold text-xl flex justify-center">Logements</h1>
+          </div>
+          <Search id="logement-search" placeholder="Rechercher un logement..." />
+        </div>
+        <div className="mt-2 md:mt-4">
+          <LogementList />
+        </div>
       </section>
     </div>
   )
