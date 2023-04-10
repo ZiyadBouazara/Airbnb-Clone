@@ -4,6 +4,7 @@ import ElectricityLogo from "../logos/ElectricityLogo"
 import WifiLogo from "../logos/WifiLogo"
 import ParkingLogo from "../logos/ParkingLogo"
 import GymLogo from "../logos/GymLogo"
+import PoolLogo from "../logos/PoolLogo"
 import BackyardLogo from "../logos/BackyardLogo"
 import ElevatorLogo from "../logos/ElevatorLogo"
 import EVChargerLogo from "../logos/EVChargerLogo"
@@ -15,6 +16,7 @@ interface Props {
     hasElectricity: boolean,
     hasWifi: boolean,
     hasParking: boolean,
+    hasPool: boolean,
     hasGym: boolean,
     hasBackyard: boolean,
     hasElevator: boolean,
@@ -24,15 +26,16 @@ interface Props {
 }
 
 const ImmeubleAmenities: React.FC<Props> = ({ hasHotWater, hasElectricity, hasWifi, hasParking,
-    hasGym, hasBackyard, hasElevator, hasEVCharger, hasAC, hasTerrace }) => {
+  hasPool, hasGym, hasBackyard, hasElevator, hasEVCharger, hasAC, hasTerrace }) => {
   return (
     <>
         <h1 className="font-semibold text-xl">Services et commodités</h1>
-        <ul className="flex flex-wrap gap-1">
+        <ul className="flex flex-wrap justify-center gap-1">
             {hasHotWater ? <ImmeubleAmentiesItem name="Eau chaude" logo={<HotWaterLogo />} /> : null}
             {hasElectricity ? <ImmeubleAmentiesItem name="Électricité" logo={<ElectricityLogo />} /> : null}
             {hasWifi ? <ImmeubleAmentiesItem name="Wifi" logo={<WifiLogo />} /> : null}
             {hasParking ? <ImmeubleAmentiesItem name="Parking" logo={<ParkingLogo />} /> : null}
+            {hasPool ? <ImmeubleAmentiesItem name="Piscine" logo={<PoolLogo />} /> : null}
             {hasGym ? <ImmeubleAmentiesItem name="Gym" logo={<GymLogo />} /> : null}
             {hasBackyard ? <ImmeubleAmentiesItem name="Cour" logo={<BackyardLogo />} /> : null}
             {hasElevator ? <ImmeubleAmentiesItem name="Ascenseur" logo={<ElevatorLogo />} /> : null}
