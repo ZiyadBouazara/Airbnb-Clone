@@ -1,6 +1,7 @@
 import Button from "../inputs/Button";
 import EmailInput from "../inputs/EmailInput";
 import PasswordInput from "../inputs/PasswordInput";
+import TextInput from "../inputs/TextInput";
 
 interface Props {
     toggleLogin: () => void;
@@ -17,6 +18,15 @@ const SignUpModal: React.FC<Props> = ({ toggleLogin }) => {
         </div>
         <div>
             <PasswordInput id="password" label="Mot de passe" placeholder="••••••••" required />
+        </div>
+        <div>
+            <TextInput id="name" label="Nom" placeholder="Nom" />
+        </div>
+        <div>
+            <TextInput id="phone-number" label="Numéro de téléphone" placeholder="###-###-####" />
+        </div>
+        <div>
+            <TextInput id="age" label="Âge" placeholder="Âge" />
         </div>
         <Button text="Inscription" />
         <div className="text-sm font-medium">

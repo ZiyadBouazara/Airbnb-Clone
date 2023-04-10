@@ -1,6 +1,6 @@
 import { ENDPOINT } from "./endpoint";
 
-export const signup = async (email: string, password: string): Promise<Response> => {
+export const signup = async (email: string, password: string, name: string, phoneNumber: string, age: number): Promise<Response> => {
     const request = new Request(
         `${ENDPOINT}/signup`, {
             method: "POST",
@@ -10,6 +10,9 @@ export const signup = async (email: string, password: string): Promise<Response>
             body: JSON.stringify({
                 email: email,
                 password: password,
+                name: name,
+                phoneNumber: phoneNumber,
+                age: age
             })
         }
     );
