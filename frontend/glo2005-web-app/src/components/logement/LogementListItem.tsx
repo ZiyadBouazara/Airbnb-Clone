@@ -8,7 +8,7 @@ interface Props {
   photos: string[],
   available: boolean,
   rooms: string,
-  size: string,
+  size: number,
   number: number,
   price: number
 }
