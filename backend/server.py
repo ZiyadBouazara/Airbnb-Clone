@@ -68,10 +68,10 @@ def signup():
 
         data = request.json
 
-        email = data["username"]
-        phone = data["phone"]
+        email = data["email"]
+        phone = data["phoneNumber"]
         nom = data["nom"]
-        mdp = data["mdp"]
+        mdp = data["password"]
         age = data ["age"]
 
         insert_user(email, phone, nom, mdp, age)
