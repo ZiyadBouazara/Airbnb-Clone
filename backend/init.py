@@ -52,6 +52,7 @@ def create_tables():
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     r8 = "CREATE TABLE IF NOT EXISTS Safe(id INT, mdp VARCHAR(255)," \
+         "PRIMARY KEY (id)," \
          "FOREIGN KEY(id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     cursor.execute(r1)
