@@ -44,7 +44,7 @@ def get_user_favorites(userId):
 def get_immeubles(immeubleId=None):
     # Cette fonction retourne un ou plusieurs immeubles
     if immeubleId is not None:
-        sqlRequest = f"SELECT * FROM Immeuble WHERE iid = '{immeubleId}';"
+        sqlRequest = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = '{immeubleId}' AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
     else:
         sqlRequest = "SELECT * FROM Immeuble;"
     cursor.execute(sqlRequest)
