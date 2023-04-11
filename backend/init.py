@@ -29,7 +29,7 @@ def create_tables():
          " PRIMARY KEY(id_logement)," \
          " FOREIGN KEY (contient) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r3 = "CREATE TABLE IF NOT EXISTS User(id INT AUTO_INCREMENT, email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255)," \
+    r3 = "CREATE TABLE IF NOT EXISTS User(id INT AUTO_INCREMENT, email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50)," \
          " age INTEGER, UNIQUE(email), UNIQUE(nom, age), PRIMARY KEY(id), " \
          "CONSTRAINT age_legal CHECK ( age BETWEEN 18 AND 112));"
 
@@ -51,6 +51,10 @@ def create_tables():
          "FOREIGN KEY (iid) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
 
+    r8 = "CREATE TABLE IF NOT EXISTS Safe(id INT, mdp VARCHAR(255)," \
+         "PRIMARY KEY (id)," \
+         "FOREIGN KEY(id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
+
     cursor.execute(r1)
     cursor.execute(r2)
     cursor.execute(r3)
@@ -58,6 +62,7 @@ def create_tables():
     cursor.execute(r5)
     cursor.execute(r6)
     cursor.execute(r7)
+    cursor.execute(r8)
 
 
 def create_indexes():
