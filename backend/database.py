@@ -22,6 +22,11 @@ def insert_favorite(logement_id, user_id):
     sqlRequest = f"INSERT INTO Aime (id_logement, id) VALUE ('{logement_id}', '{user_id}');"
     cursor.execute(sqlRequest)
 
+def delete_favorite(logement_id, user_id):
+    # Cette fonction insère un nouveau logement dans Aime
+    sqlRequest = f"DELETE FROM Aime (id_logement, id) WHERE id_logement = logement_id AND id = user_id;"
+    cursor.execute(sqlRequest)
+
 def check_user_mdp(email, mdp):
     # Cette fonction valide le mot de passe d'un utilisateur
     sqlRequest = f"SELECT mdp FROM User WHERE email = '{email}';"

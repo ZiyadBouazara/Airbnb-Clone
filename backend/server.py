@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify
 from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements, get_users,\
-    insert_favorite
+    insert_favorite, delete_favorite
 
 app = Flask(__name__)
 
@@ -215,20 +215,30 @@ def getUsers(user_id):
             }
         return jsonify(response)
 
-@app.route("/immeubles/$<immeuble_id>/logements/<logement_id>", methods=["POST"])
-def addFavorite(logement_id):
+@app.route("/users/<user_id>/favorites/<logement_id>", methods=["POST"])
+def addFavorite(user_id, logement_id):
     # Fonction qui insère un tuple dans la table aime
     # Retourne status : 201 pour un succès
     if request.method == "POST":
-
-        data = request.json
-
-        user_id = data["user"]
 
         insert_favorite(logement_id, user_id)
 
         response = {
             "status": 201
+        }
+
+        return jsonify(response)
+
+@app.route("/users/<user_id>/favorites/<logement_id>", methods=["DELETE"])
+def deleteFavorite(user_id, logement_id):
+    # Fonction qui retire un tuple dans la table aime
+    # Retourne status : 204 pour un succès
+    if request.method == "DELETE":
+
+        delete_favorite(logement_id, user_id)
+
+        response = {
+            "status": 204
         }
 
         return jsonify(response)
