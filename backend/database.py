@@ -14,7 +14,9 @@ cursor = connection.cursor()
 def insert_user(email, phone, nom, mdp, age):
     # Cette fonction insère un nouvel utilisateur dans la table Users
     hashed_mdp = pbkdf2_sha256.hash(mdp)
-    sqlRequest = f"INSERT INTO User (id, email, phone, nom, mdp, age) VALUE (NULL, '{email}', '{phone}', '{nom}', '{hashed_mdp}', '{age}');"
+    sqlRequest = f"INSERT INTO User (id, email, phone, nom, age) VALUE (NULL, '{email}', '{phone}', '{nom}', '{age}');"
+    cursor.execute(sqlRequest)
+    sqlRequest = f"INSERT INTO safe (email, mdp) VALUE ('{email}', '{hashed_mdp}');"
     cursor.execute(sqlRequest)
 
 def insert_favorite(logement_id, user_id):
@@ -29,7 +31,7 @@ def delete_favorite(logement_id, user_id):
 
 def check_user_mdp(email, mdp):
     # Cette fonction valide le mot de passe d'un utilisateur
-    sqlRequest = f"SELECT mdp FROM User WHERE email = '{email}';"
+    sqlRequest = f"SELECT mdp FROM safe WHERE email = '{email}';"
     cursor.execute(sqlRequest)
     hashed_mdp = cursor.fetchone()[0]
     return pbkdf2_sha256.verify(mdp, hashed_mdp)

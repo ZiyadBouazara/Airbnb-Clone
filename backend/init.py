@@ -51,9 +51,9 @@ def create_tables():
          "FOREIGN KEY (iid) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
 
-    r8 = "CREATE TABLE IF NOT EXISTS Safe(id INT, mdp VARCHAR(255)," \
-         "PRIMARY KEY (id)," \
-         "FOREIGN KEY(id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
+    r8 = "CREATE TABLE IF NOT EXISTS Safe(email VARCHAR(50), mdp VARCHAR(255)," \
+         "PRIMARY KEY (email)," \
+         "FOREIGN KEY(email) REFERENCES User(email) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     cursor.execute(r1)
     cursor.execute(r2)
@@ -240,14 +240,18 @@ def init():
     sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price, photos) " \
                    "VALUES (NULL, %s, 1, %s, %s, %s, %s, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg,https://images.pexels.com/photos/275484/pexels-photo-275484.jpeg,https://images.pexels.com/photos/1457847/pexels-photo-1457847.jpeg')"
     users = []
+    safe = []
     with open('users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             row[4] = pbkdf2_sha256.hash(row[4])
-            users.append(row[1:])
+            safe.append(row[1:2]+row[4:5])
+            users.append(row[1:4]+row[5:])
 
-    sqlUsers = "INSERT INTO User (id, email, phone, nom, mdp, age) " \
-               "VALUES (NULL, %s, %s, %s, %s, %s)"
+    sqlUsers = "INSERT INTO User (id, email, phone, nom, age) " \
+               "VALUES (NULL, %s, %s, %s, %s)"
+    sqlSafe = "INSERT INTO Safe (email, mdp) " \
+               "VALUES (%s, %s)"
 
     louer = []
     locataire = []
@@ -264,6 +268,7 @@ def init():
     cursor.executemany(sqlImmeubles, immeubles)
     cursor.executemany(sqlLogements, logements)
     cursor.executemany(sqlUsers, users)
+    cursor.executemany(sqlSafe, safe)
     cursor.executemany(sqlLocataire, locataire)
     cursor.executemany(sqlLouer, louer)
 
