@@ -6,7 +6,7 @@ def db_connection():
     conn = pymysql.connect(
         host="localhost",
         user="root",
-        password="abcdef",
+        password="!@##@!Ziyo",
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -60,6 +60,31 @@ def create_tables():
     cursor.execute(r7)
 
 
+def create_indexes():
+    # Cette fonction cree les index
+    # (Immeuble.address, Immeuble.nom, Immeuble.secteur, Logement.pieces, Logement.taille, Logement.price, Immeuble.type)
+
+    i1 = "CREATE INDEX idx_immeuble_address ON Immeuble(address);"
+
+    i2 = "CREATE INDEX idx_immeuble_nom ON Immeuble(nom);"
+
+    i3 = "CREATE INDEX idx_immeuble_secteur ON Immeuble(secteur);"
+
+    i4 = "CREATE INDEX idx_logement_pieces ON Logement(pieces);"
+
+    i5 = "CREATE INDEX idx_logement_taille ON Logement(taille);"
+
+    i6 = "CREATE INDEX idx_logement_price ON Logement(price);"
+
+    i7 = "CREATE INDEX idx_immeuble_type ON Immeuble(type);"
+
+    cursor.execute(i1)
+    cursor.execute(i2)
+    cursor.execute(i3)
+    cursor.execute(i4)
+    cursor.execute(i5)
+    cursor.execute(i6)
+    cursor.execute(i7)
 
 def create_triggers():
     # Cette fonction crée les triggers nécéssaires à la BD
@@ -242,6 +267,7 @@ def init():
 if __name__ == '__main__':
     connection, cursor = db_connection()
     create_tables()
+    create_indexes()
     create_triggers()
     init()
 

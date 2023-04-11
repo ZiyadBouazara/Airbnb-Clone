@@ -54,7 +54,7 @@ def get_immeubles(immeubleId=None):
 def get_logements(immeubleId, logementId=None):
     # Cette fonction retourne un ou plusieurs logements
     if logementId is not None:
-        sqlRequest = f"SELECT * FROM Immeuble WHERE contient = '{immeubleId}' AND id_logement = '{logementId}';"
+        sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND id_logement = '{logementId}';"
     else:
         sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}';"
     cursor.execute(sqlRequest)
