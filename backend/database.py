@@ -90,7 +90,3 @@ def get_users(userId=None):
     cursor.execute(sqlRequest)
     users = cursor.fetchall()
     return users
-
-
-if __name__ == '__main__':
-    insert_user("wrgeg@gmail.com", 123-234-2341, "georges", "pass123", 23)
