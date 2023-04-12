@@ -20,16 +20,11 @@ def login():
         mdp = data["password"]
 
         if check_user_mdp(email, mdp):
-            response = {
-                "status": 200
-            }
+            status = 200=1
         else:
-            response = {
-                "status": 403,
-                "message": "Mauvaise informations de connexion"
-            }
+            status = 403
 
-        return jsonify(response)
+        return status
 
 
 @app.route("/users/<user_id>/favorites", methods=["GET"])
@@ -45,16 +40,10 @@ def getFavorites(user_id):
 
         logements_favoris = get_user_favorites(user_id)
         if logements_favoris:
-            response = {
-                "status": 200,
-                "favoris": f"{logements_favoris}"
-            }
+            status = 201
         else:
-            response = {
-                "status": 204,
-                "favoris": f"{logements_favoris}"
-            }
-        return jsonify(response)
+            status = 204
+        return jsonify(logements_favoris), status
 
 @app.route("/signin", methods=["POST"])
 def signup():
@@ -72,11 +61,9 @@ def signup():
 
         insert_user(email, phone, nom, mdp, age)
 
-        response = {
-            "status": 201
-        }
+        status = 201
 
-        return jsonify(response)
+        return status
 
 @app.route("/immeubles", methods=["GET"])
 def getImmeubles():
@@ -105,16 +92,10 @@ def getImmeuble(immeuble_id):
     if request.method == "GET":
         immeuble = get_immeubles(immeuble_id)
         if immeuble:
-            response = {
-                "status": 200,
-                "immeuble": f"{immeuble}"
-            }
+            status = 200
         else:
-            response = {
-                "status": 204,
-                "immeuble": f"{immeuble}"
-            }
-        return jsonify(response)
+            status = 204
+        return jsonify(immeuble), status
 
 @app.route("/immeubles/<immeuble_id>/logements", methods=["GET"])
 def getLogements(immeuble_id):
@@ -127,16 +108,10 @@ def getLogements(immeuble_id):
     if request.method == "GET":
         logements = get_logements(immeuble_id)
         if logements:
-            response = {
-                "status": 200,
-                "logements": f"{logements}"
-            }
+            status = 200
         else:
-            response = {
-                "status": 204,
-                "logements": f"{logements}"
-            }
-        return jsonify(response)
+            status = 204
+        return jsonify(logements), status
 
 @app.route("/immeubles/$<immeuble_id>/logements/<logement_id>", methods=["GET"])
 def getLogement(immeuble_id, logement_id):
@@ -147,18 +122,12 @@ def getLogement(immeuble_id, logement_id):
     #          status : 204 pour un succès, mais il n'y a pas de logement avec cet id
     #          logement : tuples du logement (vide)
     if request.method == "GET":
-        logements = get_logements(immeuble_id, logement_id)
-        if logements:
-            response = {
-                "status": 200,
-                "logements": f"{logements}"
-            }
+        logement = get_logements(immeuble_id, logement_id)
+        if logement:
+            status = 200
         else:
-            response = {
-                "status": 204,
-                "logements": f"{logements}"
-            }
-        return jsonify(response)
+            status = 204
+        return jsonify(logement), status
 
 
 @app.route("/users", methods=["GET"])
@@ -172,16 +141,10 @@ def getUsers():
     if request.method == "GET":
         users = get_users()
         if users:
-            response = {
-                "status": 200,
-                "users": f"{users}"
-            }
+            status = 200
         else:
-            response = {
-                "status": 204,
-                "users": f"{users}"
-            }
-        return jsonify(response)
+            status = 204
+        return jsonify(users), status
 
 @app.route("/users/<userId>", methods=["GET"])
 def getUser(user_id):
@@ -194,16 +157,10 @@ def getUser(user_id):
     if request.method == "GET":
         user = get_immeubles(user_id)
         if user:
-            response = {
-                "status": 200,
-                "immeuble": f"{user}"
-            }
+            status = 200
         else:
-            response = {
-                "status": 204,
-                "immeuble": f"{user}"
-            }
-        return jsonify(response)
+            status = 204
+        return jsonify(user), status
 
 @app.route("/users/<user_id>/favorites/<logement_id>", methods=["POST"])
 def addFavorite(user_id, logement_id):
@@ -213,11 +170,9 @@ def addFavorite(user_id, logement_id):
 
         insert_favorite(logement_id, user_id)
 
-        response = {
-            "status": 201
-        }
+        status = 201
 
-        return jsonify(response)
+        return status
 
 @app.route("/users/<user_id>/favorites/<logement_id>", methods=["DELETE"])
 def deleteFavorite(user_id, logement_id):
@@ -227,11 +182,9 @@ def deleteFavorite(user_id, logement_id):
 
         delete_favorite(logement_id, user_id)
 
-        response = {
-            "status": 204
-        }
+        status = 204
 
-        return jsonify(response)
+        return status
 
 if __name__ == '__main__':
     app.run()
