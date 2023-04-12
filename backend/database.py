@@ -58,9 +58,9 @@ def get_immeubles(immeubleId=None, query=None):
     if immeubleId is not None:
         sqlRequest = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = '{immeubleId}' AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
     elif query is not None:
-        addresseIndex = f"SELECT * FROM Immeuble WHERE LIKE = '%{query}%'"
-        nomIndex = f"SELECT * FROM Immeuble WHERE nom LIKE '%{query}%'"
-        secteurIndex = f"SELECT * FROM Immeuble WHERE secteur LIKE '%{query}%'"
+        addresseIndex = f"SELECT * FROM Immeuble WHERE address LIKE '{query}'"
+        nomIndex = f"SELECT * FROM Immeuble WHERE nom LIKE '{query}'"
+        secteurIndex = f"SELECT * FROM Immeuble WHERE secteur LIKE '{query}'"
         union = " UNION "
         sqlRequest = addresseIndex+union+nomIndex+union+secteurIndex+';'
     else:
