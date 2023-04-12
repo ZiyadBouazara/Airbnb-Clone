@@ -89,16 +89,10 @@ def getImmeubles():
     if request.method == "GET":
         immeubles = get_immeubles()
         if immeubles:
-            response = {
-                "status": 200,
-                "immeubles": f"{immeubles}"
-            }
+            status = 200
         else:
-            response = {
-                "status": 204,
-                "immeubles": f"{immeubles}"
-            }
-        return jsonify(response)
+            status = 204
+        return jsonify(immeubles), status
 
 @app.route("/immeubles/<immeuble_id>", methods=["GET"])
 def getImmeuble(immeuble_id):
