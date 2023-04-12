@@ -90,7 +90,3 @@ def get_users(userId=None):
     cursor.execute(sqlRequest)
     users = cursor.fetchall()
     return users
-
-
-if __name__ == '__main__':
-

@@ -66,7 +66,7 @@ def signup():
             status = 201
         except:
             status = 500
-        return status
+        return ("", status)
 
 
 @app.route("/immeubles", methods=["GET"])
