@@ -25,7 +25,7 @@ def login():
                 status = 403
         except:
             status = 500
-        return status
+        return "", status
 
 
 @app.route("/users/<user_id>/favorites", methods=["GET"])
@@ -66,7 +66,7 @@ def signup():
             status = 201
         except:
             status = 500
-        return ("", status)
+        return "", status
 
 
 @app.route("/immeubles", methods=["GET"])
@@ -209,7 +209,7 @@ def addFavorite(user_id, logement_id):
             status = 201
         except:
             status = 500
-        return status
+        return "", status
 
 
 @app.route("/users/<user_id>/favorites/<logement_id>", methods=["DELETE"])
@@ -222,7 +222,7 @@ def deleteFavorite(user_id, logement_id):
             status = 204
         except:
             status = 500
-        return status
+        return "", status
 
 
 if __name__ == '__main__':
