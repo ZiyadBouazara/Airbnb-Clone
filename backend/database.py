@@ -33,14 +33,14 @@ def check_user_mdp(email, mdp):
     # Cette fonction valide le mot de passe d'un utilisateur
     sqlRequest = f"SELECT mdp FROM safe WHERE email = '{email}';"
     cursor.execute(sqlRequest)
-    hashed_mdp = cursor.fetchone()[0]
+    hashed_mdp = cursor.fetchall()
     return pbkdf2_sha256.verify(mdp, hashed_mdp)
 
 def get_user_favorites(userId):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur
     sqlRequest = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE id = '{userId}';"
     cursor.execute(sqlRequest)
-    logements_favoris = cursor.fetchone()[0]
+    logements_favoris = cursor.fetchall()
     return logements_favoris
 
 def get_immeubles(immeubleId=None):
@@ -50,7 +50,7 @@ def get_immeubles(immeubleId=None):
     else:
         sqlRequest = "SELECT * FROM Immeuble;"
     cursor.execute(sqlRequest)
-    immeubles = cursor.fetchone()[0]
+    immeubles = cursor.fetchall()
     return immeubles
 
 def get_logements(immeubleId, logementId=None):
@@ -60,7 +60,7 @@ def get_logements(immeubleId, logementId=None):
     else:
         sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}';"
     cursor.execute(sqlRequest)
-    logements = cursor.fetchone()[0]
+    logements = cursor.fetchall()
     return logements
 
 def get_users(userId=None):
@@ -70,7 +70,7 @@ def get_users(userId=None):
     else:
         sqlRequest = "SELECT * FROM User;"
     cursor.execute(sqlRequest)
-    users = cursor.fetchone()[0]
+    users = cursor.fetchall()
     return users
 
 
