@@ -26,7 +26,7 @@ def insert_favorite(logement_id, user_id):
 
 def delete_favorite(logement_id, user_id):
     # Cette fonction insère un nouveau logement dans Aime
-    sqlRequest = f"DELETE FROM Aime (id_logement, id) WHERE id_logement = logement_id AND id = user_id;"
+    sqlRequest = f"DELETE FROM Aime WHERE id_logement = '{logement_id}' AND id = '{user_id}';"
     cursor.execute(sqlRequest)
 
 def check_user_mdp(email, mdp):
@@ -76,5 +76,7 @@ def get_users(userId=None):
 
 
 if __name__ == '__main__':
-
+    insert_favorite(1, 1)
+    print(get_user_favorites(1))
+    delete_favorite(1, 1)
 
