@@ -11,8 +11,11 @@ CORS(app)
 def login():
     # Valide le mot de passe d'un utilisateur
     # Retourne : status : 200 pour un mot de passe valide
+    #            user_id : id du user
     #               ou
     #            status : 403 pour un mot de passe non valide
+    #               ou
+    #            status : 500 pour un server-side error
 
     if request.method == "POST":
         user_id = {}
@@ -38,6 +41,8 @@ def getFavorites(user_id):
     #               ou
     #          status : 204 pour un succès, mais l'utilisateur n'a pas de logements favoris
     #          favoris : tuples des logements favoris (vide)
+    #               ou
+    #            status : 500 pour un server-side error
 
     if request.method == "GET":
         logements_favoris = {}
@@ -56,6 +61,10 @@ def getFavorites(user_id):
 def signup():
     # Insère un nouvel utilisateur dans la base de données
     # Retourne status : 201 pour un succès
+    #          user_id : id du user
+    #               ou
+    #          status : 500 pour un server-side error
+
     if request.method == "POST":
         user_id = {}
         try:
@@ -81,6 +90,8 @@ def getImmeubles():
     #               ou
     #          status : 204 pour un succès, mais il n'y a pas d'immeubles
     #          immeubles : tuples des immeubles (vide)
+    #               ou
+    #          status : 500 pour un server-side error
 
     query = request.args['query']
 
@@ -105,6 +116,8 @@ def getImmeuble(immeuble_id):
     #               ou
     #          status : 204 pour un succès, mais il n'y a pas d'immeuble avec cet id
     #          immeuble : tuples de l'immeuble (vide)
+    #               ou
+    #          status : 500 pour un server-side error
 
     if request.method == "GET":
         immeuble = {}
@@ -127,6 +140,9 @@ def getLogements(immeuble_id):
     #               ou
     #          status : 204 pour un succès, mais il n'y a pas de logements
     #          logements : tuples des logements (vide)
+    #               ou
+    #          status : 500 pour un server-side error
+
     if request.method == "GET":
         logements = {}
         try:
@@ -148,6 +164,9 @@ def getLogement(immeuble_id, logement_id):
     #               ou
     #          status : 204 pour un succès, mais il n'y a pas de logement avec cet id
     #          logement : tuples du logement (vide)
+    #               ou
+    #          status : 500 pour un server-side error
+
     if request.method == "GET":
         logement = {}
         try:
@@ -169,6 +188,9 @@ def getUsers():
     #               ou
     #          status : 204 pour un succès, mais il n'y a pas d'users
     #          users : tuples des users (vide)
+    #               ou
+    #          status : 500 pour un server-side error
+
     if request.method == "GET":
         users = {}
         try:
@@ -190,6 +212,9 @@ def getUser(user_id):
     #               ou
     #          status : 204 pour un succès, mais il n'y a pas d'user avec cet id
     #          user : tuples de l'user (vide)
+    #               ou
+    #          status : 500 pour un server-side error
+
     if request.method == "GET":
         user = {}
         try:
@@ -207,6 +232,9 @@ def getUser(user_id):
 def addFavorite(user_id, logement_id):
     # Fonction qui insère un tuple dans la table aime
     # Retourne status : 201 pour un succès
+    #               ou
+    #          status : 500 pour un server-side error
+
     if request.method == "POST":
         try:
             insert_favorite(logement_id, user_id)
@@ -220,6 +248,9 @@ def addFavorite(user_id, logement_id):
 def deleteFavorite(user_id, logement_id):
     # Fonction qui retire un tuple dans la table aime
     # Retourne status : 204 pour un succès
+    #               ou
+    #          status : 500 pour un server-side error
+
     if request.method == "DELETE":
         try:
             delete_favorite(logement_id, user_id)
