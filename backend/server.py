@@ -50,7 +50,7 @@ def getFavorites(user_id):
         return jsonify(logements_favoris), status
 
 
-@app.route("/signin", methods=["POST"])
+@app.route("/signup", methods=["POST"])
 def signup():
     # Insère un nouvel utilisateur dans la base de données
     # Retourne status : 201 pour un succès
