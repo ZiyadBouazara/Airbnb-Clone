@@ -1,25 +1,22 @@
+import { Immeuble } from "../../utils/Immeuble"
+
 interface Props {
-    name: string,
-    photo: string,
-    address: string,
-    sector: string,
-    type: string,
-    minPrice: number
+  immeuble: Immeuble;
 }
 
-const ImmeubleHeader: React.FC<Props> = ({ name, photo, address, sector, type, minPrice }) => {
+const ImmeubleHeader: React.FC<Props> = ({ immeuble }) => {
   return (
     <>
         <div>
-          <h1 className="font-bold text-5xl">{name}</h1>
+          <h1 className="font-bold text-5xl">{immeuble.nom}</h1>
         </div>
         <div>
           <ul className="flex flex-wrap gap-1">
-            <li>📍 {address}, {sector}</li>
+            <li>📍 {immeuble.address}, {immeuble.secteur}</li>
             <li>·</li>
-            <li>{type}</li>
+            <li>{immeuble.type}</li>
             <li>·</li>
-            <li>À partir de {minPrice}$/mois</li>
+            <li>À partir de {immeuble.price}$/mois</li>
           </ul>
         </div>
     </>

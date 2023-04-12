@@ -13,7 +13,7 @@ const LogementList: React.FC<Props> = ({ logements }) => {
   return (
     <ul className="flex flex-wrap justify-center gap-2">
         {logements.map((logement) => (
-            <LogementListItem key={logement.id} id={logement.id} immeubleId={logement.immeubleId} photos={logement.photos} available={logement.available} number={logement.number} price={logement.price} rooms={logement.rooms} size={logement.size} />
+            <LogementListItem key={logement.id_logement} id={logement.id_logement} immeubleId={logement.contient} photos={logement.photos} available={logement.available} number={logement.numero} price={logement.price} rooms={logement.pieces} size={logement.taille} />
             ))}
     </ul>
   )

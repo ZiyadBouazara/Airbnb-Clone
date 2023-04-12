@@ -8,7 +8,7 @@ namespace logement {
             }
         );
         const response = await fetch(request);
-        return response;
+        return await response.json();
     }
 
     export const getLogement = async (immeubleId: string, logementId: string): Promise<Response> => {

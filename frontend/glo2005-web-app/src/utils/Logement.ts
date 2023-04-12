@@ -1,10 +1,10 @@
 export interface Logement {
-    id: number,
-    immeubleId: number,
+    id_logement: number,
+    contient: number,
     available: boolean,
     photos:string[],
-    rooms: string,
-    size: number,
-    number: number,
+    pieces: string,
+    taille: number,
+    numero: number,
     price: number,
 }

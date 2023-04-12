@@ -10,38 +10,28 @@ import ElevatorLogo from "../logos/ElevatorLogo"
 import EVChargerLogo from "../logos/EVChargerLogo"
 import ACLogo from "../logos/ACLogo"
 import TerraceLogo from "../logos/TerraceLogo"
+import { Immeuble } from "../../utils/Immeuble"
 
 interface Props {
-    hasHotWater: boolean,
-    hasElectricity: boolean,
-    hasWifi: boolean,
-    hasParking: boolean,
-    hasPool: boolean,
-    hasGym: boolean,
-    hasBackyard: boolean,
-    hasElevator: boolean,
-    hasEVCharger: boolean,
-    hasAC: boolean,
-    hasTerrace: boolean,
+  immeuble: Immeuble;
 }
 
-const ImmeubleAmenities: React.FC<Props> = ({ hasHotWater, hasElectricity, hasWifi, hasParking,
-  hasPool, hasGym, hasBackyard, hasElevator, hasEVCharger, hasAC, hasTerrace }) => {
+const ImmeubleAmenities: React.FC<Props> = ({ immeuble }) => {
   return (
     <>
         <h1 className="font-semibold text-xl">Services et commodités</h1>
         <ul className="flex flex-wrap justify-center gap-1">
-            {hasHotWater ? <ImmeubleAmentiesItem name="Eau chaude" logo={<HotWaterLogo />} /> : null}
-            {hasElectricity ? <ImmeubleAmentiesItem name="Électricité" logo={<ElectricityLogo />} /> : null}
-            {hasWifi ? <ImmeubleAmentiesItem name="Wifi" logo={<WifiLogo />} /> : null}
-            {hasParking ? <ImmeubleAmentiesItem name="Parking" logo={<ParkingLogo />} /> : null}
-            {hasPool ? <ImmeubleAmentiesItem name="Piscine" logo={<PoolLogo />} /> : null}
-            {hasGym ? <ImmeubleAmentiesItem name="Gym" logo={<GymLogo />} /> : null}
-            {hasBackyard ? <ImmeubleAmentiesItem name="Cour" logo={<BackyardLogo />} /> : null}
-            {hasElevator ? <ImmeubleAmentiesItem name="Ascenseur" logo={<ElevatorLogo />} /> : null}
-            {hasEVCharger ? <ImmeubleAmentiesItem name="Chargeur VE" logo={<EVChargerLogo />} /> : null}
-            {hasAC ? <ImmeubleAmentiesItem name="Air conditionné" logo={<ACLogo />} /> : null}
-            {hasTerrace ? <ImmeubleAmentiesItem name="Terrasse" logo={<TerraceLogo />} /> : null}
+            {immeuble.hot_water ? <ImmeubleAmentiesItem name="Eau chaude" logo={<HotWaterLogo />} /> : null}
+            {immeuble.electricity ? <ImmeubleAmentiesItem name="Électricité" logo={<ElectricityLogo />} /> : null}
+            {immeuble.wifi ? <ImmeubleAmentiesItem name="Wifi" logo={<WifiLogo />} /> : null}
+            {immeuble.parking ? <ImmeubleAmentiesItem name="Parking" logo={<ParkingLogo />} /> : null}
+            {immeuble.pool ? <ImmeubleAmentiesItem name="Piscine" logo={<PoolLogo />} /> : null}
+            {immeuble.gym ? <ImmeubleAmentiesItem name="Gym" logo={<GymLogo />} /> : null}
+            {immeuble.backyard ? <ImmeubleAmentiesItem name="Cour" logo={<BackyardLogo />} /> : null}
+            {immeuble.elevator ? <ImmeubleAmentiesItem name="Ascenseur" logo={<ElevatorLogo />} /> : null}
+            {immeuble.ev_charger ? <ImmeubleAmentiesItem name="Chargeur VE" logo={<EVChargerLogo />} /> : null}
+            {immeuble.air_conditioner ? <ImmeubleAmentiesItem name="Air conditionné" logo={<ACLogo />} /> : null}
+            {immeuble.terrasse ? <ImmeubleAmentiesItem name="Terrasse" logo={<TerraceLogo />} /> : null}
         </ul>
     </>
   )

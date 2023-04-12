@@ -18,7 +18,7 @@ export const getImmeuble = async (immeubleId: string): Promise<Response> => {
         }
     );
     const response = await fetch(request);
-    return response;
+    return await response.json();
 }
 
 export const getLogements = async (immeubleId: string): Promise<Response> => {
