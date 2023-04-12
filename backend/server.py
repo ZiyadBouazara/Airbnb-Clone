@@ -194,7 +194,7 @@ def getUsers():
         return jsonify(response)
 
 @app.route("/users/<userId>", methods=["GET"])
-def getUsers(user_id):
+def getUser(user_id):
     # Fonction qui retourne le tuple d'un user en fonction de son id
     # Retourne status : 200 pour un succès
     #          user : tuples de l'user
