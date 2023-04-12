@@ -182,7 +182,7 @@ def getUsers():
         return jsonify(users), status
 
 
-@app.route("/users/<userId>", methods=["GET"])
+@app.route("/users/<user_id>", methods=["GET"])
 def getUser(user_id):
     # Fonction qui retourne le tuple d'un user en fonction de son id
     # Retourne status : 200 pour un succès
@@ -193,7 +193,7 @@ def getUser(user_id):
     if request.method == "GET":
         user = {}
         try:
-            user = get_immeubles(user_id)
+            user = get_users(user_id)
             if user:
                 status = 200
             else:
