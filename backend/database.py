@@ -93,6 +93,4 @@ def get_users(userId=None):
 
 
 if __name__ == '__main__':
-    #insert_user('sdfeas@gmail.com', 418-234-2354, 'password123', 'georges', 23)
-    print(get_immeubles(None, "Kebon"))
-    check_user_mdp('sdfeas@gmail.com', 'password123')
+
