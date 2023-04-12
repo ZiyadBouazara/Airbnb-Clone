@@ -44,6 +44,13 @@ def check_user_mdp(email, mdp):
     else:
         return False
 
+def get_user_id(email):
+    # Cette fonction retourne le id d'un user en fonction de son email
+    sqlRequest = f"SELECT id FROM USER WHERE email = '{email}';"
+    cursor.execute(sqlRequest)
+    user_id = cursor.fetchone()
+    return user_id
+
 
 def get_user_favorites(userId):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur
@@ -90,3 +97,6 @@ def get_users(userId=None):
     cursor.execute(sqlRequest)
     users = cursor.fetchall()
     return users
+
+if __name__ == '__main__':
+    insert_user("wrgeg@gmail.com", "123-234-2341", "georges", "pass123", 23)

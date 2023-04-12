@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements, get_users,\
-    insert_favorite, delete_favorite
+    insert_favorite, delete_favorite, get_user_id
 
 app = Flask(__name__)
 CORS(app)
@@ -15,17 +15,19 @@ def login():
     #            status : 403 pour un mot de passe non valide
 
     if request.method == "POST":
+        user_id = {}
         try:
             data = request.json
             email = data["username"]
             mdp = data["password"]
             if check_user_mdp(email, mdp):
                 status = 200
+                user_id = get_user_id(email)
             else:  # Si le user existe pas ou si le mdp est inexact
                 status = 403
         except:
             status = 500
-        return "", status
+        return jsonify(user_id), status
 
 
 @app.route("/users/<user_id>/favorites", methods=["GET"])
@@ -55,6 +57,7 @@ def signup():
     # Insère un nouvel utilisateur dans la base de données
     # Retourne status : 201 pour un succès
     if request.method == "POST":
+        user_id = {}
         try:
             data = request.json
             email = data["email"]
@@ -64,9 +67,10 @@ def signup():
             age = data["age"]
             insert_user(email, phone, nom, mdp, age)
             status = 201
+            user_id = get_user_id(email)
         except:
             status = 500
-        return "", status
+        return user_id, status
 
 
 @app.route("/immeubles", methods=["GET"])
