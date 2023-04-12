@@ -25,7 +25,6 @@ def login():
             status = 200
         else:  # Si le user existe pas ou si le mdp est inexact
             status = 403
-
         return status
 
 
