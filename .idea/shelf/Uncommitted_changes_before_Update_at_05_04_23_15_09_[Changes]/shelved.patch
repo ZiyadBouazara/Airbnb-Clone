@@ -1,0 +1,302 @@
+Index: backend/server.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from flask import Flask, render_template, request, jsonify\r\nfrom database import insert_user, check_user_mdp, get_user_favorites, get_immeubles\r\n\r\napp = Flask(__name__)\r\n\r\n\r\n@app.route(\"/\")\r\ndef index():\r\n    return render_template(\"index.html\")\r\n\r\n@app.route(\"/login\", methods=[\"POST\"])\r\ndef login():\r\n    # Valide le mot de passe d'un utilisateur\r\n    # Retourne : status : 200 pour un mot de passe valide\r\n    #               ou\r\n    #            status : 403 pour un mot de passe non valide\r\n\r\n    if request.method == \"POST\":\r\n\r\n        data = request.json\r\n\r\n        email = data[\"username\"]\r\n        mdp = data[\"password\"]\r\n\r\n        if check_user_mdp(email, mdp):\r\n            response = {\r\n                \"status\": 200\r\n            }\r\n        else:\r\n            response = {\r\n                \"status\": 403,\r\n                \"message\": \"Mauvaise informations de connexion\"\r\n            }\r\n\r\n        return jsonify(response)\r\n\r\n\r\n@app.route(\"/users/<user_id>/favorites\", methods=[\"GET\"])\r\ndef getFavorites(user_id):\r\n    # Fonction qui retourne les logements favoris d'un utilisateur\r\n    # Retourne status : 200 pour un succès\r\n    #          favoris : tuples des logements favoris\r\n    #               ou\r\n    #          status : 204 pour un succès, mais l'utilisateur n'a pas de logements favoris\r\n    #          favoris : tuples des logements favoris (vide)\r\n\r\n    if request.method == \"GET\":\r\n\r\n        logements_favoris = get_user_favorites(user_id)\r\n        if logements_favoris:\r\n            response = {\r\n                \"status\": 200,\r\n                \"favoris\": f\"{logements_favoris}\"\r\n            }\r\n        else:\r\n            response = {\r\n                \"status\": 204,\r\n                \"favoris\": f\"{logements_favoris}\"\r\n            }\r\n        return jsonify(response)\r\n\r\n@app.route(\"/signin\", methods=[\"POST\"])\r\ndef signin():\r\n    # Insère un nouvel utilisateur dans la base de données\r\n    # Retourne status : 201 pour un succès\r\n    if request.method == \"POST\":\r\n\r\n        data = request.json\r\n\r\n        email = data[\"username\"]\r\n        phone = data[\"phone\"]\r\n        nom = data[\"nom\"]\r\n        mdp = data[\"mdp\"]\r\n        age = data [\"age\"]\r\n\r\n        insert_user(email, phone, nom, mdp, age)\r\n\r\n        response = {\r\n            \"status\": 201\r\n        }\r\n\r\n        return jsonify(response)\r\n\r\n@app.route(\"/immeubles\", methods=[\"GET\"])\r\ndef getImmeubles():\r\n    # Fonction qui retourne tous les immeubles\r\n    # Retourne status : 200 pour un succès\r\n    #          immeubles : tuples des immeubles\r\n    #               ou\r\n    #          status : 204 pour un succès, mais il n'y a pas d'immeubles\r\n    #          immeubles : tuples des immeubles (vide)\r\n    if request.method == \"GET\":\r\n        immeubles = get_immeubles()\r\n        if immeubles:\r\n            response = {\r\n                \"status\": 200,\r\n                \"immeubles\": f\"{immeubles}\"\r\n            }\r\n        else:\r\n            response = {\r\n                \"status\": 204,\r\n                \"immeubles\": f\"{immeubles}\"\r\n            }\r\n        return jsonify(response)\r\n\r\n@app.route(\"/immeubles/<immeuble_adresse>\", methods=[\"GET\"])\r\ndef getImmeuble(immeuble_adresse):\r\n    # Fonction qui retourne le tuple d'un immeuble en fonction de son adresse\r\n    # Retourne status : 200 pour un succès\r\n    #          immeuble : tuples de l'immeuble\r\n    #               ou\r\n    #          status : 204 pour un succès, mais il n'y a pas d'immeuble a cette adresse\r\n    #          immeuble : tuples de l'immeuble (vide)\r\n    if request.method == \"GET\":\r\n        immeuble = get_immeubles(immeuble_adresse)\r\n        if immeuble:\r\n            response = {\r\n                \"status\": 200,\r\n                \"immeuble\": f\"{immeuble}\"\r\n            }\r\n        else:\r\n            response = {\r\n                \"status\": 204,\r\n                \"immeuble\": f\"{immeuble}\"\r\n            }\r\n        return jsonify(response)\r\n\r\n\r\nif __name__ == '__main__':\r\n    app.run()\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/server.py b/backend/server.py
+--- a/backend/server.py	(revision 2e1be9c20cd4576d38f30a3ae663cc4559011de4)
++++ b/backend/server.py	(date 1680720118895)
+@@ -103,8 +103,8 @@
+             }
+         return jsonify(response)
+ 
+-@app.route("/immeubles/<immeuble_adresse>", methods=["GET"])
+-def getImmeuble(immeuble_adresse):
++@app.route("/immeubles/<immeuble_id>", methods=["GET"])
++def getImmeuble(immeuble_id):
+     # Fonction qui retourne le tuple d'un immeuble en fonction de son adresse
+     # Retourne status : 200 pour un succès
+     #          immeuble : tuples de l'immeuble
+@@ -112,7 +112,7 @@
+     #          status : 204 pour un succès, mais il n'y a pas d'immeuble a cette adresse
+     #          immeuble : tuples de l'immeuble (vide)
+     if request.method == "GET":
+-        immeuble = get_immeubles(immeuble_adresse)
++        immeuble = get_immeubles(immeuble_id)
+         if immeuble:
+             response = {
+                 "status": 200,
+Index: backend/init.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pymysql, pymysql.cursors\r\nimport csv\r\nfrom passlib.hash import pbkdf2_sha256\r\n\r\ndef db_connection():\r\n    conn = pymysql.connect(\r\n        host=\"localhost\",\r\n        user=\"root\",\r\n        password=\"!@##@!Ziyo\",\r\n        db=\"glo_2005_webapp\",\r\n        autocommit=True\r\n    )\r\n    c = conn.cursor()\r\n    return conn, c\r\n\r\n\r\ndef create_tables():\r\n    # Cette fonction crée les tables nécéssaires à la BD\r\n\r\n    r1 = \"CREATE TABLE IF NOT EXISTS Immeuble(iid INT AUTO_INCREMENT, address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20),\" \\\r\n         \" nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), photos VARCHAR(255), descriptif VARCHAR(500), hot_water TINYINT(1),\" \\\r\n         \" electricity TINYINT(1), wifi TINYINT(1), parking TINYINT(1), gym TINYINT(1), backyard TINYINT(1),\" \\\r\n         \" elevator TINYINT(1), pool TINYINT(1), ev_charger TINYINT(1), air_conditioner TINYINT(1),\" \\\r\n         \" terrasse TINYINT(1), PRIMARY KEY(iid), UNIQUE (address));\"\r\n\r\n    r2 = \"CREATE TABLE IF NOT EXISTS Logement(id_logement INT AUTO_INCREMENT, contient INT NOT NULL,\" \\\r\n         \" available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER,\" \\\r\n         \" UNIQUE(contient, numero),\" \\\r\n         \" PRIMARY KEY(id_logement),\" \\\r\n         \" FOREIGN KEY (contient) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE);\"\r\n\r\n    r3 = \"CREATE TABLE IF NOT EXISTS User(id INT AUTO_INCREMENT, email VARCHAR(50), phone VARCHAR(15), nom VARCHAR(50), mdp VARCHAR(255),\" \\\r\n         \" age INTEGER, UNIQUE(email), UNIQUE(nom, age), PRIMARY KEY(id), \" \\\r\n         \"CONSTRAINT age_legal CHECK ( age BETWEEN 18 AND 112));\"\r\n\r\n    r4 = \"CREATE TABLE IF NOT EXISTS Locataire(id  INT, \" \\\r\n         \"PRIMARY KEY (id), FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);\"\r\n\r\n    r5 = \"CREATE TABLE IF NOT EXISTS Louer(id  INT, id_logement INT, date_debut DATE, date_fin DATE,\" \\\r\n         \"PRIMARY KEY(id_logement, id),\" \\\r\n         \"FOREIGN KEY (id) REFERENCES Locataire(id) ON UPDATE CASCADE ON DELETE CASCADE,\" \\\r\n         \"FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);\"\r\n\r\n    r6 = \"CREATE TABLE IF NOT EXISTS Aime(id_logement INT, id INT,\" \\\r\n         \"PRIMARY KEY(id_logement, id),\" \\\r\n         \"FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE,\" \\\r\n         \"FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);\"\r\n\r\n    r7 = \"CREATE TABLE IF NOT EXISTS Contient(iid INT, id_logement  INT, \" \\\r\n         \"PRIMARY KEY(iid, id_logement),\" \\\r\n         \"FOREIGN KEY (iid) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE,\" \\\r\n         \"FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);\"\r\n\r\n    cursor.execute(r1)\r\n    cursor.execute(r2)\r\n    cursor.execute(r3)\r\n    cursor.execute(r4)\r\n    cursor.execute(r5)\r\n    cursor.execute(r6)\r\n    cursor.execute(r7)\r\n\r\n\r\n\r\ndef create_triggers():\r\n    # Cette fonction crée les triggers nécéssaires à la BD\r\n\r\n    t1 = \"\"\"\r\n    CREATE TRIGGER AjoutLouer AFTER INSERT ON Louer\r\n    FOR EACH ROW\r\n    BEGIN\r\n        UPDATE Logement\r\n        SET Logement.available = 0\r\n        WHERE NEW.id_logement = Logement.id_logement;\r\n    END\r\n    \"\"\"\r\n    # Cette trigger set available a FALSE (0) lorsque l'on Loue un logement\r\n    # Donc le logement n'est plus disponible, il est loue\r\n\r\n\r\n    t2 = \"\"\"\r\n    CREATE TRIGGER EndOfLocation\r\n    AFTER DELETE ON Louer\r\n    FOR EACH ROW\r\n    BEGIN\r\n        UPDATE Logement\r\n        SET available = 1\r\n        WHERE Logement.id_logement = OLD.id_logement;\r\n        \r\n        IF (SELECT COUNT(*) FROM Louer WHERE id = OLD.id) = 1 THEN\r\n            DELETE FROM Locataire WHERE Locataire.id = OLD.id; \r\n        END IF ;\r\n    END\r\n    \"\"\"\r\n    # Cette trigger verifie apres avoir supprimer un tuple de Louer si le locataire possede une autre location.\r\n    # Si il n'en a pas d'autre, alors il n'est plus un locataire donc on le supprime de la Table Locataire\r\n    # Si il possede une autre location, alors on fait rien car il est encore un locataire\r\n    # + On set a available le logement qui a ete libere par le locataire dans tout les cas\r\n\r\n\r\n    t3 = \"\"\"\r\n    CREATE TRIGGER SupprimeLogement\r\n    AFTER DELETE ON Logement\r\n    FOR EACH ROW\r\n    BEGIN\r\n        UPDATE Immeuble\r\n        SET Immeuble.nombre_logements = Immeuble.nombre_logements - 1\r\n        WHERE OLD.contient = Immeuble.iid;\r\n    END\r\n    \"\"\"\r\n    # Cette trigger update le compte de nombre_logement apres suppression de logement en decrementant\r\n\r\n\r\n    t4 = \"\"\"\r\n    CREATE TRIGGER AjoutLogement\r\n    AFTER INSERT ON Logement\r\n    FOR EACH ROW\r\n    BEGIN\r\n        UPDATE Immeuble\r\n        SET Immeuble.nombre_logements = Immeuble.nombre_logements + 1\r\n        WHERE NEW.contient = Immeuble.iid;\r\n        \r\n        INSERT INTO Contient(iid, id_logement) VALUES (NEW.contient, NEW.id_logement);\r\n    END\r\n    \"\"\"\r\n    # Cette trigger ajoute immediatement apres un ajout de logement le tuple unique de ce logement a Contient\r\n    # Update le compte de nombre_logement en incrementant (Voir t3 pour decrement)\r\n    # Pour chaque ajout de logement AjoutLogement ajoute le tuple a Contient\r\n\r\n\r\n    t5 = \"\"\"\r\n    CREATE TRIGGER AucunLogementVerif\r\n    BEFORE DELETE ON Contient\r\n    FOR EACH ROW\r\n    BEGIN\r\n        IF (SELECT COUNT(*) FROM Contient WHERE iid = OLD.iid) = 1\r\n        THEN\r\n            SIGNAL SQLSTATE '45000'\r\n            SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus si vous supprimez ces logements. Veuillez supprimer Immeuble voulue directement.';\r\n        END IF ;\r\n    END\r\n    \"\"\"\r\n    #Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.\r\n    #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des\r\n    # renovations et enlever des logements. Donc c'est une precaution.\r\n\r\n\r\n    t6 = \"\"\"\r\n    CREATE TRIGGER ImmeubleExisteVerif\r\n    BEFORE INSERT ON Contient\r\n    FOR EACH ROW\r\n    BEGIN\r\n        IF (SELECT COUNT(*) FROM Immeuble WHERE Immeuble.iid = NEW.iid) = 0\r\n        THEN\r\n            SIGNAL SQLSTATE '45000'\r\n            SET MESSAGE_TEXT = 'Cette immeuble nexiste pas.';\r\n        END IF ;\r\n    END\r\n    \"\"\"\r\n    #Avant d'ajouter un tuple a Contient, on s'assure que l'immeuble pour lequel on ajoute ces tuples existes. On ne doit jamais avoir des logements sans Immeuble.\r\n    # ADD ORDER : 1-Immeuble, 2-Logements, 3-Contient\r\n    # DELETE ORDER: 1-Immeuble -> Cascade (Les tuples dans contient et logements seront automatiquement supprime)\r\n    # Si on supprime un Logement, les tuples dans Contient de ce logement seront supprime automatiquement\r\n\r\n\r\n    t7 = \"\"\"\r\n    CREATE TRIGGER AucunLogementVerif2\r\n    BEFORE DELETE ON Logement\r\n    FOR EACH ROW\r\n    BEGIN\r\n        IF (SELECT COUNT(*) FROM Logement WHERE contient = OLD.contient) = 1\r\n        THEN\r\n            SIGNAL SQLSTATE '45000'\r\n            SET MESSAGE_TEXT = 'Cette immeuble ne possède plus de logements ni de revenus si vous supprimez ces logements. Veuillez supprimer Immeuble voulue directement.';\r\n        END IF ;\r\n    END\r\n    \"\"\"\r\n    #Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.\r\n    #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des\r\n    # renovations et enlever des logements. Donc c'est une precaution. On defend ce type de suppression sur Logement et Contient\r\n\r\n\r\n    cursor.execute(t1)\r\n    cursor.execute(t2)\r\n    cursor.execute(t3)\r\n    cursor.execute(t4)\r\n    cursor.execute(t5)\r\n    cursor.execute(t6)\r\n    cursor.execute(t7)\r\n\r\n\r\ndef init():\r\n    # Cette fonction insere des données fictives dans la BD\r\n    immeubles = []\r\n    with open('immeubles.csv', newline='') as csvfile:\r\n        spamreader = csv.reader(csvfile, delimiter=',')\r\n        for row in spamreader:\r\n            immeubles.append(row[:1]+row[2:])\r\n\r\n    sqlImmeubles = \"INSERT INTO Immeuble (address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity,\" \\\r\n                   \"wifi, parking, gym, backyard, elevator, pool, ev_charger, air_conditioner, terrasse) \" \\\r\n                   \"VALUES (%s, 0, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)\"\r\n\r\n    logements = []\r\n    with open('logements.csv', newline='') as csvfile:\r\n        spamreader = csv.reader(csvfile, delimiter=',')\r\n        for row in spamreader:\r\n            logements.append(row[1:2]+row[3:])\r\n\r\n    sqlLogements = \"INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price) \" \\\r\n                   \"VALUES (NULL, %s, 1, %s, %s, %s, %s)\"\r\n\r\n    users = []\r\n    with open('users.csv', newline='') as csvfile:\r\n        spamreader = csv.reader(csvfile, delimiter=',')\r\n        for row in spamreader:\r\n            row[4] = pbkdf2_sha256.hash(row[4])\r\n            users.append(row[1:])\r\n\r\n    sqlUsers = \"INSERT INTO User (id, email, phone, nom, mdp, age) \" \\\r\n               \"VALUES (NULL, %s, %s, %s, %s, %s)\"\r\n\r\n    louer = []\r\n    locataire = []\r\n    with open('louer.csv', newline='') as csvfile:\r\n        spamreader = csv.reader(csvfile, delimiter=',')\r\n        for row in spamreader:\r\n            louer.append(row)\r\n            locataire.append(row[0])\r\n\r\n    sqlLouer = \"INSERT INTO Louer (id, id_logement, date_debut, date_fin) \" \\\r\n               \"VALUES (%s, %s, %s, %s)\"\r\n    sqlLocataire = \"INSERT INTO Locataire (id) VALUES (%s)\"\r\n\r\n    cursor.executemany(sqlImmeubles, immeubles)\r\n    cursor.executemany(sqlLogements, logements)\r\n    cursor.executemany(sqlUsers, users)\r\n    cursor.executemany(sqlLocataire, locataire)\r\n    cursor.executemany(sqlLouer, louer)\r\n\r\n\r\n\r\nif __name__ == '__main__':\r\n    connection, cursor = db_connection()\r\n    create_tables()\r\n    create_triggers()\r\n    init()\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/init.py b/backend/init.py
+--- a/backend/init.py	(revision 2e1be9c20cd4576d38f30a3ae663cc4559011de4)
++++ b/backend/init.py	(date 1680720922214)
+@@ -6,7 +6,7 @@
+     conn = pymysql.connect(
+         host="localhost",
+         user="root",
+-        password="!@##@!Ziyo",
++        password="abcdef",
+         db="glo_2005_webapp",
+         autocommit=True
+     )
+@@ -196,15 +196,15 @@
+         for row in spamreader:
+             immeubles.append(row[:1]+row[2:])
+ 
+-    sqlImmeubles = "INSERT INTO Immeuble (address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
++    sqlImmeubles = "INSERT INTO Immeuble (iid, address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
+                    "wifi, parking, gym, backyard, elevator, pool, ev_charger, air_conditioner, terrasse) " \
+-                   "VALUES (%s, 0, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
++                   "VALUES (NULL, %s, 0, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+ 
+     logements = []
+     with open('logements.csv', newline='') as csvfile:
+         spamreader = csv.reader(csvfile, delimiter=',')
+         for row in spamreader:
+-            logements.append(row[1:2]+row[3:])
++            logements.append(row)
+ 
+     sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price) " \
+                    "VALUES (NULL, %s, 1, %s, %s, %s, %s)"
+Index: backend/logements.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>bb9f4756-9497-4de1-844f-547fe5cd2fa2,957 Prairieview Drive,1,3 1/2,442,24,1778\r\nc9e25bdc-5afc-47c6-ba69-c4d5754c36fd,754 Clemons Parkway,1,6 1/2,557,1,1714\r\nc4b75534-85c9-409a-b56f-5a7a314598a4,42 Sunnyside Park,0,4 1/2,1252,10,1605\r\n9c64d8e7-43f5-4c04-92b8-8e3d4acea648,957 Prairieview Drive,1,4 1/2,848,11,1640\r\nc9af71e1-cbde-4c94-b4ab-7a3e2e29f34f,208 Jenna Way,0,4 1/2,1289,5,1137\r\n15afa8c8-002b-4600-a435-dfe3416d0e2f,7 Chive Avenue,0,6 1/2,1126,28,942\r\n2ff277ce-e27a-44b8-be8a-ffa62b21bc1a,532 Kinsman Crossing,0,5 1/2,1187,29,1580\r\n8b08f49d-0b07-4c1c-8141-a3721e5e5e27,14 Towne Parkway,1,3 1/2,1043,25,1158\r\n96add7c3-4370-41c0-9b5f-bfc56a8ddace,957 Prairieview Drive,0,4 1/2,568,14,1059\r\n4ee1c23b-e59f-47bc-bc06-67c029a43f6f,5137 Monument Street,0,4 1/2,909,25,2009\r\nc9011b76-4ff4-475b-9465-4a954dd846ba,38597 Mallory Court,0,3 1/2,908,26,1560\r\ncee87234-faf3-4493-81c1-4eadd41772be,42 Sunnyside Park,1,5 1/2,907,27,1479\r\ne7e700d0-78b2-4bb3-aff7-f7371ce013b2,38597 Mallory Court,0,5 1/2,476,27,1980\r\n540c8eeb-6673-48d1-8f7e-8ad19ddf04c2,7 Chive Avenue,1,3 1/2,1195,13,1652\r\n5a42cb14-fc87-494e-8016-ff06b0b0513d,957 Prairieview Drive,1,5 1/2,476,10,1126\r\n5cde1104-20c7-4a65-8640-f3839eaf3da0,72736 Village Drive,0,3 1/2,783,26,1767\r\nc1862842-c34a-4f96-91bb-016d13fd8d80,7 Chive Avenue,1,5 1/2,933,30,1545\r\ne3416439-9b50-4156-9717-beb0274ad114,957 Prairieview Drive,0,3 1/2,1038,19,1600\r\nf09b9073-9096-4371-a489-d1bc7547a3aa,754 Clemons Parkway,0,5 1/2,554,15,930\r\nb1b12879-3468-4784-9486-b27e136b3260,42 Sunnyside Park,1,6 1/2,1137,14,1373\r\n4b7b952f-9727-4433-bf29-53e908003bd7,532 Kinsman Crossing,1,3 1/2,584,13,944\r\n8de93cc1-4c58-4a55-be8a-b0c14533686e,957 Prairieview Drive,1,3 1/2,840,16,1223\r\n10a87c76-1b4b-4d12-8c96-0bfd8275d90b,38597 Mallory Court,1,3 1/2,672,9,1469\r\ne46f5b95-d2a6-4573-bfa5-4e27dc3ad739,14 Towne Parkway,0,4 1/2,609,18,1775\r\n306336ad-9da1-489c-9df3-9803f875c10c,754 Clemons Parkway,0,3 1/2,869,20,1911\r\n5e7e8a97-bea0-4184-b3dc-60dc15c4791f,38597 Mallory Court,0,5 1/2,744,11,1508\r\n39e3cf87-e667-425e-9aee-fdd4d8b8270d,532 Kinsman Crossing,0,6 1/2,633,2,1625\r\n54ae637a-74ad-4432-bee4-ad02253685fd,532 Kinsman Crossing,1,6 1/2,545,5,1548\r\n6390cffb-ff2b-49ea-aa84-7443edbca505,208 Jenna Way,1,5 1/2,695,23,1776\r\nb40e2386-0af4-4df9-993b-2565cdcb48ee,208 Jenna Way,1,4 1/2,988,11,1346\r\n390136df-2c76-400f-bc84-f8f4d59a9ae7,72736 Village Drive,0,6 1/2,700,24,1666\r\n05ea84bc-e770-433f-8a54-15837973a206,532 Kinsman Crossing,0,6 1/2,1228,12,995\r\n74985647-b3d0-4623-ae4c-fd6b7ff7d176,42 Sunnyside Park,0,5 1/2,937,28,1553\r\n2de0ed08-434f-439b-b4fc-7dcce5246e0e,42 Sunnyside Park,1,4 1/2,1056,4,1346\r\n8b601993-5f1b-46e8-8244-0edc65ac4dbf,7 Chive Avenue,1,6 1/2,1153,9,1203\r\nc20a403e-ece6-4c84-95e9-0d07c53edc14,532 Kinsman Crossing,0,4 1/2,1180,1,1936\r\n8eb90594-fc15-4865-96fb-5b611186dca1,38597 Mallory Court,1,5 1/2,541,8,1718\r\nc2dff40c-a58c-4d28-aed2-f25c8a54c8de,38597 Mallory Court,0,3 1/2,1096,28,1229\r\n1bb795b6-8261-4bdc-94bc-27d9afcadb62,72736 Village Drive,1,3 1/2,407,19,1003\r\n69f8ee40-241f-4765-b08c-6221eac80b96,5137 Monument Street,1,3 1/2,1126,14,1373\r\nb9ea7c7a-f349-4e7f-8f86-0b7b994be252,7 Chive Avenue,1,3 1/2,1177,15,1318\r\n8b27cc12-12ea-4e91-9c4d-e8bc367e114b,208 Jenna Way,1,4 1/2,594,25,1136\r\nc28b02f3-35b0-476c-a432-ff975ed0048c,5137 Monument Street,1,4 1/2,423,1,1267\r\n00aa881d-1a17-4167-86c2-a0a579c20b43,38597 Mallory Court,1,5 1/2,430,25,1083\r\n3e7ac133-8a33-42fd-91cb-21fc3e5c86b3,38597 Mallory Court,0,4 1/2,540,1,947\r\n939f4c46-059a-415f-86b8-3b7649a14c3c,208 Jenna Way,1,6 1/2,801,19,1312\r\n3ce8e0f9-fb8c-43f1-ac3a-d35c3a895efb,208 Jenna Way,1,3 1/2,573,18,1162\r\n344a259f-c815-45e3-bb83-3a350e5edcd7,208 Jenna Way,1,3 1/2,1007,30,1275\r\n97125ac5-d2a1-45e3-add6-b81f96967878,72736 Village Drive,1,4 1/2,1132,27,1617\r\nf89addc8-3bc0-4277-9711-6d358568e4c6,754 Clemons Parkway,0,5 1/2,1222,23,1694\r\na7cc1b75-ae17-4a46-8f7b-86d3c977e0dd,72736 Village Drive,0,5 1/2,706,21,1682\r\n5fa67283-eb1b-4740-ad42-b6ae3b11bf49,14 Towne Parkway,1,3 1/2,616,26,922\r\nfef96a12-7b8d-4c1e-a7b9-9f3fb3ea6e56,208 Jenna Way,1,3 1/2,1170,31,1397\r\n1270b529-9fe2-4ee5-ad52-6348a29b22c5,957 Prairieview Drive,1,4 1/2,441,22,2093\r\nec1700de-766c-4264-899e-65a562c0b60c,14 Towne Parkway,1,3 1/2,1072,24,2082\r\n772b39f5-a8dc-4ab4-adef-ca1b1a9e1097,532 Kinsman Crossing,0,4 1/2,916,10,1263\r\ndb4f139b-d5fc-4044-b854-12ed24c2af08,957 Prairieview Drive,0,5 1/2,445,13,1085\r\n3297c1fc-9968-4519-b0a8-6b308a4e5c67,14 Towne Parkway,0,6 1/2,773,4,1762\r\nc266dab0-2480-457e-bea3-56754bc16bde,72736 Village Drive,0,3 1/2,468,1,1223\r\n16c28813-3690-496e-b9df-ac3557f4c688,42 Sunnyside Park,0,3 1/2,1087,8,976\r\ne352a1c6-d201-440c-8a08-0d1fabebdf48,38597 Mallory Court,1,3 1/2,955,7,1481\r\ncbcebdb2-16e7-4ad0-92c5-e2951cf3a388,532 Kinsman Crossing,1,4 1/2,902,14,950\r\n21c6867c-38cf-4fd8-96a7-a70774b27e99,42 Sunnyside Park,0,3 1/2,1236,11,1949\r\n43a9da72-fca5-4c27-9610-2cb960207255,957 Prairieview Drive,1,4 1/2,1258,30,1757\r\nd22554e3-6171-4a86-998f-87c574a3da51,38597 Mallory Court,0,5 1/2,429,10,1644\r\n47f4abe8-a0c9-4e88-b5cd-438463c10dcf,42 Sunnyside Park,0,6 1/2,1190,30,1553\r\n41716fa0-774f-43e8-b4f4-c1d67d31fff8,208 Jenna Way,0,5 1/2,629,22,1506\r\n4464cf28-81ac-4b2a-879d-cd9bbb91fcbb,532 Kinsman Crossing,1,3 1/2,698,25,2072\r\n6e8bf587-ce77-42ed-994a-5877872de245,72736 Village Drive,1,5 1/2,667,11,1621\r\n954a8e74-a3d8-4007-887b-35cf18240ad0,5137 Monument Street,0,4 1/2,1243,29,1121\r\n8399456f-43c9-41e2-979a-7f8bc69df294,208 Jenna Way,0,3 1/2,445,24,1378\r\nb58de243-a6e5-4284-a5e1-82acb7fbba5f,7 Chive Avenue,0,3 1/2,597,3,1720\r\n406e57b2-b415-4541-af90-aa38ca921a84,72736 Village Drive,0,5 1/2,720,22,1884\r\n5f64b549-d4a3-4b91-b8b1-f50ead6e1855,754 Clemons Parkway,0,5 1/2,721,7,2071\r\nd2ee1665-98c6-4d8e-9ce4-b91057267e13,14 Towne Parkway,1,3 1/2,745,10,1005\r\n6a65ffd8-adf3-4900-903e-fc6d5a4167dd,38597 Mallory Court,1,6 1/2,409,2,936\r\nc8ff9d63-1f57-456d-9ca3-09a45fe6bb38,42 Sunnyside Park,0,5 1/2,1231,5,1248\r\n756ae5a4-ceb7-457b-93ab-4fc4dcea542d,957 Prairieview Drive,1,6 1/2,1291,21,1406\r\ne1cfb7af-33c5-45f3-8cd2-3555f82d8981,5137 Monument Street,1,3 1/2,602,27,1282\r\n23fbeb6e-392c-485b-b09b-b57da587b576,38597 Mallory Court,0,5 1/2,744,22,1527\r\n3792fb28-cd61-48fb-baa3-3f059b85960c,7 Chive Avenue,1,3 1/2,1280,1,1451\r\n5fdb69ca-5429-4681-96f9-be51e5b20380,5137 Monument Street,1,4 1/2,958,28,2097\r\n49104ac9-b3a0-4d7f-8b50-f67e24c52201,957 Prairieview Drive,1,5 1/2,659,18,1393\r\n92fc4516-db08-4173-8443-068722139119,38597 Mallory Court,0,3 1/2,1016,29,1282\r\nb951ee83-d18e-47c0-ad9f-2c0773b207c8,754 Clemons Parkway,1,4 1/2,407,16,1792\r\n086f8ed9-ca90-4e87-b675-cf7c38eaac01,38597 Mallory Court,1,3 1/2,780,23,1167\r\nd0b806a3-27b7-4646-9cef-28574eeff521,14 Towne Parkway,0,4 1/2,1142,22,1158\r\n80bf04a4-99da-448f-aef5-808d54c843b0,14 Towne Parkway,1,4 1/2,647,27,1630\r\n082d552e-5b73-4241-bbfd-a28c18e37d77,7 Chive Avenue,0,4 1/2,807,16,1870\r\nc9af8ca3-75a5-45ac-a7e4-ecc57576a92e,532 Kinsman Crossing,1,3 1/2,630,11,1014\r\n996daae6-f016-4045-91fa-7769138fc666,38597 Mallory Court,1,6 1/2,935,13,1922\r\n93febe4f-74f9-48f4-b6fa-3dac32e5b3ae,72736 Village Drive,0,4 1/2,1046,12,1248\r\nde4ff53f-8e5e-4761-9ba7-b86bc7851c7c,957 Prairieview Drive,0,3 1/2,540,12,1328\r\n354791c2-915c-4d1e-a831-c4f5af1101f6,7 Chive Avenue,0,5 1/2,1017,2,1103\r\ne482888c-3b87-4025-806e-469490db7063,208 Jenna Way,1,3 1/2,670,14,2045\r\n46f42119-bcbd-4fca-9b75-9eb194ba878d,72736 Village Drive,0,5 1/2,1057,7,1059\r\na0168027-ace6-45df-b4aa-77b46f7554c5,5137 Monument Street,1,6 1/2,707,2,1261\r\n2b276821-381b-4f92-baa4-6913a8218e23,38597 Mallory Court,1,6 1/2,683,14,2051\r\n8d2336b7-6453-4043-9ee5-756bcf3448d5,7 Chive Avenue,0,4 1/2,992,22,1014\r\ncd15390d-ad61-42e1-aaf6-0004f2b5d06f,208 Jenna Way,1,3 1/2,563,26,1024\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/logements.csv b/backend/logements.csv
+--- a/backend/logements.csv	(revision 2e1be9c20cd4576d38f30a3ae663cc4559011de4)
++++ b/backend/logements.csv	(date 1680721745283)
+@@ -1,100 +1,100 @@
+-bb9f4756-9497-4de1-844f-547fe5cd2fa2,957 Prairieview Drive,1,3 1/2,442,24,1778
+-c9e25bdc-5afc-47c6-ba69-c4d5754c36fd,754 Clemons Parkway,1,6 1/2,557,1,1714
+-c4b75534-85c9-409a-b56f-5a7a314598a4,42 Sunnyside Park,0,4 1/2,1252,10,1605
+-9c64d8e7-43f5-4c04-92b8-8e3d4acea648,957 Prairieview Drive,1,4 1/2,848,11,1640
+-c9af71e1-cbde-4c94-b4ab-7a3e2e29f34f,208 Jenna Way,0,4 1/2,1289,5,1137
+-15afa8c8-002b-4600-a435-dfe3416d0e2f,7 Chive Avenue,0,6 1/2,1126,28,942
+-2ff277ce-e27a-44b8-be8a-ffa62b21bc1a,532 Kinsman Crossing,0,5 1/2,1187,29,1580
+-8b08f49d-0b07-4c1c-8141-a3721e5e5e27,14 Towne Parkway,1,3 1/2,1043,25,1158
+-96add7c3-4370-41c0-9b5f-bfc56a8ddace,957 Prairieview Drive,0,4 1/2,568,14,1059
+-4ee1c23b-e59f-47bc-bc06-67c029a43f6f,5137 Monument Street,0,4 1/2,909,25,2009
+-c9011b76-4ff4-475b-9465-4a954dd846ba,38597 Mallory Court,0,3 1/2,908,26,1560
+-cee87234-faf3-4493-81c1-4eadd41772be,42 Sunnyside Park,1,5 1/2,907,27,1479
+-e7e700d0-78b2-4bb3-aff7-f7371ce013b2,38597 Mallory Court,0,5 1/2,476,27,1980
+-540c8eeb-6673-48d1-8f7e-8ad19ddf04c2,7 Chive Avenue,1,3 1/2,1195,13,1652
+-5a42cb14-fc87-494e-8016-ff06b0b0513d,957 Prairieview Drive,1,5 1/2,476,10,1126
+-5cde1104-20c7-4a65-8640-f3839eaf3da0,72736 Village Drive,0,3 1/2,783,26,1767
+-c1862842-c34a-4f96-91bb-016d13fd8d80,7 Chive Avenue,1,5 1/2,933,30,1545
+-e3416439-9b50-4156-9717-beb0274ad114,957 Prairieview Drive,0,3 1/2,1038,19,1600
+-f09b9073-9096-4371-a489-d1bc7547a3aa,754 Clemons Parkway,0,5 1/2,554,15,930
+-b1b12879-3468-4784-9486-b27e136b3260,42 Sunnyside Park,1,6 1/2,1137,14,1373
+-4b7b952f-9727-4433-bf29-53e908003bd7,532 Kinsman Crossing,1,3 1/2,584,13,944
+-8de93cc1-4c58-4a55-be8a-b0c14533686e,957 Prairieview Drive,1,3 1/2,840,16,1223
+-10a87c76-1b4b-4d12-8c96-0bfd8275d90b,38597 Mallory Court,1,3 1/2,672,9,1469
+-e46f5b95-d2a6-4573-bfa5-4e27dc3ad739,14 Towne Parkway,0,4 1/2,609,18,1775
+-306336ad-9da1-489c-9df3-9803f875c10c,754 Clemons Parkway,0,3 1/2,869,20,1911
+-5e7e8a97-bea0-4184-b3dc-60dc15c4791f,38597 Mallory Court,0,5 1/2,744,11,1508
+-39e3cf87-e667-425e-9aee-fdd4d8b8270d,532 Kinsman Crossing,0,6 1/2,633,2,1625
+-54ae637a-74ad-4432-bee4-ad02253685fd,532 Kinsman Crossing,1,6 1/2,545,5,1548
+-6390cffb-ff2b-49ea-aa84-7443edbca505,208 Jenna Way,1,5 1/2,695,23,1776
+-b40e2386-0af4-4df9-993b-2565cdcb48ee,208 Jenna Way,1,4 1/2,988,11,1346
+-390136df-2c76-400f-bc84-f8f4d59a9ae7,72736 Village Drive,0,6 1/2,700,24,1666
+-05ea84bc-e770-433f-8a54-15837973a206,532 Kinsman Crossing,0,6 1/2,1228,12,995
+-74985647-b3d0-4623-ae4c-fd6b7ff7d176,42 Sunnyside Park,0,5 1/2,937,28,1553
+-2de0ed08-434f-439b-b4fc-7dcce5246e0e,42 Sunnyside Park,1,4 1/2,1056,4,1346
+-8b601993-5f1b-46e8-8244-0edc65ac4dbf,7 Chive Avenue,1,6 1/2,1153,9,1203
+-c20a403e-ece6-4c84-95e9-0d07c53edc14,532 Kinsman Crossing,0,4 1/2,1180,1,1936
+-8eb90594-fc15-4865-96fb-5b611186dca1,38597 Mallory Court,1,5 1/2,541,8,1718
+-c2dff40c-a58c-4d28-aed2-f25c8a54c8de,38597 Mallory Court,0,3 1/2,1096,28,1229
+-1bb795b6-8261-4bdc-94bc-27d9afcadb62,72736 Village Drive,1,3 1/2,407,19,1003
+-69f8ee40-241f-4765-b08c-6221eac80b96,5137 Monument Street,1,3 1/2,1126,14,1373
+-b9ea7c7a-f349-4e7f-8f86-0b7b994be252,7 Chive Avenue,1,3 1/2,1177,15,1318
+-8b27cc12-12ea-4e91-9c4d-e8bc367e114b,208 Jenna Way,1,4 1/2,594,25,1136
+-c28b02f3-35b0-476c-a432-ff975ed0048c,5137 Monument Street,1,4 1/2,423,1,1267
+-00aa881d-1a17-4167-86c2-a0a579c20b43,38597 Mallory Court,1,5 1/2,430,25,1083
+-3e7ac133-8a33-42fd-91cb-21fc3e5c86b3,38597 Mallory Court,0,4 1/2,540,1,947
+-939f4c46-059a-415f-86b8-3b7649a14c3c,208 Jenna Way,1,6 1/2,801,19,1312
+-3ce8e0f9-fb8c-43f1-ac3a-d35c3a895efb,208 Jenna Way,1,3 1/2,573,18,1162
+-344a259f-c815-45e3-bb83-3a350e5edcd7,208 Jenna Way,1,3 1/2,1007,30,1275
+-97125ac5-d2a1-45e3-add6-b81f96967878,72736 Village Drive,1,4 1/2,1132,27,1617
+-f89addc8-3bc0-4277-9711-6d358568e4c6,754 Clemons Parkway,0,5 1/2,1222,23,1694
+-a7cc1b75-ae17-4a46-8f7b-86d3c977e0dd,72736 Village Drive,0,5 1/2,706,21,1682
+-5fa67283-eb1b-4740-ad42-b6ae3b11bf49,14 Towne Parkway,1,3 1/2,616,26,922
+-fef96a12-7b8d-4c1e-a7b9-9f3fb3ea6e56,208 Jenna Way,1,3 1/2,1170,31,1397
+-1270b529-9fe2-4ee5-ad52-6348a29b22c5,957 Prairieview Drive,1,4 1/2,441,22,2093
+-ec1700de-766c-4264-899e-65a562c0b60c,14 Towne Parkway,1,3 1/2,1072,24,2082
+-772b39f5-a8dc-4ab4-adef-ca1b1a9e1097,532 Kinsman Crossing,0,4 1/2,916,10,1263
+-db4f139b-d5fc-4044-b854-12ed24c2af08,957 Prairieview Drive,0,5 1/2,445,13,1085
+-3297c1fc-9968-4519-b0a8-6b308a4e5c67,14 Towne Parkway,0,6 1/2,773,4,1762
+-c266dab0-2480-457e-bea3-56754bc16bde,72736 Village Drive,0,3 1/2,468,1,1223
+-16c28813-3690-496e-b9df-ac3557f4c688,42 Sunnyside Park,0,3 1/2,1087,8,976
+-e352a1c6-d201-440c-8a08-0d1fabebdf48,38597 Mallory Court,1,3 1/2,955,7,1481
+-cbcebdb2-16e7-4ad0-92c5-e2951cf3a388,532 Kinsman Crossing,1,4 1/2,902,14,950
+-21c6867c-38cf-4fd8-96a7-a70774b27e99,42 Sunnyside Park,0,3 1/2,1236,11,1949
+-43a9da72-fca5-4c27-9610-2cb960207255,957 Prairieview Drive,1,4 1/2,1258,30,1757
+-d22554e3-6171-4a86-998f-87c574a3da51,38597 Mallory Court,0,5 1/2,429,10,1644
+-47f4abe8-a0c9-4e88-b5cd-438463c10dcf,42 Sunnyside Park,0,6 1/2,1190,30,1553
+-41716fa0-774f-43e8-b4f4-c1d67d31fff8,208 Jenna Way,0,5 1/2,629,22,1506
+-4464cf28-81ac-4b2a-879d-cd9bbb91fcbb,532 Kinsman Crossing,1,3 1/2,698,25,2072
+-6e8bf587-ce77-42ed-994a-5877872de245,72736 Village Drive,1,5 1/2,667,11,1621
+-954a8e74-a3d8-4007-887b-35cf18240ad0,5137 Monument Street,0,4 1/2,1243,29,1121
+-8399456f-43c9-41e2-979a-7f8bc69df294,208 Jenna Way,0,3 1/2,445,24,1378
+-b58de243-a6e5-4284-a5e1-82acb7fbba5f,7 Chive Avenue,0,3 1/2,597,3,1720
+-406e57b2-b415-4541-af90-aa38ca921a84,72736 Village Drive,0,5 1/2,720,22,1884
+-5f64b549-d4a3-4b91-b8b1-f50ead6e1855,754 Clemons Parkway,0,5 1/2,721,7,2071
+-d2ee1665-98c6-4d8e-9ce4-b91057267e13,14 Towne Parkway,1,3 1/2,745,10,1005
+-6a65ffd8-adf3-4900-903e-fc6d5a4167dd,38597 Mallory Court,1,6 1/2,409,2,936
+-c8ff9d63-1f57-456d-9ca3-09a45fe6bb38,42 Sunnyside Park,0,5 1/2,1231,5,1248
+-756ae5a4-ceb7-457b-93ab-4fc4dcea542d,957 Prairieview Drive,1,6 1/2,1291,21,1406
+-e1cfb7af-33c5-45f3-8cd2-3555f82d8981,5137 Monument Street,1,3 1/2,602,27,1282
+-23fbeb6e-392c-485b-b09b-b57da587b576,38597 Mallory Court,0,5 1/2,744,22,1527
+-3792fb28-cd61-48fb-baa3-3f059b85960c,7 Chive Avenue,1,3 1/2,1280,1,1451
+-5fdb69ca-5429-4681-96f9-be51e5b20380,5137 Monument Street,1,4 1/2,958,28,2097
+-49104ac9-b3a0-4d7f-8b50-f67e24c52201,957 Prairieview Drive,1,5 1/2,659,18,1393
+-92fc4516-db08-4173-8443-068722139119,38597 Mallory Court,0,3 1/2,1016,29,1282
+-b951ee83-d18e-47c0-ad9f-2c0773b207c8,754 Clemons Parkway,1,4 1/2,407,16,1792
+-086f8ed9-ca90-4e87-b675-cf7c38eaac01,38597 Mallory Court,1,3 1/2,780,23,1167
+-d0b806a3-27b7-4646-9cef-28574eeff521,14 Towne Parkway,0,4 1/2,1142,22,1158
+-80bf04a4-99da-448f-aef5-808d54c843b0,14 Towne Parkway,1,4 1/2,647,27,1630
+-082d552e-5b73-4241-bbfd-a28c18e37d77,7 Chive Avenue,0,4 1/2,807,16,1870
+-c9af8ca3-75a5-45ac-a7e4-ecc57576a92e,532 Kinsman Crossing,1,3 1/2,630,11,1014
+-996daae6-f016-4045-91fa-7769138fc666,38597 Mallory Court,1,6 1/2,935,13,1922
+-93febe4f-74f9-48f4-b6fa-3dac32e5b3ae,72736 Village Drive,0,4 1/2,1046,12,1248
+-de4ff53f-8e5e-4761-9ba7-b86bc7851c7c,957 Prairieview Drive,0,3 1/2,540,12,1328
+-354791c2-915c-4d1e-a831-c4f5af1101f6,7 Chive Avenue,0,5 1/2,1017,2,1103
+-e482888c-3b87-4025-806e-469490db7063,208 Jenna Way,1,3 1/2,670,14,2045
+-46f42119-bcbd-4fca-9b75-9eb194ba878d,72736 Village Drive,0,5 1/2,1057,7,1059
+-a0168027-ace6-45df-b4aa-77b46f7554c5,5137 Monument Street,1,6 1/2,707,2,1261
+-2b276821-381b-4f92-baa4-6913a8218e23,38597 Mallory Court,1,6 1/2,683,14,2051
+-8d2336b7-6453-4043-9ee5-756bcf3448d5,7 Chive Avenue,0,4 1/2,992,22,1014
+-cd15390d-ad61-42e1-aaf6-0004f2b5d06f,208 Jenna Way,1,3 1/2,563,26,1024
++7,3 1/2,603,34,1912
++9,6 1/2,1201,44,1379
++3,4 1/2,1100,27,1938
++3,3 1/2,1087,18,2424
++2,5 1/2,733,7,1371
++8,5 1/2,1021,6,2260
++9,5 1/2,1406,36,2131
++2,3 1/2,1302,6,1298
++8,4 1/2,732,27,1066
++8,6 1/2,1313,25,1479
++10,4 1/2,722,18,2269
++3,3 1/2,1343,43,1148
++6,3 1/2,1157,9,1081
++7,4 1/2,1103,9,2330
++7,6 1/2,689,38,1951
++2,3 1/2,1240,43,2241
++5,4 1/2,1469,49,1343
++9,4 1/2,789,6,1516
++2,3 1/2,1241,8,1870
++1,4 1/2,1065,30,1546
++6,6 1/2,686,50,1130
++7,6 1/2,1278,10,1957
++9,3 1/2,1042,15,1745
++1,6 1/2,1435,38,2312
++3,3 1/2,600,26,1904
++8,3 1/2,1286,5,1135
++10,5 1/2,1486,20,1026
++3,6 1/2,1067,16,1875
++2,5 1/2,771,27,2270
++8,3 1/2,665,29,2476
++5,6 1/2,1008,17,1270
++6,4 1/2,1366,46,1849
++10,6 1/2,1053,24,1974
++2,3 1/2,1280,21,2384
++3,5 1/2,1429,22,1409
++4,6 1/2,1301,6,1468
++8,3 1/2,1121,19,2342
++3,3 1/2,1316,44,1978
++4,3 1/2,1001,26,2012
++2,4 1/2,988,15,2196
++3,3 1/2,1482,32,2167
++6,4 1/2,1396,4,1811
++4,4 1/2,859,49,1242
++4,3 1/2,1481,48,1792
++1,3 1/2,779,9,2326
++1,4 1/2,983,40,1481
++4,4 1/2,1189,22,1905
++5,4 1/2,1236,32,2455
++9,5 1/2,727,16,2169
++2,5 1/2,1287,9,1247
++3,4 1/2,1422,29,2041
++8,6 1/2,670,8,1781
++4,5 1/2,1213,24,1337
++1,6 1/2,1050,20,1980
++10,5 1/2,1185,23,1069
++3,4 1/2,1023,23,1133
++1,6 1/2,1000,46,2418
++7,5 1/2,1313,20,1770
++2,4 1/2,1251,5,2196
++8,3 1/2,871,15,1354
++1,5 1/2,980,49,2010
++10,6 1/2,1256,7,1398
++5,3 1/2,1232,42,1007
++8,3 1/2,735,24,1657
++4,4 1/2,868,35,1768
++10,4 1/2,1161,31,2040
++8,5 1/2,1435,31,1302
++7,3 1/2,1477,16,1435
++4,6 1/2,747,10,1729
++10,4 1/2,917,9,2337
++2,6 1/2,1016,11,2219
++7,3 1/2,785,14,2394
++9,3 1/2,966,33,2122
++2,5 1/2,1291,26,1864
++6,6 1/2,1136,10,1294
++7,3 1/2,974,23,2141
++6,3 1/2,647,12,1756
++1,6 1/2,1257,4,2199
++3,5 1/2,848,25,2229
++8,3 1/2,1268,32,1132
++3,4 1/2,1100,45,1858
++8,4 1/2,1269,42,996
++5,3 1/2,1474,21,2269
++10,6 1/2,1439,29,2412
++8,5 1/2,1313,16,1905
++7,3 1/2,1046,39,1751
++4,6 1/2,1350,20,1922
++1,4 1/2,939,13,2448
++7,4 1/2,1316,12,1441
++2,6 1/2,937,48,1960
++7,5 1/2,1351,43,1171
++2,4 1/2,835,38,2162
++3,4 1/2,1378,30,2108
++1,4 1/2,1131,59,2325
++7,4 1/2,1483,28,1923
++2,6 1/2,1165,42,1064
++9,3 1/2,828,34,2280
++5,5 1/2,1035,9,1438
++8,5 1/2,697,35,2038
++7,3 1/2,741,21,1548
+Index: backend/database.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import pymysql, pymysql.cursors\r\nfrom passlib.hash import pbkdf2_sha256\r\n\r\nconnection = pymysql.connect(\r\n    host=\"localhost\",\r\n    user=\"root\",\r\n    password=\"abcdef\",\r\n    db=\"glo_2005_webapp\",\r\n    autocommit=True\r\n)\r\n\r\ncursor = connection.cursor()\r\n\r\ndef insert_user(email, phone, nom, mdp, age):\r\n    # Cette fonction insère un nouvel utilisateur dans la table Users\r\n    hashed_mdp = pbkdf2_sha256.hash(mdp)\r\n    sqlRequest = f\"INSERT INTO User (id, email, phone, nom, mdp, age) VALUE (NULL, '{email}', '{phone}', '{nom}', '{hashed_mdp}', '{age}');\"\r\n    cursor.execute(sqlRequest)\r\n\r\n\r\n\r\ndef check_user_mdp(email, mdp):\r\n    # Cette fonction valide le mot de passe d'un utilisateur\r\n    sqlRequest = f\"SELECT mdp FROM User WHERE email = '{email}';\"\r\n    cursor.execute(sqlRequest)\r\n    hashed_mdp = cursor.fetchone()[0]\r\n    return pbkdf2_sha256.verify(mdp, hashed_mdp)\r\n\r\ndef get_user_favorites(userId):\r\n    # Cette fonction retourne les tuples des logements favoris d'un utilisateur\r\n    sqlRequest = f\"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE id = '{userId}';\"\r\n    cursor.execute(sqlRequest)\r\n    logements_favoris = cursor.fetchone()[0]\r\n    return logements_favoris\r\n\r\ndef get_immeubles(immeubleAdresse=None):\r\n    # Cette fonction retourne un ou plusieurs immeubles\r\n    if immeubleAdresse is not None:\r\n        sqlRequest = f\"SELECT * FROM Immeuble WHERE address = '{immeubleAdresse}';\"\r\n    else:\r\n        sqlRequest = \"SELECT * FROM Immeuble;\"\r\n    cursor.execute(sqlRequest)\r\n    immeubles = cursor.fetchone()[0]\r\n    return immeubles\r\n\r\n\r\n\r\nif __name__ == '__main__':\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/database.py b/backend/database.py
+--- a/backend/database.py	(revision 2e1be9c20cd4576d38f30a3ae663cc4559011de4)
++++ b/backend/database.py	(date 1680720118908)
+@@ -33,10 +33,10 @@
+     logements_favoris = cursor.fetchone()[0]
+     return logements_favoris
+ 
+-def get_immeubles(immeubleAdresse=None):
++def get_immeubles(immeubleId=None):
+     # Cette fonction retourne un ou plusieurs immeubles
+     if immeubleAdresse is not None:
+-        sqlRequest = f"SELECT * FROM Immeuble WHERE address = '{immeubleAdresse}';"
++        sqlRequest = f"SELECT * FROM Immeuble WHERE iid = '{immeubleId}';"
+     else:
+         sqlRequest = "SELECT * FROM Immeuble;"
+     cursor.execute(sqlRequest)
