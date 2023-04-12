@@ -224,7 +224,7 @@ def init():
     with open('immeubles.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            immeubles.append(row[:1]+row[2:5]+row[6:])
+            immeubles.append(row[:2]+row[3:5]+row[6:])
 
     sqlImmeubles = "INSERT INTO Immeuble (iid, address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
                    "wifi, parking, gym, backyard, elevator, pool, ev_charger, air_conditioner, terrasse) " \
