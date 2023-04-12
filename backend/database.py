@@ -34,7 +34,7 @@ def check_user_mdp(email, mdp):
     sqlRequest = f"SELECT mdp FROM safe WHERE email = '{email}';"
     cursor.execute(sqlRequest)
     hashed_mdp = cursor.fetchone()
-    return pbkdf2_sha256.verify(mdp, hashed_mdp[0])
+    return pbkdf2_sha256.verify(mdp, hashed_mdp['mdp'])
 
 def get_user_favorites(userId):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur

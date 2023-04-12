@@ -20,8 +20,8 @@ def login():
         mdp = data["password"]
 
         if check_user_mdp(email, mdp):
-            status = 200=1
-        else:
+            status = 200
+        else: #Si le user existe pas ou si le mdp est inexact
             status = 403
 
         return status
