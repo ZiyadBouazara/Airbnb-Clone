@@ -73,8 +73,13 @@ def getImmeubles():
     #               ou
     #          status : 204 pour un succès, mais il n'y a pas d'immeubles
     #          immeubles : tuples des immeubles (vide)
+
+    query = request.args['query']
+
+    print(query)
+
     if request.method == "GET":
-        immeubles = get_immeubles()
+        immeubles = get_immeubles(None, query)
         if immeubles:
             status = 200
         else:
