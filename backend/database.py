@@ -33,8 +33,8 @@ def check_user_mdp(email, mdp):
     # Cette fonction valide le mot de passe d'un utilisateur
     sqlRequest = f"SELECT mdp FROM safe WHERE email = '{email}';"
     cursor.execute(sqlRequest)
-    hashed_mdp = cursor.fetchall()
-    return pbkdf2_sha256.verify(mdp, hashed_mdp)
+    hashed_mdp = cursor.fetchone()
+    return pbkdf2_sha256.verify(mdp, hashed_mdp[0])
 
 def get_user_favorites(userId):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur
@@ -76,7 +76,8 @@ def get_users(userId=None):
 
 
 if __name__ == '__main__':
-    insert_favorite(1, 1)
-    print(get_user_favorites(1))
-    delete_favorite(1, 1)
+    #insert_user('sdfeas@gmail.com', 418-234-2354, 'password123', 'georges', 23)
+    print(get_users())
+    check_user_mdp('sdfeas@gmail.com', 'password123')
+
 
