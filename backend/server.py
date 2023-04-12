@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements, get_users,\
     insert_favorite, delete_favorite
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/login", methods=["POST"])
@@ -21,7 +23,11 @@ def login():
 
         if check_user_mdp(email, mdp):
             status = 200
+<<<<<<< HEAD
+        else:
+=======
         else: #Si le user existe pas ou si le mdp est inexact
+>>>>>>> 5a8f9f56d3f1ddf27acb4b798a888e6677e96118
             status = 403
 
         return status
@@ -45,6 +51,7 @@ def getFavorites(user_id):
             status = 204
         return jsonify(logements_favoris), status
 
+
 @app.route("/signin", methods=["POST"])
 def signup():
     # Insère un nouvel utilisateur dans la base de données
@@ -57,13 +64,14 @@ def signup():
         phone = data["phoneNumber"]
         nom = data["nom"]
         mdp = data["password"]
-        age = data ["age"]
+        age = data["age"]
 
         insert_user(email, phone, nom, mdp, age)
 
         status = 201
 
         return status
+
 
 @app.route("/immeubles", methods=["GET"])
 def getImmeubles():
@@ -86,6 +94,7 @@ def getImmeubles():
             status = 204
         return jsonify(immeubles), status
 
+
 @app.route("/immeubles/<immeuble_id>", methods=["GET"])
 def getImmeuble(immeuble_id):
     # Fonction qui retourne le tuple d'un immeuble en fonction de son id
@@ -102,6 +111,7 @@ def getImmeuble(immeuble_id):
             status = 204
         return jsonify(immeuble), status
 
+
 @app.route("/immeubles/<immeuble_id>/logements", methods=["GET"])
 def getLogements(immeuble_id):
     # Fonction qui retourne tous les logements d'un immeuble
@@ -117,6 +127,7 @@ def getLogements(immeuble_id):
         else:
             status = 204
         return jsonify(logements), status
+
 
 @app.route("/immeubles/$<immeuble_id>/logements/<logement_id>", methods=["GET"])
 def getLogement(immeuble_id, logement_id):
@@ -151,6 +162,7 @@ def getUsers():
             status = 204
         return jsonify(users), status
 
+
 @app.route("/users/<userId>", methods=["GET"])
 def getUser(user_id):
     # Fonction qui retourne le tuple d'un user en fonction de son id
@@ -167,6 +179,7 @@ def getUser(user_id):
             status = 204
         return jsonify(user), status
 
+
 @app.route("/users/<user_id>/favorites/<logement_id>", methods=["POST"])
 def addFavorite(user_id, logement_id):
     # Fonction qui insère un tuple dans la table aime
@@ -178,6 +191,7 @@ def addFavorite(user_id, logement_id):
         status = 201
 
         return status
+
 
 @app.route("/users/<user_id>/favorites/<logement_id>", methods=["DELETE"])
 def deleteFavorite(user_id, logement_id):
@@ -191,6 +205,6 @@ def deleteFavorite(user_id, logement_id):
 
         return status
 
+
 if __name__ == '__main__':
     app.run()
-

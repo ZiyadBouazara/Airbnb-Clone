@@ -1,4 +1,5 @@
-import pymysql, pymysql.cursors
+import pymysql
+import pymysql.cursors
 from passlib.hash import pbkdf2_sha256
 
 connection = pymysql.connect(
@@ -11,6 +12,7 @@ connection = pymysql.connect(
 
 cursor = connection.cursor(pymysql.cursors.DictCursor)
 
+
 def insert_user(email, phone, nom, mdp, age):
     # Cette fonction insère un nouvel utilisateur dans la table Users
     hashed_mdp = pbkdf2_sha256.hash(mdp)
@@ -19,15 +21,18 @@ def insert_user(email, phone, nom, mdp, age):
     sqlRequest = f"INSERT INTO safe (email, mdp) VALUE ('{email}', '{hashed_mdp}');"
     cursor.execute(sqlRequest)
 
+
 def insert_favorite(logement_id, user_id):
     # Cette fonction insère un nouveau logement dans Aime
     sqlRequest = f"INSERT INTO Aime (id_logement, id) VALUE ('{logement_id}', '{user_id}');"
     cursor.execute(sqlRequest)
 
+
 def delete_favorite(logement_id, user_id):
     # Cette fonction insère un nouveau logement dans Aime
     sqlRequest = f"DELETE FROM Aime WHERE id_logement = '{logement_id}' AND id = '{user_id}';"
     cursor.execute(sqlRequest)
+
 
 def check_user_mdp(email, mdp):
     # Cette fonction valide le mot de passe d'un utilisateur
@@ -39,12 +44,14 @@ def check_user_mdp(email, mdp):
     else:
         return False
 
+
 def get_user_favorites(userId):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur
     sqlRequest = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE id = '{userId}';"
     cursor.execute(sqlRequest)
     logements_favoris = cursor.fetchall()
     return logements_favoris
+
 
 def get_immeubles(immeubleId=None, query=None):
     # Cette fonction retourne un ou plusieurs immeubles
@@ -62,6 +69,7 @@ def get_immeubles(immeubleId=None, query=None):
     immeubles = cursor.fetchall()
     return immeubles
 
+
 def get_logements(immeubleId, logementId=None):
     # Cette fonction retourne un ou plusieurs logements
     if logementId is not None:
@@ -71,6 +79,7 @@ def get_logements(immeubleId, logementId=None):
     cursor.execute(sqlRequest)
     logements = cursor.fetchall()
     return logements
+
 
 def get_users(userId=None):
     # Cette fonction retourne un ou plusieurs users
@@ -83,10 +92,7 @@ def get_users(userId=None):
     return users
 
 
-
 if __name__ == '__main__':
     #insert_user('sdfeas@gmail.com', 418-234-2354, 'password123', 'georges', 23)
     print(get_immeubles(None, "Kebon"))
     check_user_mdp('sdfeas@gmail.com', 'password123')
-
-
