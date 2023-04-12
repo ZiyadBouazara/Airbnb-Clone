@@ -34,7 +34,10 @@ def check_user_mdp(email, mdp):
     sqlRequest = f"SELECT mdp FROM safe WHERE email = '{email}';"
     cursor.execute(sqlRequest)
     hashed_mdp = cursor.fetchone()
-    return pbkdf2_sha256.verify(mdp, hashed_mdp['mdp'])
+    if hashed_mdp:
+        return pbkdf2_sha256.verify(mdp, hashed_mdp['mdp'])
+    else:
+        return False
 
 def get_user_favorites(userId):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur
@@ -47,7 +50,12 @@ def get_immeubles(immeubleId=None, query=None):
     # Cette fonction retourne un ou plusieurs immeubles
     if immeubleId is not None:
         sqlRequest = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = '{immeubleId}' AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
-
+    elif query is not None:
+        addresseIndex = f"SELECT * FROM Immeuble WHERE address = '{query}'"
+        nomIndex = f"SELECT * FROM Immeuble WHERE nom = '{query}'"
+        secteurIndex = f"SELECT * FROM Immeuble WHERE secteur = '{query}'"
+        union = " UNION "
+        sqlRequest = addresseIndex+union+nomIndex+union+secteurIndex+';'
     else:
         sqlRequest = "SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
     cursor.execute(sqlRequest)
@@ -78,7 +86,7 @@ def get_users(userId=None):
 
 if __name__ == '__main__':
     #insert_user('sdfeas@gmail.com', 418-234-2354, 'password123', 'georges', 23)
-    print(get_users())
+    print(get_immeubles(None, "Kebon"))
     check_user_mdp('sdfeas@gmail.com', 'password123')
 
 
