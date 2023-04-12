@@ -9,7 +9,7 @@ connection = pymysql.connect(
     autocommit=True
 )
 
-cursor = connection.cursor()
+cursor = connection.cursor(pymysql.cursors.DictCursor)
 
 def insert_user(email, phone, nom, mdp, age):
     # Cette fonction insère un nouvel utilisateur dans la table Users

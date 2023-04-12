@@ -5,10 +5,6 @@ from database import insert_user, check_user_mdp, get_user_favorites, get_immeub
 app = Flask(__name__)
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
 @app.route("/login", methods=["POST"])
 def login():
     # Valide le mot de passe d'un utilisateur
