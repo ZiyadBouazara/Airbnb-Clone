@@ -68,8 +68,9 @@ def get_immeubles(immeubleId=None, query=None):
         addresseIndex = f"SELECT * FROM Immeuble WHERE address LIKE '{query}'"
         nomIndex = f"SELECT * FROM Immeuble WHERE nom LIKE '{query}'"
         secteurIndex = f"SELECT * FROM Immeuble WHERE secteur LIKE '{query}'"
+        typeIndex = f"SELECT * FROM Immeuble WHERE type LIKE '{query}'"
         union = " UNION "
-        sqlRequest = addresseIndex+union+nomIndex+union+secteurIndex+';'
+        sqlRequest = addresseIndex+union+nomIndex+union+secteurIndex+union+typeIndex+';'
     else:
         sqlRequest = "SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
     cursor.execute(sqlRequest)
@@ -77,10 +78,16 @@ def get_immeubles(immeubleId=None, query=None):
     return immeubles
 
 
-def get_logements(immeubleId, logementId=None):
+def get_logements(immeubleId, logementId=None, query=None):
     # Cette fonction retourne un ou plusieurs logements
     if logementId is not None:
         sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND id_logement = '{logementId}';"
+    elif query is not None:
+        piecesIndex = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND pieces LIKE '{query}'"
+        tailleIndex = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND taille LIKE '{query}'"
+        priceIndex = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND price LIKE '{query}'"
+        union = " UNION "
+        sqlRequest = piecesIndex+union+tailleIndex+union+priceIndex+';'
     else:
         sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}';"
     cursor.execute(sqlRequest)

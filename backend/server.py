@@ -143,10 +143,12 @@ def getLogements(immeuble_id):
     #               ou
     #          status : 500 pour un server-side error
 
+    query = request.args['query']
+
     if request.method == "GET":
         logements = {}
         try:
-            logements = get_logements(immeuble_id)
+            logements = get_logements(immeuble_id, None, query)
             if logements:
                 status = 200
             else:
