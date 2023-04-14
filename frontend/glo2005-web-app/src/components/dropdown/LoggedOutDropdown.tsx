@@ -3,7 +3,11 @@ import LogInModal from "../modal/LoginModal"
 import SignUpModal from "../modal/SignUpModal"
 import { useState } from "react"
 
-const LoggedOutDropdown: React.FC = () => {
+interface Props {
+    toggleOpen: () => void;
+}
+
+const LoggedOutDropdown: React.FC<Props> = ({ toggleOpen }) => {
 
     const [isModalOpen, setModalOpen] = useState(false);
     const [isLogin, setLogin] = useState(true); 
@@ -34,7 +38,7 @@ const LoggedOutDropdown: React.FC = () => {
             <div className="hover:bg-gray-100 rounded-lg p-1 cursor-pointer" onClick={onSignUp}>Inscription</div>
         </div>
         <Modal isOpen={isModalOpen} toggleOpen={toggleModalOpen}>
-            {isLogin ? <LogInModal toggleLogin={toggleLogin} /> : <SignUpModal toggleLogin={toggleLogin} />}
+            {isLogin ? <LogInModal toggleDropdownOpen={toggleOpen} toggleOpen={toggleModalOpen} toggleLogin={toggleLogin} /> : <SignUpModal toggleDropdownOpen={toggleOpen} toggleOpen={toggleModalOpen} toggleLogin={toggleLogin} />}
         </Modal>
     </>
   )

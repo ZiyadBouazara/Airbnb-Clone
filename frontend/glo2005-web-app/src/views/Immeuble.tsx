@@ -6,15 +6,15 @@ import Search from '../components/inputs/Search';
 import { useState, useEffect } from 'react';
 import { getImmeuble } from '../utils/api/immeuble';
 import { getLogements } from '../utils/api/immeuble';
-import { Immeuble as ImmeubleType } from '../utils/Immeuble';
-import { Logement } from '../utils/Logement';
+import { ImmeubleType } from '../utils/ImmeubleType';
+import { LogementType } from '../utils/LogementType';
 
 const Immeuble: React.FC = () => {
 
   const {immeubleId} = useParams<string>();
 
   const [immeuble, setImmeuble] = useState<ImmeubleType>();
-  const [logements, setLogements] = useState<Logement[]>();
+  const [logements, setLogements] = useState<LogementType[]>();
 
 
   useEffect(() => {
@@ -26,10 +26,10 @@ const Immeuble: React.FC = () => {
           console.error(e);
       });
       
-      getLogements(immeubleId)
-        .then(logements => {
-          console.log(logements);
-      });
+      //getLogements(immeubleId)
+      //  .then(logements => {
+      //    console.log(logements);
+      //});
     }
   }, []);
 

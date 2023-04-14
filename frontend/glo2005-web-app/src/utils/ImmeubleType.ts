@@ -1,4 +1,4 @@
-export interface Immeuble {
+export interface ImmeubleType {
     iid: number;
     address: string;
     nombre_logements: number;

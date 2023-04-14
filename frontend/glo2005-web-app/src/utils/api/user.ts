@@ -8,17 +8,17 @@ export const getUsers = async (): Promise<Response> => {
         }
     );
     const response = await fetch(request);
-    return response;
+    return await response.json();
 }
 
-export const getUser = async (userId: string): Promise<Response> => {
+export const getUser = async (userId: string) => {
     const request = new Request(
         `${ENDPOINT}/users/${userId}`, {
             method: "GET",
         }
     );
     const response = await fetch(request);
-    return response;
+    return await response.json();
 }
 
 export const getFavorites = async (userId: string): Promise<Response> => {

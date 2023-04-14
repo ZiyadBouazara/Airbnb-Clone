@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { Immeuble } from "../../utils/Immeuble";
+import { ImmeubleType } from "../../utils/ImmeubleType";
 
 interface Props {
-  immeuble: Immeuble;
+  immeuble: ImmeubleType;
 }
 
 const ImmeubleListItem: React.FC<Props> = ({ immeuble }) => {
