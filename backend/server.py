@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements, get_users,\
-    insert_favorite, delete_favorite, get_user_id
+    insert_favorite, delete_favorite, get_user_id, get_locations
 
 app = Flask(__name__)
 CORS(app)
@@ -44,10 +44,16 @@ def getFavorites(user_id):
     #               ou
     #            status : 500 pour un server-side error
 
+    try:
+        search = request.args['search']
+        search = search.replace("+", " ")
+    except:
+        search = None
+
     if request.method == "GET":
         logements_favoris = {}
         try:
-            logements_favoris = get_user_favorites(user_id)
+            logements_favoris = get_user_favorites(user_id, search)
             if logements_favoris:
                 status = 201
             else:
@@ -84,32 +90,6 @@ def signup():
 
 @app.route("/immeubles", methods=["GET"])
 def getImmeubles():
-    # Fonction qui retourne tous les immeubles
-    # Retourne status : 200 pour un succès
-    #          immeubles : tuples des immeubles
-    #               ou
-    #          status : 204 pour un succès, mais il n'y a pas d'immeubles
-    #          immeubles : tuples des immeubles (vide)
-    #               ou
-    #          status : 500 pour un server-side error
-
-    query = None
-
-    if request.method == "GET":
-        immeubles = {}
-        try:
-            immeubles = get_immeubles(None, query)
-            if immeubles:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
-        return jsonify(immeubles), status
-
-
-@app.route("/immeubles/search", methods=["GET"])
-def searchImmeubles():
     # Fonction qui retourne les immeubles d'une recherche
     # Retourne status : 200 pour un succès
     #          immeubles : tuples des immeubles
@@ -119,13 +99,22 @@ def searchImmeubles():
     #               ou
     #          status : 500 pour un server-side error
 
-    key = request.args['key']
-    key = key.replace("+", " ")
+    try:
+        search = request.args['search']
+        search = search.replace("+", " ")
+    except:
+        search = None
+
+    try:
+        typeImm = request.args['type']
+        typeImm = typeImm.replace("+", " ")
+    except:
+        typeImm = None
 
     if request.method == "GET":
         immeubles = {}
         try:
-            immeubles = get_immeubles(None, key)
+            immeubles = get_immeubles(None, search, typeImm)
             if immeubles:
                 status = 200
             else:
@@ -159,29 +148,6 @@ def getImmeuble(immeuble_id):
 
 
 @app.route("/immeubles/<immeuble_id>/logements", methods=["GET"])
-def getLogements(immeuble_id):
-    # Fonction qui retourne tous les logements d'un immeuble
-    # Retourne status : 200 pour un succès
-    #          logements : tuples des logements
-    #               ou
-    #          status : 204 pour un succès, mais il n'y a pas de logements
-    #          logements : tuples des logements (vide)
-    #               ou
-    #          status : 500 pour un server-side error
-
-    if request.method == "GET":
-        logements = {}
-        try:
-            logements = get_logements(immeuble_id, None, None)
-            if logements:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
-        return jsonify(logements), status
-
-@app.route("/immeubles/<immeuble_id>/logements/search", methods=["GET"])
 def searchLogements(immeuble_id):
     # Fonction qui retourneles logements d'un immeuble en fonction d'une recherche
     # Retourne status : 200 pour un succès
@@ -192,13 +158,16 @@ def searchLogements(immeuble_id):
     #               ou
     #          status : 500 pour un server-side error
 
-    key = request.args['key']
-    key = key.replace("+", " ")
+    try:
+        search = request.args['search']
+        search = search.replace("+", " ")
+    except:
+        search = None
 
     if request.method == "GET":
         logements = {}
         try:
-            logements = get_logements(immeuble_id, None, key)
+            logements = get_logements(immeuble_id, None, search)
             if logements:
                 status = 200
             else:
@@ -311,6 +280,28 @@ def deleteFavorite(user_id, logement_id):
             status = 500
         return "", status
 
+@app.route("/users/<user_id>/locations", methods=["GET"])
+def getLocations(user_id):
+    # Fonction qui retourne les tuples des location d'un user en fonction de son id
+    # Retourne status : 200 pour un succès
+    #          locations : tuples des locations
+    #               ou
+    #          status : 204 pour un succès, mais il n'y a pas de locations
+    #          user : tuples des locations (vide)
+    #               ou
+    #          status : 500 pour un server-side error
+
+    if request.method == "GET":
+        locations = {}
+        try:
+            locations = get_locations(user_id)
+            if locations:
+                status = 200
+            else:
+                status = 204
+        except:
+            status = 500
+        return jsonify(locations), status
 
 if __name__ == '__main__':
     app.run()

@@ -33,12 +33,12 @@ def create_tables():
          " age INTEGER, UNIQUE(email), UNIQUE(nom, age), PRIMARY KEY(id), " \
          "CONSTRAINT age_legal CHECK ( age BETWEEN 18 AND 112));"
 
-    r4 = "CREATE TABLE IF NOT EXISTS Locataire(id  INT, " \
-         "PRIMARY KEY (id), FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
+    # r4 = "CREATE TABLE IF NOT EXISTS Locataire(id  INT, " \
+    #     "PRIMARY KEY (id), FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     r5 = "CREATE TABLE IF NOT EXISTS Louer(id  INT, id_logement INT, date_debut DATE, date_fin DATE," \
          "PRIMARY KEY(id_logement, id)," \
-         "FOREIGN KEY (id) REFERENCES Locataire(id) ON UPDATE CASCADE ON DELETE CASCADE," \
+         "FOREIGN KEY (id) REFERENCES User(id) ON UPDATE CASCADE ON DELETE CASCADE," \
          "FOREIGN KEY (id_logement) REFERENCES Logement(id_logement) ON UPDATE CASCADE ON DELETE CASCADE);"
 
     r6 = "CREATE TABLE IF NOT EXISTS Aime(id_logement INT, id INT," \
@@ -58,7 +58,7 @@ def create_tables():
     cursor.execute(r1)
     cursor.execute(r2)
     cursor.execute(r3)
-    cursor.execute(r4)
+    #cursor.execute(r4)
     cursor.execute(r5)
     cursor.execute(r6)
     cursor.execute(r7)
@@ -116,9 +116,9 @@ def create_triggers():
         SET available = 1
         WHERE Logement.id_logement = OLD.id_logement;
         
-        IF (SELECT COUNT(*) FROM Louer WHERE id = OLD.id) = 1 THEN
-            DELETE FROM Locataire WHERE Locataire.id = OLD.id; 
-        END IF ;
+        # IF (SELECT COUNT(*) FROM Louer WHERE id = OLD.id) = 1 THEN
+        #    DELETE FROM Locataire WHERE Locataire.id = OLD.id; 
+        # END IF ;
     END
     """
     # Cette trigger verifie apres avoir supprimer un tuple de Louer si le locataire possede une autre location.
@@ -259,17 +259,17 @@ def init():
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             louer.append(row)
-            locataire.append(row[0])
+            #locataire.append(row[0])
 
     sqlLouer = "INSERT INTO Louer (id, id_logement, date_debut, date_fin) " \
                "VALUES (%s, %s, %s, %s)"
-    sqlLocataire = "INSERT INTO Locataire (id) VALUES (%s)"
+    #sqlLocataire = "INSERT INTO Locataire (id) VALUES (%s)"
 
     cursor.executemany(sqlImmeubles, immeubles)
     cursor.executemany(sqlLogements, logements)
     cursor.executemany(sqlUsers, users)
     cursor.executemany(sqlSafe, safe)
-    cursor.executemany(sqlLocataire, locataire)
+    #cursor.executemany(sqlLocataire, locataire)
     cursor.executemany(sqlLouer, louer)
 
 
