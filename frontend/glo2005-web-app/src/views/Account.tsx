@@ -20,11 +20,11 @@ const Account: React.FC = () => {
       getUser(userId)
         .then(user => {
           setUser(user[0] as UserType);
-          getFavorites(userId)
-          .then(favorites => {
-            setFavorites(favorites);
-          })
         });
+      getFavorites(userId)
+        .then(favorites => {
+          setFavorites(favorites);
+        })
     }
   }, [])
 

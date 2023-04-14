@@ -304,4 +304,4 @@ def getLocations(user_id):
         return jsonify(locations), status
 
 if __name__ == '__main__':
-    app.run()
+    app.run(threaded=False)
