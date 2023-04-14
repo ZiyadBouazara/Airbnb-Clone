@@ -16,7 +16,7 @@ cursor = connection.cursor(pymysql.cursors.DictCursor)
 def insert_user(email, phone, nom, mdp, age):
     # Cette fonction insère un nouvel utilisateur dans la table Users
     hashed_mdp = pbkdf2_sha256.hash(mdp)
-    sqlRequest = f"INSERT INTO User (id, email, phone, nom, age) VALUE (NULL, '{email}', '{phone}', '{nom}', '{age}');"
+    sqlRequest = f"INSERT INTO User (id, email, phone, nom, age) VALUE (NULL, '{email}', '{phone}', '{nom}', {age});"
     cursor.execute(sqlRequest)
     sqlRequest = f"INSERT INTO safe (email, mdp) VALUE ('{email}', '{hashed_mdp}');"
     cursor.execute(sqlRequest)
@@ -24,19 +24,19 @@ def insert_user(email, phone, nom, mdp, age):
 
 def insert_favorite(logement_id, user_id):
     # Cette fonction insère un nouveau logement dans Aime
-    sqlRequest = f"INSERT INTO Aime (id_logement, id) VALUE ('{logement_id}', '{user_id}');"
+    sqlRequest = f"INSERT INTO Aime (id_logement, id) VALUE ({logement_id}, {user_id});"
     cursor.execute(sqlRequest)
 
 
 def delete_favorite(logement_id, user_id):
     # Cette fonction insère un nouveau logement dans Aime
-    sqlRequest = f"DELETE FROM Aime WHERE id_logement = '{logement_id}' AND id = '{user_id}';"
+    sqlRequest = f"DELETE FROM Aime WHERE id_logement = {logement_id} AND id = {user_id};"
     cursor.execute(sqlRequest)
 
 
 def check_user_mdp(email, mdp):
     # Cette fonction valide le mot de passe d'un utilisateur
-    sqlRequest = f"SELECT mdp FROM safe WHERE email = '{email}';"
+    sqlRequest = f"SELECT mdp FROM safe WHERE email LIKE '{email}';"
     cursor.execute(sqlRequest)
     hashed_mdp = cursor.fetchone()
     if hashed_mdp:
@@ -46,7 +46,7 @@ def check_user_mdp(email, mdp):
 
 def get_user_id(email):
     # Cette fonction retourne le id d'un user en fonction de son email
-    sqlRequest = f"SELECT id FROM USER WHERE email = '{email}';"
+    sqlRequest = f"SELECT id FROM USER WHERE email LIKE '{email}';"
     cursor.execute(sqlRequest)
     user_id = cursor.fetchone()
     return user_id
@@ -54,7 +54,7 @@ def get_user_id(email):
 
 def get_user_favorites(userId):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur
-    sqlRequest = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE id = '{userId}';"
+    sqlRequest = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE id = {userId};"
     cursor.execute(sqlRequest)
     logements_favoris = cursor.fetchall()
     return logements_favoris
@@ -63,7 +63,7 @@ def get_user_favorites(userId):
 def get_immeubles(immeubleId=None, query=None):
     # Cette fonction retourne un ou plusieurs immeubles
     if immeubleId is not None:
-        sqlRequest = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = '{immeubleId}' AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
+        sqlRequest = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = {immeubleId} AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
     elif query is not None:
         addresseIndex = f"SELECT * FROM Immeuble WHERE address LIKE '{query}'"
         nomIndex = f"SELECT * FROM Immeuble WHERE nom LIKE '{query}'"
@@ -81,15 +81,16 @@ def get_immeubles(immeubleId=None, query=None):
 def get_logements(immeubleId, logementId=None, query=None):
     # Cette fonction retourne un ou plusieurs logements
     if logementId is not None:
-        sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND id_logement = '{logementId}';"
+        sqlRequest = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND id_logement = {logementId};"
     elif query is not None:
-        piecesIndex = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND pieces LIKE '{query}'"
-        tailleIndex = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND taille LIKE '{query}'"
-        priceIndex = f"SELECT * FROM Logement WHERE contient = '{immeubleId}' AND price LIKE '{query}'"
+        piecesIndex = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND pieces LIKE '{query}'"
+        tailleIndex = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND taille LIKE '{query}'"
+        priceIndex = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND price LIKE '{query}'"
         union = " UNION "
         sqlRequest = piecesIndex+union+tailleIndex+union+priceIndex+';'
     else:
-        sqlRequest = f"SELECT * FROM Logement WHERE contient = '{immeubleId}';"
+        sqlRequest = f"SELECT * FROM Logement WHERE contient = {immeubleId};"
+    print(sqlRequest)
     cursor.execute(sqlRequest)
     logements = cursor.fetchall()
     return logements
@@ -98,7 +99,7 @@ def get_logements(immeubleId, logementId=None, query=None):
 def get_users(userId=None):
     # Cette fonction retourne un ou plusieurs users
     if userId is not None:
-        sqlRequest = f"SELECT * FROM User WHERE id = '{userId}';"
+        sqlRequest = f"SELECT * FROM User WHERE id = {userId};"
     else:
         sqlRequest = "SELECT * FROM User;"
     cursor.execute(sqlRequest)
@@ -106,4 +107,7 @@ def get_users(userId=None):
     return users
 
 if __name__ == '__main__':
-    insert_user("wrgeg@gmail.com", "123-234-2341", "georges", "pass123", 23)
+    print(get_logements("1", None, "2199"))
+    print(get_users())
+    print(get_user_id("nsarark@clickbank.net"))
+    print(get_logements("1"))
