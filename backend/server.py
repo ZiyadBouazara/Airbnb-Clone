@@ -18,7 +18,7 @@ def login():
     #            status : 500 pour un server-side error
 
     if request.method == "POST":
-        user_id = None
+        user_id = {}
         try:
             data = request.json
             email = data["username"]
@@ -66,7 +66,7 @@ def signup():
     #          status : 500 pour un server-side error
 
     if request.method == "POST":
-        user_id = None
+        user_id = {}
         try:
             data = request.json
             email = data["email"]
