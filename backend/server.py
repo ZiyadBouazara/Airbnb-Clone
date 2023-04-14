@@ -93,7 +93,7 @@ def getImmeubles():
     #               ou
     #          status : 500 pour un server-side error
 
-    query = request.args['query']
+    query = None
 
     if request.method == "GET":
         immeubles = {}
@@ -107,6 +107,32 @@ def getImmeubles():
             status = 500
         return jsonify(immeubles), status
 
+
+@app.route("/immeubles/search", methods=["GET"])
+def searchImmeubles():
+    # Fonction qui retourne les immeubles d'une recherche
+    # Retourne status : 200 pour un succès
+    #          immeubles : tuples des immeubles
+    #               ou
+    #          status : 204 pour un succès, mais il n'y a pas d'immeubles
+    #          immeubles : tuples des immeubles (vide)
+    #               ou
+    #          status : 500 pour un server-side error
+
+    key = request.args['key']
+    key = key.replace("+", " ")
+
+    if request.method == "GET":
+        immeubles = {}
+        try:
+            immeubles = get_immeubles(None, key)
+            if immeubles:
+                status = 200
+            else:
+                status = 204
+        except:
+            status = 500
+        return jsonify(immeubles), status
 
 @app.route("/immeubles/<immeuble_id>", methods=["GET"])
 def getImmeuble(immeuble_id):
@@ -143,12 +169,36 @@ def getLogements(immeuble_id):
     #               ou
     #          status : 500 pour un server-side error
 
-    query = request.args['query']
+    if request.method == "GET":
+        logements = {}
+        try:
+            logements = get_logements(immeuble_id, None, None)
+            if logements:
+                status = 200
+            else:
+                status = 204
+        except:
+            status = 500
+        return jsonify(logements), status
+
+@app.route("/immeubles/<immeuble_id>/logements/search", methods=["GET"])
+def searchLogements(immeuble_id):
+    # Fonction qui retourneles logements d'un immeuble en fonction d'une recherche
+    # Retourne status : 200 pour un succès
+    #          logements : tuples des logements
+    #               ou
+    #          status : 204 pour un succès, mais il n'y a pas de logements
+    #          logements : tuples des logements (vide)
+    #               ou
+    #          status : 500 pour un server-side error
+
+    key = request.args['key']
+    key = key.replace("+", " ")
 
     if request.method == "GET":
         logements = {}
         try:
-            logements = get_logements(immeuble_id, None, query)
+            logements = get_logements(immeuble_id, None, key)
             if logements:
                 status = 200
             else:
@@ -158,7 +208,7 @@ def getLogements(immeuble_id):
         return jsonify(logements), status
 
 
-@app.route("/immeubles/$<immeuble_id>/logements/<logement_id>", methods=["GET"])
+@app.route("/immeubles/<immeuble_id>/logements/<logement_id>", methods=["GET"])
 def getLogement(immeuble_id, logement_id):
     # Fonction qui retourne le tuple d'un logement en fonction de son id
     # Retourne status : 200 pour un succès
