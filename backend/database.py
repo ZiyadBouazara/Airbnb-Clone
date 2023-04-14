@@ -5,7 +5,7 @@ from passlib.hash import pbkdf2_sha256
 connection = pymysql.connect(
     host="localhost",
     user="root",
-    password="S!d3n0t3",
+    password="abcdef",
     db="glo_2005_webapp",
     autocommit=True
 )
