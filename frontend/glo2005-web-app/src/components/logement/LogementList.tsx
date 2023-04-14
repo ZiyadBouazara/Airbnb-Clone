@@ -1,11 +1,11 @@
 import React from 'react'
 import LogementListItem from './LogementListItem'
-import { Logement } from '../../utils/Logement'
+import { LogementType } from '../../utils/LogementType'
 
 
 
 interface Props {
-    logements: Logement[]
+    logements: LogementType[]
 }
 
 const LogementList: React.FC<Props> = ({ logements }) => {

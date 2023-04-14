@@ -10,12 +10,12 @@ export const signup = async (email: string, password: string, name: string, phon
             body: JSON.stringify({
                 email: email,
                 password: password,
-                name: name,
+                nom: name,
                 phoneNumber: phoneNumber,
                 age: age
             })
         }
     );
     const response = await fetch(request);
-    return response;
+    return await response.json();
 }

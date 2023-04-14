@@ -1,7 +1,7 @@
-import { Immeuble } from "../../utils/Immeuble"
+import { ImmeubleType } from "../../utils/ImmeubleType"
 
 interface Props {
-  immeuble: Immeuble;
+  immeuble: ImmeubleType;
 }
 
 const ImmeubleHeader: React.FC<Props> = ({ immeuble }) => {

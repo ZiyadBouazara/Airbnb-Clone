@@ -18,18 +18,14 @@ def login():
     #            status : 500 pour un server-side error
 
     if request.method == "POST":
-        user_id = {}
-        try:
-            data = request.json
-            email = data["username"]
-            mdp = data["password"]
-            if check_user_mdp(email, mdp):
-                status = 200
-                user_id = get_user_id(email)
-            else:  # Si le user existe pas ou si le mdp est inexact
-                status = 403
-        except:
-            status = 500
+        data = request.json
+        email = data["username"]
+        mdp = data["password"]
+        if check_user_mdp(email, mdp):
+            status = 200
+            user_id = get_user_id(email)
+        else:  # Si le user existe pas ou si le mdp est inexact
+            status = 403
         return jsonify(user_id), status
 
 
@@ -45,15 +41,11 @@ def getFavorites(user_id):
     #            status : 500 pour un server-side error
 
     if request.method == "GET":
-        logements_favoris = {}
-        try:
-            logements_favoris = get_user_favorites(user_id)
-            if logements_favoris:
-                status = 201
-            else:
-                status = 204
-        except:
-            status = 500
+        logements_favoris = get_user_favorites(user_id)
+        if logements_favoris:
+            status = 201
+        else:
+            status = 204
         return jsonify(logements_favoris), status
 
 
@@ -66,19 +58,15 @@ def signup():
     #          status : 500 pour un server-side error
 
     if request.method == "POST":
-        user_id = {}
-        try:
-            data = request.json
-            email = data["email"]
-            phone = data["phoneNumber"]
-            nom = data["nom"]
-            mdp = data["password"]
-            age = data["age"]
-            insert_user(email, phone, nom, mdp, age)
-            status = 201
-            user_id = get_user_id(email)
-        except:
-            status = 500
+        data = request.json
+        email = data["email"]
+        phone = data["phoneNumber"]
+        nom = data["nom"]
+        mdp = data["password"]
+        age = data["age"]
+        insert_user(email, phone, nom, mdp, age)
+        status = 201
+        user_id = get_user_id(email)
         return user_id, status
 
 
@@ -96,15 +84,11 @@ def getImmeubles():
     query = request.args['query']
 
     if request.method == "GET":
-        immeubles = {}
-        try:
-            immeubles = get_immeubles(None, query)
-            if immeubles:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
+        immeubles = get_immeubles(None, query)
+        if immeubles:
+            status = 200
+        else:
+            status = 204
         return jsonify(immeubles), status
 
 
@@ -120,15 +104,11 @@ def getImmeuble(immeuble_id):
     #          status : 500 pour un server-side error
 
     if request.method == "GET":
-        immeuble = {}
-        try:
-            immeuble = get_immeubles(immeuble_id)
-            if immeuble:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
+        immeuble = get_immeubles(immeuble_id)
+        if immeuble:
+            status = 200
+        else:
+            status = 204
         return jsonify(immeuble), status
 
 
@@ -146,15 +126,11 @@ def getLogements(immeuble_id):
     query = request.args['query']
 
     if request.method == "GET":
-        logements = {}
-        try:
-            logements = get_logements(immeuble_id, None, query)
-            if logements:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
+        logements = get_logements(immeuble_id, None, query)
+        if logements:
+            status = 200
+        else:
+            status = 204
         return jsonify(logements), status
 
 
@@ -170,15 +146,11 @@ def getLogement(immeuble_id, logement_id):
     #          status : 500 pour un server-side error
 
     if request.method == "GET":
-        logement = {}
-        try:
-            logement = get_logements(immeuble_id, logement_id)
-            if logement:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
+        logement = get_logements(immeuble_id, logement_id)
+        if logement:
+            status = 200
+        else:
+            status = 204
         return jsonify(logement), status
 
 
@@ -194,15 +166,11 @@ def getUsers():
     #          status : 500 pour un server-side error
 
     if request.method == "GET":
-        users = {}
-        try:
-            users = get_users()
-            if users:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
+        users = get_users()
+        if users:
+            status = 200
+        else:
+            status = 204
         return jsonify(users), status
 
 
@@ -218,15 +186,11 @@ def getUser(user_id):
     #          status : 500 pour un server-side error
 
     if request.method == "GET":
-        user = {}
-        try:
-            user = get_users(user_id)
-            if user:
-                status = 200
-            else:
-                status = 204
-        except:
-            status = 500
+        user = get_users(user_id)
+        if user:
+            status = 200
+        else:
+            status = 204
         return jsonify(user), status
 
 
@@ -238,11 +202,8 @@ def addFavorite(user_id, logement_id):
     #          status : 500 pour un server-side error
 
     if request.method == "POST":
-        try:
-            insert_favorite(logement_id, user_id)
-            status = 201
-        except:
-            status = 500
+        insert_favorite(logement_id, user_id)
+        status = 201
         return "", status
 
 
@@ -254,11 +215,8 @@ def deleteFavorite(user_id, logement_id):
     #          status : 500 pour un server-side error
 
     if request.method == "DELETE":
-        try:
-            delete_favorite(logement_id, user_id)
-            status = 204
-        except:
-            status = 500
+        delete_favorite(logement_id, user_id)
+        status = 204
         return "", status
 
 
