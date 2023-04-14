@@ -10,10 +10,10 @@ import ElevatorLogo from "../logos/ElevatorLogo"
 import EVChargerLogo from "../logos/EVChargerLogo"
 import ACLogo from "../logos/ACLogo"
 import TerraceLogo from "../logos/TerraceLogo"
-import { Immeuble } from "../../utils/Immeuble"
+import { ImmeubleType } from "../../utils/ImmeubleType"
 
 interface Props {
-  immeuble: Immeuble;
+  immeuble: ImmeubleType;
 }
 
 const ImmeubleAmenities: React.FC<Props> = ({ immeuble }) => {

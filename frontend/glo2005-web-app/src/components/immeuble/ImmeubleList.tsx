@@ -1,8 +1,8 @@
 import ImmeubleListItem from "./ImmeubleListItem"
-import { Immeuble } from "../../utils/Immeuble"
+import { ImmeubleType } from "../../utils/ImmeubleType"
 
 interface Props {
-    immeubles: Immeuble[];
+    immeubles: ImmeubleType[];
 }
 
 const ImmeubleList: React.FC<Props> = ({ immeubles }) => {

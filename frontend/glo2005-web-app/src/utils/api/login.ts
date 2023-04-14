@@ -8,11 +8,11 @@ export const login = async (email: string, password: string): Promise<Response> 
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                email: email,
+                username: email,
                 password: password,
             })
         }
     );
     const response = await fetch(request);
-    return response;
+    return await response.json();
 }

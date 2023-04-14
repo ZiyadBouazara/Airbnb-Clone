@@ -5,7 +5,7 @@ import FavoriteCheckbox from "../inputs/FavoriteCheckbox";
 interface Props {
   id: number,
   immeubleId: number,
-  photos: string[],
+  photos: string[] | string,
   available: boolean,
   rooms: string,
   size: number,
@@ -16,6 +16,10 @@ interface Props {
 const LogementListItem: React.FC<Props> = ({ id, immeubleId, photos, available, rooms, size, number, price }) => {
 
   const to = `/immeubles/${immeubleId}/logements/${id}`;
+
+  if (typeof photos === "string") {
+    photos = photos.split(",")
+  }
 
   return (
     <li className="rounded-2xl p-2 hover:bg-gray-100">

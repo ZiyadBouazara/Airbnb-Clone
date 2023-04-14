@@ -1,22 +1,45 @@
 import Button from "../inputs/Button";
 import EmailInput from "../inputs/EmailInput";
 import PasswordInput from "../inputs/PasswordInput";
+import { useState } from "react";
+import Cookies from 'js-cookie'
+import { login } from "../../utils/api/login";
 
 interface Props {
     toggleLogin: () => void;
+    toggleOpen: () => void;
+    toggleDropdownOpen: () => void;
 }
 
-const LogInModal: React.FC<Props> = ({ toggleLogin }) => {
+const LogInModal: React.FC<Props> = ({ toggleLogin, toggleOpen, toggleDropdownOpen }) => {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    login(email, password)
+        .then(res => {
+            Cookies.set("userId", res.id);
+            setEmail("");
+            setPassword("");
+            toggleOpen();
+            toggleDropdownOpen();
+            location.reload();
+        })
+  }
+
   return (
     <div className="px-6 py-6 lg:px-8">
         <h3 className="mb-4 text-xl font-medium">Connexion</h3>
-        <form className="space-y-6" action="">
+        <form className="space-y-6" onSubmit={(e) => onLogin(e)}>
             <div>
                 <label htmlFor="email" className="block mb-2 text-sm font-medium">Courriel</label>
-                <EmailInput id="email" placeholder="Courriel" required />
+                <EmailInput id="email" value={email} setState={setEmail} placeholder="Courriel" required />
             </div>
             <div>
-                <PasswordInput id="password" label="Mot de passe" placeholder="••••••••" required />
+                <PasswordInput id="password" value={password} setState={setPassword} label="Mot de passe" placeholder="••••••••" required />
             </div>
             <Button text="Connection" />
             <div className="text-sm font-medium">
