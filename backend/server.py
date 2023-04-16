@@ -105,13 +105,13 @@ def getImmeubles():
         search = request.args['search']
         search = search.replace("+", " ")
     except:
-        search = None
+        search = ""
 
     try:
         typeImm = request.args['type']
         typeImm = typeImm.split(",")
     except:
-        typeImm = None
+        typeImm = ""
 
     if request.method == "GET":
         immeubles = {}
