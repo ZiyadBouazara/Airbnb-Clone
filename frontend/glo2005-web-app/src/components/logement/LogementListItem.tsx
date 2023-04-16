@@ -10,10 +10,11 @@ interface Props {
   rooms: string,
   size: number,
   number: number,
-  price: number
+  price: number,
+  isChecked: boolean,
 }
 
-const LogementListItem: React.FC<Props> = ({ id, immeubleId, photos, available, rooms, size, number, price }) => {
+const LogementListItem: React.FC<Props> = ({ id, immeubleId, photos, available, rooms, size, number, price, isChecked, setFavoritesSearch, favoritesSearch }) => {
 
   const to = `/immeubles/${immeubleId}/logements/${id}`;
 
@@ -30,7 +31,7 @@ const LogementListItem: React.FC<Props> = ({ id, immeubleId, photos, available, 
               <h1 className="font-semibold text-lg">#{number}</h1>
             </Link>
             <div className="w-10">
-              <FavoriteCheckbox />
+              <FavoriteCheckbox logementId={id} />
             </div>
           </div>
           <Link to={to} className="flex flex-col">

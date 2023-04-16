@@ -1,12 +1,70 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import Cookies from 'js-cookie'
+import Modal from "../modal/Modal";
+import LogInModal from "../modal/LoginModal";
+import SignUpModal from "../modal/SignUpModal";
+import { addFavorite, deleteFavorite } from "../../utils/api/user";
+import { getFavorites } from "../../utils/api/user";
 
-const FavoriteCheckbox: React.FC = () => {
+interface Props {
+  logementId: number;
+}
 
-    const [isChecked, setChecked] = useState(false);
+const FavoriteCheckbox: React.FC<Props> = ({ logementId }) => {
+
+  const userId = Cookies.get("userId");
+
+  const [isChecked, setChecked] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isLogin, setLogin] = useState(true); 
+
+  useEffect(() => {
+    if(userId) {
+      getFavorites(userId, "").then(res => {
+        res.forEach(favori => {
+          if(favori.id_logement === logementId) {
+            setChecked(true);
+          }
+        })
+      })
+    }
+  }, [])
+
+  const toggleModalOpen: () => void = () => {
+    setModalOpen(!isModalOpen);
+  }
+
+  const toggleLogin: () => void = () => {
+      setLogin(!isLogin);
+  }
+
+  const onLogIn = () => {
+      setLogin(true);
+      toggleModalOpen();
+  }
+
+  const toggleFavorite = () => {
+    if (userId) {
+      if (!isChecked) {
+        addFavorite(userId, logementId).then(res => {
+          setChecked(true);
+        })
+      } else {
+        deleteFavorite(userId, logementId).then(res => {
+          setChecked(false);
+        })
+      }
+    } else {
+      toggleModalOpen();
+    }
+  }
 
   return (
     <>
-        <svg xmlns="http://www.w3.org/2000/svg" fill={isChecked ? "#dc2626" : "#aab8c2"} className="m-2 cursor-pointer z-30" onClick={() => setChecked(!isChecked)} viewBox="0 0 16 16"> <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/> </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" fill={isChecked ? "#dc2626" : "#aab8c2"} className="m-2 cursor-pointer z-30" onClick={toggleFavorite} viewBox="0 0 16 16"> <path fillRule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/> </svg>
+      <Modal isOpen={isModalOpen} toggleOpen={toggleModalOpen}>
+        {isLogin ? <LogInModal toggleOpen={toggleModalOpen} toggleLogin={toggleLogin} /> : <SignUpModal toggleOpen={toggleModalOpen} toggleLogin={toggleLogin} />}
+      </Modal>
     </>   
   )
 }

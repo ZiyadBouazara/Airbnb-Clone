@@ -6,7 +6,7 @@ interface Props {
 const ContactInfoListItem: React.FC<Props> = ({ text, phoneNumber }) => {
   return (
     <li>
-      {phoneNumber ? <li>{text}<span className="hover:underline">{phoneNumber}</span></li> : <span>{text}</span>}
+      {phoneNumber ? <div>{text}<span className="hover:underline">{phoneNumber}</span></div> : <span>{text}</span>}
     </li>
   )
 }

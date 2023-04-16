@@ -8,7 +8,7 @@ import { login } from "../../utils/api/login";
 interface Props {
     toggleLogin: () => void;
     toggleOpen: () => void;
-    toggleDropdownOpen: () => void;
+    toggleDropdownOpen?: () => void;
 }
 
 const LogInModal: React.FC<Props> = ({ toggleLogin, toggleOpen, toggleDropdownOpen }) => {
@@ -25,7 +25,9 @@ const LogInModal: React.FC<Props> = ({ toggleLogin, toggleOpen, toggleDropdownOp
             setEmail("");
             setPassword("");
             toggleOpen();
-            toggleDropdownOpen();
+            if (toggleDropdownOpen) {
+                toggleDropdownOpen();
+            }
             location.reload();
         })
   }

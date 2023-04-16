@@ -8,5 +8,6 @@ export interface LogementType {
     numero: number,
     price: number,
     date_debut: string,
-    date_fin: string
+    date_fin: string,
+    isChecked: boolean
 }

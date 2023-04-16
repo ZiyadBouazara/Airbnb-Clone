@@ -11,7 +11,7 @@ import { signup } from "../../utils/api/signup";
 interface Props {
     toggleLogin: () => void;
     toggleOpen: () => void;
-    toggleDropdownOpen: () => void;
+    toggleDropdownOpen?: () => void;
 }
 
 const SignUpModal: React.FC<Props> = ({ toggleLogin, toggleDropdownOpen, toggleOpen }) => {
@@ -34,7 +34,9 @@ const SignUpModal: React.FC<Props> = ({ toggleLogin, toggleDropdownOpen, toggleO
             setPhoneNumber("");
             setAge(18);
             toggleOpen();
-            toggleDropdownOpen();
+            if (toggleDropdownOpen) {
+                toggleDropdownOpen();
+            }
             location.reload();
         })
   }

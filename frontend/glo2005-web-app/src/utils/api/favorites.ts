@@ -14,7 +14,7 @@ namespace favorites {
         return await response.json();
     }
 
-    export const addFavorite = async (userId: string, logementId: string): Promise<Response> => {
+    export const addFavorite = async (userId: string, logementId: number): Promise<Response> => {
         const request = new Request(
             `${ENDPOINT}/users/${userId}/favorites/${logementId}`, {
                 method: "POST",
@@ -24,7 +24,7 @@ namespace favorites {
         return response;
     }
 
-    export const deleteFavorite = async (userId: string, logementId: string): Promise<Response> => {
+    export const deleteFavorite = async (userId: string, logementId: number): Promise<Response> => {
         const request = new Request(
             `${ENDPOINT}/users/${userId}/favorites/${logementId}`, {
                 method: "DELETE",

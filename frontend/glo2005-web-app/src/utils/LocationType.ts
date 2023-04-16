@@ -8,5 +8,5 @@ export interface LocationType {
     numero: number,
     price: number,
     date_debut: string,
-    date_fin: string
+    date_fin: string,
 }

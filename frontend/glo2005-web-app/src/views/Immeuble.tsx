@@ -33,6 +33,9 @@ const Immeuble: React.FC = () => {
     if (immeubleId) {
       getLogements(immeubleId, logementsSearch)
       .then(res => {
+        res.forEach(logement => {
+          logement.isChecked = false;
+        })
         setLogements(res);
       }).catch((e) => {
         setLogements([]);
