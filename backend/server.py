@@ -324,9 +324,7 @@ def contact():
             msg["to"] = email_proprio
             msg["subject"] = f"""Ne pas répondre - {data['subject']}"""
 
-            msg.set_content(f"""Message de la part de {data['name']} :\n« {data['message']} »\n\n
-            Ne pas répondre à cette adresse courriel\nVous pouvez répondre à {data['name']} 
-            en lui envoyant un courriel à l'adresse suivante : {data['email']}""")
+            msg.set_content(f"""Message de la part de {data['name']} :\n« {data['message']} »\n\nNe pas répondre à cette adresse courriel\nVous pouvez répondre à {data['name']} en lui envoyant un courriel à l'adresse suivante : {data['email']}""")
 
             server = smtplib.SMTP('smtp-mail.outlook.com', port=587)
             server.starttls()
