@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements, get_users,\
     insert_favorite, delete_favorite, get_user_id, get_locations
+import smtplib
+from email.message import EmailMessage
 
 app = Flask(__name__)
 CORS(app)
@@ -302,6 +304,40 @@ def getLocations(user_id):
         except:
             status = 500
         return jsonify(locations), status
+
+
+@app.route('/contact', methods=["POST"])
+def contact():
+    # Fonction qui envoit un email au proprio avec le message d'un utilisateur
+    # Retourne status : 200 pour un succès
+    #               ou
+    #          status : 500 pour un server-side error
+    if request.method == "POST":
+        try:
+            data = request.json
+
+            email_proprio = "immofab@outlook.com" # Password : Imf390**
+            pw = "Imf390**"
+
+            msg = EmailMessage()
+            msg["from"] = email_proprio
+            msg["to"] = email_proprio
+            msg["subject"] = f"""Ne pas répondre - {data['subject']}"""
+
+            msg.set_content(f"""Message de la part de {data['name']} :\n« {data['message']} »\n\n
+            Ne pas répondre à cette adresse courriel\nVous pouvez répondre à {data['name']} 
+            en lui envoyant un courriel à l'adresse suivante : {data['email']}""")
+
+            server = smtplib.SMTP('smtp-mail.outlook.com', port=587)
+            server.starttls()
+            server.login(email_proprio, pw)
+            server.send_message(msg)
+            server.quit()
+
+            status = 200
+        except:
+            status = 500
+    return "", status
 
 if __name__ == '__main__':
     app.run(threaded=False)
