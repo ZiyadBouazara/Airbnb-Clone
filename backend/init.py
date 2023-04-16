@@ -115,16 +115,9 @@ def create_triggers():
         UPDATE Logement
         SET available = 1
         WHERE Logement.id_logement = OLD.id_logement;
-        
-        # IF (SELECT COUNT(*) FROM Louer WHERE id = OLD.id) = 1 THEN
-        #    DELETE FROM Locataire WHERE Locataire.id = OLD.id; 
-        # END IF ;
     END
     """
-    # Cette trigger verifie apres avoir supprimer un tuple de Louer si le locataire possede une autre location.
-    # Si il n'en a pas d'autre, alors il n'est plus un locataire donc on le supprime de la Table Locataire
-    # Si il possede une autre location, alors on fait rien car il est encore un locataire
-    # + On set a available le logement qui a ete libere par le locataire dans tout les cas
+    # Cette trigger set a available le logement qui a ete libere par le locataire dans tout les cas
 
 
     t3 = """
