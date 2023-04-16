@@ -1,6 +1,7 @@
 import pymysql, pymysql.cursors
 import csv
 from passlib.hash import pbkdf2_sha256
+import random
 
 def db_connection():
     conn = pymysql.connect(
@@ -17,8 +18,8 @@ def db_connection():
 def create_tables():
     # Cette fonction crée les tables nécéssaires à la BD
 
-    r1 = "CREATE TABLE IF NOT EXISTS Immeuble(iid INT AUTO_INCREMENT, address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(20)," \
-         " nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), photos VARCHAR(255), descriptif VARCHAR(500), hot_water TINYINT(1)," \
+    r1 = "CREATE TABLE IF NOT EXISTS Immeuble(iid INT AUTO_INCREMENT, address VARCHAR(30), nombre_logements INTEGER, secteur VARCHAR(50)," \
+         " nom VARCHAR(50), type ENUM('Condo/Loft', 'Appartements', 'Commercial'), photos VARCHAR(255), descriptif VARCHAR(800), hot_water TINYINT(1)," \
          " electricity TINYINT(1), wifi TINYINT(1), parking TINYINT(1), gym TINYINT(1), backyard TINYINT(1)," \
          " elevator TINYINT(1), pool TINYINT(1), ev_charger TINYINT(1), air_conditioner TINYINT(1)," \
          " terrasse TINYINT(1), PRIMARY KEY(iid), UNIQUE (address));"
@@ -216,12 +217,35 @@ def init():
     immeubles = []
     with open('immeubles.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
+        photos = ['https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/87223/pexels-photo-87223.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/430216/pexels-photo-430216.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/1717272/pexels-photo-1717272.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/439382/pexels-photo-439382.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/1031593/pexels-photo-1031593.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/2077937/pexels-photo-2077937.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/259781/pexels-photo-259781.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/932328/pexels-photo-932328.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/425047/pexels-photo-425047.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/425343/pexels-photo-425343.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/3499176/pexels-photo-3499176.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/1560065/pexels-photo-1560065.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/1021189/pexels-photo-1021189.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/1671051/pexels-photo-1671051.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/2090651/pexels-photo-2090651.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/1755287/pexels-photo-1755287.jpeg?auto=compress&cs=tinysrgb&w=600',
+                  'https://images.pexels.com/photos/2079234/pexels-photo-2079234.jpeg?auto=compress&cs=tinysrgb&w=600']
+        i = 0
         for row in spamreader:
-            immeubles.append(row[:1]+row[2:5]+row[6:])
+            row.insert(4, photos[i])
+            immeubles.append(row)
+            i += 1
 
     sqlImmeubles = "INSERT INTO Immeuble (iid, address, nombre_logements, secteur, nom, type, photos, descriptif, hot_water, electricity," \
                    "wifi, parking, gym, backyard, elevator, pool, ev_charger, air_conditioner, terrasse) " \
-                   "VALUES (NULL, %s, 0, %s, %s, %s, 'https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg'," \
+                   "VALUES (NULL, %s, 0, %s, %s, %s, %s," \
                    " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
     logements = []
@@ -237,9 +261,8 @@ def init():
     with open('users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            row[4] = pbkdf2_sha256.hash(row[4])
-            safe.append(row[1:2]+row[4:5])
-            users.append(row[1:4]+row[5:])
+            safe.append([row[0], pbkdf2_sha256.hash(row[3])])
+            users.append(row)
 
     sqlUsers = "INSERT INTO User (id, email, phone, nom, age) " \
                "VALUES (NULL, %s, %s, %s, %s)"
@@ -247,7 +270,7 @@ def init():
                "VALUES (%s, %s)"
 
     louer = []
-    locataire = []
+    #locataire = []
     with open('louer.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
