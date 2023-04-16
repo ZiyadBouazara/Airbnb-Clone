@@ -44,6 +44,7 @@ def check_user_mdp(email, mdp):
     else:
         return False
 
+
 def get_user_id(email):
     # Cette fonction retourne le id d'un user en fonction de son email
     sqlRequest = f"SELECT id FROM USER WHERE email LIKE '{email}';"
@@ -55,11 +56,7 @@ def get_user_id(email):
 def get_user_favorites(userId, search=None):
     # Cette fonction retourne les tuples des logements favoris d'un utilisateur
     if search:
-        piecesIndex = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE pieces LIKE '{search}'"
-        tailleIndex = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE taille LIKE '{search}'"
-        priceIndex = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE price LIKE '{search}'"
-        union = " UNION "
-        sqlRequest = piecesIndex + union + tailleIndex + union + priceIndex + ';'
+        sqlRequest = f"SELECT DISTINCT l.* FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE l.pieces LIKE '%{search}%' OR l.taille LIKE '%{search}%' OR l.price LIKE '%{search}%';"
     else:
         sqlRequest = f"SELECT * FROM Logement AS l INNER JOIN Aime AS a ON a.id_logement = l.id_logement WHERE id = {userId};"
     cursor.execute(sqlRequest)
@@ -71,21 +68,12 @@ def get_immeubles(immeubleId=None, search=None, typeImm=None):
     # Cette fonction retourne un ou plusieurs immeubles
     if immeubleId is not None:
         sqlRequest = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = {immeubleId} AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
-    elif typeImm and search:
-        sqlRequest = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE type LIKE '{typeImm}';"
+    elif typeImm[0] != "" and search:
+        sqlRequest = f"""SELECT i.*, MIN(l.price) AS minPrice FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient WHERE i.type IN ("{'","'.join(typeImm)}") AND (i.nom LIKE '%{search}%' OR i.address LIKE '%{search}%' OR i.secteur LIKE '%{search}%') GROUP BY i.iid"""
     elif search:
-        if typeImm:
-            t = f" AND type LIKE '{typeImm}'"
-            typeIndex = ""
-        else:
-            t = ""
-            typeIndex = f" UNION SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE type LIKE '{search}'"
-
-        addresseIndex = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE address LIKE '{search}'"
-        nomIndex = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE nom LIKE '{search}'"
-        secteurIndex = f"SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE secteur LIKE '{search}'"
-        union = " UNION "
-        sqlRequest = addresseIndex+t+union+nomIndex+t+union+secteurIndex+t+typeIndex+';'
+        sqlRequest = f"SELECT i.*, MIN(l.price) AS minPrice FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient WHERE i.nom LIKE '%{search}%' OR i.address LIKE '%{search}%' OR i.secteur LIKE '%{search}%' GROUP BY i.iid"
+    elif typeImm[0] != "":
+        sqlRequest = f"""SELECT i.*, MIN(l.price) AS minPrice FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient WHERE i.type IN ("{'","'.join(typeImm)}") GROUP BY i.iid"""
     else:
         sqlRequest = "SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"
     cursor.execute(sqlRequest)
@@ -98,14 +86,9 @@ def get_logements(immeubleId, logementId=None, search=None):
     if logementId is not None:
         sqlRequest = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND id_logement = {logementId};"
     elif search:
-        piecesIndex = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND pieces LIKE '{search}'"
-        tailleIndex = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND taille LIKE '{search}'"
-        priceIndex = f"SELECT * FROM Logement WHERE contient = {immeubleId} AND price LIKE '{search}'"
-        union = " UNION "
-        sqlRequest = piecesIndex+union+tailleIndex+union+priceIndex+';'
+        sqlRequest = f"SELECT * FROM Logement l WHERE l.contient = {immeubleId} AND (l.pieces LIKE '%{search}%' OR l.taille LIKE '%{search}%' OR l.price LIKE '%{search}%');"
     else:
         sqlRequest = f"SELECT * FROM Logement WHERE contient = {immeubleId};"
-    print(sqlRequest)
     cursor.execute(sqlRequest)
     logements = cursor.fetchall()
     return logements
@@ -121,6 +104,7 @@ def get_users(userId=None):
     users = cursor.fetchall()
     return users
 
+
 def get_locations(userId):
     # Cette fonction retourne les locations d'un user
     sqlRequest = f"SELECT lou.*, log.* FROM LOUER AS lou INNER JOIN Logement AS log ON lou.id_logement = log.id_logement WHERE id = {userId}"
@@ -128,22 +112,14 @@ def get_locations(userId):
     locations = cursor.fetchall()
     return locations
 
+
 def insert_location(userId, logementId, dateDebut, dateFin):
     # Cette fonction insère une nouvelle location dans louer
     sqlRequest = f"INSERT INTO Louer (id, id_logement, date_debut, date_fin) VALUE ({userId}, {logementId}, '{dateDebut}', '{dateFin}');"
     cursor.execute(sqlRequest)
 
+
 def delete_location(userId, logementId):
     # Cette fonction enleve une location dans louer
     sqlRequest = f"DELETE FROM Louer WHERE id = {userId} AND id_logement = {logementId};"
     cursor.execute(sqlRequest)
-
-if __name__ == '__main__':
-    print(get_logements("1", None, "2199"))
-    print(get_users())
-    print(get_user_id("nsarark@clickbank.net"))
-    print(get_logements("1"))
-    print(get_immeubles(1, None, "Condo/Loft"))
-    insert_location(1, 1, "2023-04-14", "2024-04-14")
-    print(getLocations(1))
-    delete_location(1, 1)

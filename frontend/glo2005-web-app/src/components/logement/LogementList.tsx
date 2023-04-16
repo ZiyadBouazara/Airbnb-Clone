@@ -3,7 +3,6 @@ import LogementListItem from './LogementListItem'
 import { LogementType } from '../../utils/LogementType'
 
 
-
 interface Props {
     logements: LogementType[]
 }

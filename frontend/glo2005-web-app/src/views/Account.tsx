@@ -1,54 +1,61 @@
-import LogementListItem from "../components/logement/LogementListItem"
 import Search from "../components/inputs/Search"
 import LogementList from "../components/logement/LogementList"
 import AccountInfo from "../components/account/AccountInfo"
 import { useState, useEffect } from "react"
-import { getFavorites, getUser } from "../utils/api/user"
+import { getFavorites, getUser, getLocations } from "../utils/api/user"
 import Cookies from 'js-cookie'
 import { UserType } from "../utils/UserType"
 import { LogementType } from "../utils/LogementType"
+import LocationList from "../components/location/LocationList"
+import { LocationType } from "../utils/LocationType"
+import { Link } from "react-router-dom"
+
 
 const Account: React.FC = () => {
 
   const userId = Cookies.get("userId");
 
+  if (!userId) {
+    return (
+      <div className="my-2 md:my-4 flex justify-center gap-1 h-72">
+        <div>Non connecté:</div>
+        <Link to="/" className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">Accueil</Link>
+      </div>
+    )
+  }
+
   const [user, setUser] = useState<UserType>();
   const [favorites, setFavorites] = useState<LogementType[]>([])
+  const [favoritesSearch, setFavoritesSearch] = useState<string>("");
+  const [locations, setLocations] = useState<LocationType[]>([]);
 
   useEffect(() => {
     if (userId) {
       getUser(userId)
-        .then(user => {
-          setUser(user[0] as UserType);
-        });
-      getFavorites(userId)
-        .then(favorites => {
-          setFavorites(favorites);
+        .then(res => {
+          setUser(res[0] as UserType);
+        }).catch((e) => {
+          console.error(e);
+        })
+      getLocations(userId)
+        .then((res) => {
+          setLocations(res);
+        }).catch((e) => {
+          setLocations([]);
         })
     }
   }, [])
 
-  const location = {
-    startDate: "2022-07-01", 
-    endDate: "2023-07-01", 
-    immeubleName: "Lamiaceae",
-    logement: {
-      id: 1,
-      immeubleId: 1,
-      available: true,
-      photos: [
-        "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg",
-        "https://images.pexels.com/photos/1643384/pexels-photo-1643384.jpeg",
-        "https://images.pexels.com/photos/275484/pexels-photo-275484.jpeg",
-        "https://images.pexels.com/photos/1457847/pexels-photo-1457847.jpeg"
-      ],
-      rooms: "3 1/2",
-      size: 603,
-      number: 2,
-      price: 500,
+  useEffect(() => {
+    if (userId) {
+      getFavorites(userId, favoritesSearch)
+        .then(res => {
+          setFavorites(res);
+        }).catch((e) => {
+          setFavorites([]);
+        })
     }
-  }
-
+  }, [favoritesSearch])
 
   return (
     <div className="flex flex-col mx-3 md:px-10 lg:px-20">
@@ -57,15 +64,10 @@ const Account: React.FC = () => {
       </section>
       <section className="flex flex-col items-center mt-6">
         <div className="mb-2 md:mb-4">
-          <h1 className="font-semibold text-xl flex justify-center">Location</h1>
-          <ul className="flex flex-wrap gap-1">
-            <li>{location.immeubleName}</li>
-            <li>·</li>
-            <li>{location.startDate} à {location.endDate}</li>
-          </ul>
-        </div>
-        <div className="list-none">
-          <LogementListItem id={location.logement.id} immeubleId={location.logement.immeubleId} available={location.logement.available} number={location.logement.number} photos={location.logement.photos} price={location.logement.price} rooms={location.logement.rooms} size={location.logement.size} />
+          <div className="mb-2 md:mb-4">
+            <h1 className="font-semibold text-xl flex justify-center">Locations ({locations.length})</h1>
+          </div>
+          {locations.length !== 0 ? <LocationList locations={locations} /> : <div>Aucune location.</div> }
         </div>
       </section>
       <section className="mt-2 md:mt-4">
@@ -73,10 +75,10 @@ const Account: React.FC = () => {
           <div className="mb-2 md:mb-4">
             <h1 className="font-semibold text-xl flex justify-center">Favoris ({favorites.length})</h1>
           </div>
-          <Search id="logement-search" placeholder="Rechercher un logement..." />
+          <Search setState={setFavoritesSearch} id="favoris-search" placeholder="Rechercher un favori..." />
         </div>
-        <div className="mt-2 md:mt-4">
-          <LogementList logements={favorites} />
+        <div className="my-2 md:my-4 flex justify-center">
+          {favorites.length !== 0 ? <LogementList logements={favorites} /> : <div>Aucun favori.</div> }
         </div>
       </section>
     </div>

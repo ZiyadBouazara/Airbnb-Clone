@@ -7,7 +7,7 @@ export interface ImmeubleType {
     type: string;
     photos: string;
     descriptif: string;
-    price: number;
+    minPrice: number;
     hot_water: boolean;
     electricity: boolean;
     wifi: boolean;

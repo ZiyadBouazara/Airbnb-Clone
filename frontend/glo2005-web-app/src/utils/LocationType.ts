@@ -1,4 +1,4 @@
-export interface LogementType {
+export interface LocationType {
     id_logement: number,
     contient: number,
     available: boolean,

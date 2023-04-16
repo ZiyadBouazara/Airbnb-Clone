@@ -1,9 +1,12 @@
 import { ENDPOINT } from "./endpoint";
 
 namespace favorites {
-    export const getFavorites = async (userId: string): Promise<Response> => {
+    export const getFavorites = async (userId: string, search:string): Promise<Response> => {
+        search = search.trim()
+        search.replace(" ", "+")
+        
         const request = new Request(
-            `${ENDPOINT}/users/${userId}/favorites`, {
+            `${ENDPOINT}/users/${userId}/favorites?search=${search}`, {
                 method: "GET",
             }
         );

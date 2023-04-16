@@ -14,29 +14,36 @@ const Immeuble: React.FC = () => {
   const {immeubleId} = useParams<string>();
 
   const [immeuble, setImmeuble] = useState<ImmeubleType>();
-  const [logements, setLogements] = useState<LogementType[]>();
+  const [logements, setLogements] = useState<LogementType[]>([]);
+  const [logementsSearch, setLogementsSearch] = useState<string>("");
 
 
   useEffect(() => {
     if (immeubleId) {
       getImmeuble(immeubleId)
-        .then(immeuble => {
-          setImmeuble(immeuble[0] as ImmeubleType);
+        .then(res => {
+          setImmeuble(res[0] as ImmeubleType);
         }).catch((e) => {
           console.error(e);
       });
-      
-      //getLogements(immeubleId)
-      //  .then(logements => {
-      //    console.log(logements);
-      //});
     }
   }, []);
+
+  useEffect(() => {
+    if (immeubleId) {
+      getLogements(immeubleId, logementsSearch)
+      .then(res => {
+        setLogements(res);
+      }).catch((e) => {
+        setLogements([]);
+      });
+    }
+  }, [logementsSearch])
 
   return (
     <div className="flex flex-col mx-3 md:px-10 lg:px-20">
       <section className="flex flex-col items-start mt-6">
-        {immeuble ? <ImmeubleHeader immeuble={immeuble!} /> : null}
+        {immeuble ? <ImmeubleHeader immeuble={immeuble} /> : null}
       </section>
       <section className="flex flex-wrap justify-center mt-6">
         <img className="object-cover h-80 w-96 rounded-lg" src={immeuble?.photos} alt="" />
@@ -52,10 +59,10 @@ const Immeuble: React.FC = () => {
           <div className="mb-2 md:mb-4">
             <h1 className="font-semibold text-xl flex justify-center">Logements ({immeuble?.nombre_logements})</h1>
           </div>
-          <Search id="logement-search" placeholder="Rechercher un logement..." />
+          <Search setState={setLogementsSearch} id="logement-search" placeholder="Rechercher un logement..." />
         </div>
-        <div className="mt-2 md:mt-4">
-          {logements ? <LogementList logements={logements} /> : null}
+        <div className="my-2 md:my-4 flex justify-center">
+          {logements.length !== 0 ? <LogementList logements={logements} /> : <div>Aucun logements.</div>}
         </div>
       </section>
     </div>

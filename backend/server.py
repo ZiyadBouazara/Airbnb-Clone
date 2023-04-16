@@ -55,7 +55,7 @@ def getFavorites(user_id):
         try:
             logements_favoris = get_user_favorites(user_id, search)
             if logements_favoris:
-                status = 201
+                status = 200
             else:
                 status = 204
         except:
@@ -107,7 +107,7 @@ def getImmeubles():
 
     try:
         typeImm = request.args['type']
-        typeImm = typeImm.replace("+", " ")
+        typeImm = typeImm.split(",")
     except:
         typeImm = None
 

@@ -21,6 +21,16 @@ export const getUser = async (userId: string) => {
     return await response.json();
 }
 
-export const getFavorites = async (userId: string): Promise<Response> => {
-    return await favorites.getFavorites(userId);
+export const getFavorites = async (userId: string, search: string): Promise<Response> => {
+    return await favorites.getFavorites(userId, search);
+}
+
+export const getLocations = async (userId: string): Promise<Response> => {
+    const request = new Request(
+        `${ENDPOINT}/users/${userId}/locations`, {
+            method: "GET",
+        }
+    );
+    const response = await fetch(request);
+    return await response.json();
 }
