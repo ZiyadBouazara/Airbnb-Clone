@@ -104,7 +104,6 @@ def getImmeubles():
     try:
         search = request.args['search']
         search = search.replace("%20", " ")
-        print(search)
     except:
         search = ""
 
