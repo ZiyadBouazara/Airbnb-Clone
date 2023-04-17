@@ -25,7 +25,7 @@ def create_tables():
          " terrasse TINYINT(1), PRIMARY KEY(iid), UNIQUE (address));"
 
     r2 = "CREATE TABLE IF NOT EXISTS Logement(id_logement INT AUTO_INCREMENT, contient INT NOT NULL," \
-         " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER, photos VARCHAR(255)," \
+         " available TINYINT(1), pieces VARCHAR(50), taille VARCHAR(10), numero INTEGER, price INTEGER, photos VARCHAR(1000)," \
          " UNIQUE(contient, numero)," \
          " PRIMARY KEY(id_logement)," \
          " FOREIGN KEY (contient) REFERENCES Immeuble(iid) ON UPDATE CASCADE ON DELETE CASCADE);"
@@ -249,13 +249,43 @@ def init():
                    " %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
     logements = []
+
+    photos_chambre = [
+        "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/2062431/pexels-photo-2062431.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/2029731/pexels-photo-2029731.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/2631746/pexels-photo-2631746.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/237371/pexels-photo-237371.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/276671/pexels-photo-276671.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/2082087/pexels-photo-2082087.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/3144580/pexels-photo-3144580.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/3209035/pexels-photo-3209035.jpeg?auto=compress&cs=tinysrgb&w=600,"
+                      ]
+    photos_cuisine = [
+        "https://images.pexels.com/photos/275484/pexels-photo-275484.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/2724748/pexels-photo-2724748.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/3016430/pexels-photo-3016430.jpeg?auto=compress&cs=tinysrgb&w=600,",
+        "https://images.pexels.com/photos/3623785/pexels-photo-3623785.jpeg?auto=compress&cs=tinysrgb&w=600,"
+    ]
+    photos_toilettes = [
+        "https://images.pexels.com/photos/1457847/pexels-photo-1457847.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/1910472/pexels-photo-1910472.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/2988865/pexels-photo-2988865.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/1599790/pexels-photo-1599790.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "https://images.pexels.com/photos/6487944/pexels-photo-6487944.jpeg?auto=compress&cs=tinysrgb&w=600"
+    ]
+
     with open('logements.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
+            photos = random.choice(photos_chambre)+random.choice(photos_cuisine)+random.choice(photos_toilettes)
+            row.append(photos)
             logements.append(row)
 
     sqlLogements = "INSERT INTO Logement (id_logement, contient, available, pieces, taille, numero, price, photos) " \
-                   "VALUES (NULL, %s, 1, %s, %s, %s, %s, 'https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg,https://images.pexels.com/photos/275484/pexels-photo-275484.jpeg,https://images.pexels.com/photos/1457847/pexels-photo-1457847.jpeg')"
+                   "VALUES (NULL, %s, 1, %s, %s, %s, %s, %s)"
     users = []
     safe = []
     with open('users.csv', newline='') as csvfile:

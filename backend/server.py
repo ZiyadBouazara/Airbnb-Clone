@@ -48,7 +48,7 @@ def getFavorites(user_id):
 
     try:
         search = request.args['search']
-        search = search.replace("+", " ")
+        search = search.replace("%20", " ")
     except:
         search = None
 
@@ -103,7 +103,8 @@ def getImmeubles():
 
     try:
         search = request.args['search']
-        search = search.replace("+", " ")
+        search = search.replace("%20", " ")
+        print(search)
     except:
         search = ""
 
@@ -162,7 +163,7 @@ def searchLogements(immeuble_id):
 
     try:
         search = request.args['search']
-        search = search.replace("+", " ")
+        search = search.replace("%20", " ")
     except:
         search = None
 
