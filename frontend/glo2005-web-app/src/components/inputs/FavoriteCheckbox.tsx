@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react"
-import Cookies from 'js-cookie'
-import Modal from "../modal/Modal";
-import LogInModal from "../modal/LoginModal";
-import SignUpModal from "../modal/SignUpModal";
+import Cookies from 'js-cookie';
+import { useEffect, useState } from "react";
 import { addFavorite, deleteFavorite, isFavorite } from "../../utils/api/user";
+import LogInModal from "../modal/LoginModal";
+import Modal from "../modal/Modal";
+import SignUpModal from "../modal/SignUpModal";
 
 interface Props {
   logementId: number;

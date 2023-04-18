@@ -1,13 +1,12 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import ImmeubleHeader from '../components/immeuble/ImmeubleHeader';
 import ImmeubleAmenities from '../components/immeuble/ImmeubleAmenities';
-import LogementList from '../components/logement/LogementList';
+import ImmeubleHeader from '../components/immeuble/ImmeubleHeader';
 import Search from '../components/inputs/Search';
-import { useState, useEffect } from 'react';
-import { getImmeuble } from '../utils/api/immeuble';
-import { getLogements } from '../utils/api/immeuble';
+import LogementList from '../components/logement/LogementList';
 import { ImmeubleType } from '../utils/ImmeubleType';
 import { LogementType } from '../utils/LogementType';
+import { getImmeuble, getLogements } from '../utils/api/immeuble';
 
 const Immeuble: React.FC = () => {
 

@@ -1,12 +1,12 @@
+import Cookies from 'js-cookie';
+import { useState } from "react";
+import { signup } from "../../utils/api/signup";
 import Button from "../inputs/Button";
 import EmailInput from "../inputs/EmailInput";
-import PasswordInput from "../inputs/PasswordInput";
-import PhoneNumberInput from "../inputs/phoneNumberInput";
 import NumberInput from "../inputs/NumberInput";
+import PasswordInput from "../inputs/PasswordInput";
+import PhoneNumberInput from "../inputs/PhoneNumberInput";
 import TextInput from "../inputs/TextInput";
-import { useState } from "react";
-import Cookies from 'js-cookie'
-import { signup } from "../../utils/api/signup";
 
 interface Props {
     toggleLogin: () => void;

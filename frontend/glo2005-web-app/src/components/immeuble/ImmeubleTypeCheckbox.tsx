@@ -1,4 +1,4 @@
-import ImmeubleCheckboxOption from "./ImmeubleTypeCheckboxOption"
+import ImmeubleCheckboxOption from "./ImmeubleTypeCheckboxOption";
 
 interface Props {
   immeublesFilters: string[];

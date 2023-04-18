@@ -1,11 +1,10 @@
-import { ReactNode, useState } from "react";
-import Dropdown from "../dropdown/Dropdown";
-import LoggedOutDropdown from "../dropdown/LoggedOutDropdown";
-import LoggedInDropdown from "../dropdown/LoggedInDropdown";
-import { useEffect } from "react";
 import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
 import { UserType } from "../../utils/UserType";
 import { getUser } from "../../utils/api/user";
+import Dropdown from "../dropdown/Dropdown";
+import LoggedInDropdown from "../dropdown/LoggedInDropdown";
+import LoggedOutDropdown from "../dropdown/LoggedOutDropdown";
 
 interface Props {
   isLoggedIn: boolean,

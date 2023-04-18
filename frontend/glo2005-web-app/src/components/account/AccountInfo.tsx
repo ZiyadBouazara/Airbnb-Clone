@@ -1,4 +1,4 @@
-import { UserType } from "../../utils/UserType"
+import { UserType } from "../../utils/UserType";
 
 interface Props {
     user: UserType;

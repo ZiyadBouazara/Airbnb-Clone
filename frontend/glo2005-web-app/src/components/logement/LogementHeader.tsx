@@ -1,5 +1,5 @@
-import FavoriteCheckbox from "../inputs/FavoriteCheckbox"
-import { LogementType } from "../../utils/LogementType"
+import { LogementType } from "../../utils/LogementType";
+import FavoriteCheckbox from "../inputs/FavoriteCheckbox";
 
 interface Props {
   logement: LogementType;

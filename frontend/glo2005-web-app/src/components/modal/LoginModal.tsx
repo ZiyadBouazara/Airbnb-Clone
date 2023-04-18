@@ -1,9 +1,9 @@
+import Cookies from 'js-cookie';
+import { useState } from "react";
+import { login } from "../../utils/api/login";
 import Button from "../inputs/Button";
 import EmailInput from "../inputs/EmailInput";
 import PasswordInput from "../inputs/PasswordInput";
-import { useState } from "react";
-import Cookies from 'js-cookie'
-import { login } from "../../utils/api/login";
 
 interface Props {
     toggleLogin: () => void;

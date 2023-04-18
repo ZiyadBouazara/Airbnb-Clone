@@ -1,5 +1,5 @@
-import CarouselItem from "./CarouselItem"
-import { useState } from "react"
+import { useState } from "react";
+import CarouselItem from "./CarouselItem";
 
 interface Props {
   photos: string[],

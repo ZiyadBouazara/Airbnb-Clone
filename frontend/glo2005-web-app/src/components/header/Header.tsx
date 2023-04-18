@@ -1,5 +1,5 @@
-import HeaderLogo from "./HeaderLogo";
 import HeaderList from "./HeaderList";
+import HeaderLogo from "./HeaderLogo";
 
 const Header: React.FC = () => {
     return (

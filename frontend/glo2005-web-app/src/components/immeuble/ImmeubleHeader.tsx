@@ -1,4 +1,4 @@
-import { ImmeubleType } from "../../utils/ImmeubleType"
+import { ImmeubleType } from "../../utils/ImmeubleType";
 
 interface Props {
   immeuble: ImmeubleType;

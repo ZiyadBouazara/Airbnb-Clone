@@ -1,9 +1,9 @@
-import TextInput from "../inputs/TextInput"
-import EmailInput from "../inputs/EmailInput"
-import TextAreaInput from "../inputs/TextAreaInput"
-import Button from "../inputs/Button"
 import { useState } from "react"
 import { contact } from "../../utils/api/contact"
+import Button from "../inputs/Button"
+import EmailInput from "../inputs/EmailInput"
+import TextAreaInput from "../inputs/TextAreaInput"
+import TextInput from "../inputs/TextInput"
 
 const ContactForm: React.FC = () => {
 

@@ -1,10 +1,9 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import LogementHeader from '../components/logement/LogementHeader';
 import Carousel from '../components/carousel/Carousel';
-import { useState, useEffect } from 'react';
-import { getLogement, getImmeuble } from '../utils/api/immeuble';
+import LogementHeader from '../components/logement/LogementHeader';
 import { LogementType } from '../utils/LogementType';
-import Immeuble from './Immeuble';
+import { getImmeuble, getLogement } from '../utils/api/immeuble';
 
 const Logement: React.FC = () => {
 

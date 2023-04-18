@@ -1,28 +1,20 @@
-import Search from "../components/inputs/Search"
-import LogementList from "../components/logement/LogementList"
-import AccountInfo from "../components/account/AccountInfo"
-import { useState, useEffect } from "react"
-import { getFavorites, getUser, getLocations } from "../utils/api/user"
 import Cookies from 'js-cookie'
-import { UserType } from "../utils/UserType"
-import { LogementType } from "../utils/LogementType"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import AccountInfo from "../components/account/AccountInfo"
+import Search from "../components/inputs/Search"
 import LocationList from "../components/location/LocationList"
+import LogementList from "../components/logement/LogementList"
 import { LocationType } from "../utils/LocationType"
-import { Link } from "react-router-dom"
+import { LogementType } from "../utils/LogementType"
+import { UserType } from "../utils/UserType"
+import { getFavorites, getLocations, getUser } from "../utils/api/user"
 
 
 const Account: React.FC = () => {
 
   const userId = Cookies.get("userId");
-
-  if (!userId) {
-    return (
-      <div className="my-2 md:my-4 flex justify-center gap-1 h-72">
-        <div>Non connecté:</div>
-        <Link to="/" className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">Accueil</Link>
-      </div>
-    )
-  }
+  const navigate = useNavigate();
 
   const [user, setUser] = useState<UserType>();
   const [favorites, setFavorites] = useState<LogementType[]>([])
@@ -53,6 +45,8 @@ const Account: React.FC = () => {
         }).catch(err => {
           console.error(err)
       })
+    } else {
+      navigate("/");
     }
   }, [])
 

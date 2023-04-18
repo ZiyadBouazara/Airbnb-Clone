@@ -1,7 +1,7 @@
-import Modal from "../modal/Modal"
-import LogInModal from "../modal/LoginModal"
-import SignUpModal from "../modal/SignUpModal"
-import { useState } from "react"
+import { useState } from "react";
+import LogInModal from "../modal/LoginModal";
+import Modal from "../modal/Modal";
+import SignUpModal from "../modal/SignUpModal";
 
 interface Props {
     toggleOpen: () => void;

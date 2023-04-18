@@ -1,6 +1,6 @@
-import React from 'react'
-import LogementListItem from './LogementListItem'
-import { LogementType } from '../../utils/LogementType'
+import React from 'react';
+import { LogementType } from '../../utils/LogementType';
+import LogementListItem from './LogementListItem';
 
 
 interface Props {

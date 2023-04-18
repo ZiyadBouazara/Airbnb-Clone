@@ -1,5 +1,5 @@
-import ImmeubleListItem from "./ImmeubleListItem"
-import { ImmeubleType } from "../../utils/ImmeubleType"
+import { ImmeubleType } from "../../utils/ImmeubleType";
+import ImmeubleListItem from "./ImmeubleListItem";
 
 interface Props {
     immeubles: ImmeubleType[];

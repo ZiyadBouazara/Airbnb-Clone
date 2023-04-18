@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom"
-import { getUser } from "../../utils/api/user";
-import { UserType } from "../../utils/UserType";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
+import { UserType } from "../../utils/UserType";
 
 interface Props {
   toggleOpen: () => void;

@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react"
+import ImmeubleList from "../components/immeuble/ImmeubleList"
 import ImmeubleTypeCheckbox from "../components/immeuble/ImmeubleTypeCheckbox"
 import Search from "../components/inputs/Search"
-import ImmeubleList from "../components/immeuble/ImmeubleList"
-import { useState, useEffect } from "react"
 import { getImmeubles } from "../utils/api/immeuble"
 
 const Home: React.FC = () => {
