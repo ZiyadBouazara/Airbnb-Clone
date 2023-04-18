@@ -211,7 +211,7 @@ def create_triggers():
 def init():
     # Cette fonction insere des données fictives dans la BD
     immeubles = []
-    with open('immeubles.csv', newline='') as csvfile:
+    with open('./données/immeubles.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         photos = ['https://images.pexels.com/photos/439391/pexels-photo-439391.jpeg?auto=compress&cs=tinysrgb&w=600',
                   'https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -273,7 +273,7 @@ def init():
         "https://images.pexels.com/photos/6487944/pexels-photo-6487944.jpeg?auto=compress&cs=tinysrgb&w=600"
     ]
 
-    with open('logements.csv', newline='') as csvfile:
+    with open('./données/logements.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             photos = random.choice(
@@ -285,7 +285,7 @@ def init():
                    "VALUES (NULL, %s, 1, %s, %s, %s, %s, %s)"
     users = []
     safe = []
-    with open('users.csv', newline='') as csvfile:
+    with open('./données/users.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             safe.append([row[0], pbkdf2_sha256.hash(row[3])])
@@ -298,7 +298,7 @@ def init():
 
     louer = []
     #locataire = []
-    with open('louer.csv', newline='') as csvfile:
+    with open('./données/louer.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             louer.append(row)
