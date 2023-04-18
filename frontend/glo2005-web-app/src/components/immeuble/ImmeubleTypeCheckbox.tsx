@@ -19,11 +19,11 @@ const ImmeubleTypeCheckbox: React.FC<Props> = ({ immeublesFilters, setImmeublesF
 
   return (
     <div>
-        <ul className="grid w-full gap-3 md:grid-cols-3 mt-3">
-            <ImmeubleCheckboxOption id="condos-loft-option" option="Condo/Loft" filterHandler={filterHandler} />
-            <ImmeubleCheckboxOption id="appartements-option" option="Appartements" filterHandler={filterHandler}  />
-            <ImmeubleCheckboxOption id="commercial-option" option="Commercial" filterHandler={filterHandler} />
-        </ul>
+      <ul className="grid w-full gap-3 md:grid-cols-3 mt-3">
+        <ImmeubleCheckboxOption id="condos-loft-option" option="Condo/Loft" filterHandler={filterHandler} />
+        <ImmeubleCheckboxOption id="appartements-option" option="Appartements" filterHandler={filterHandler}  />
+        <ImmeubleCheckboxOption id="commercial-option" option="Commercial" filterHandler={filterHandler} />
+      </ul>
     </div>
   )
 }

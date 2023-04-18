@@ -25,15 +25,15 @@ const Home: React.FC = () => {
   }, [immeublesSearch, immeublesFilters])
 
     return (
-      <div className="flex flex-col mx-3 md:px-10 lg:px-20">
-        <section className="mt-2 md:mt-4">
-          <Search id="immeuble-search" placeholder="Rechercher un immeuble..." setState={setImmeublesSearch} />
-          <ImmeubleTypeCheckbox immeublesFilters={immeublesFilters} setImmeublesFilters={setImmeublesFilters} />
-        </section>
-        <section className="my-2 md:my-4 flex justify-center">
-          {immeubles.length !== 0 ? <ImmeubleList immeubles={immeubles} /> : <div>Aucun immeuble.</div> }
-        </section>
-      </div>
+  <div className="flex flex-col mx-3 md:px-10 lg:px-20">
+    <section className="mt-2 md:mt-4">
+      <Search id="immeuble-search" placeholder="Rechercher un immeuble..." setState={setImmeublesSearch} />
+      <ImmeubleTypeCheckbox immeublesFilters={immeublesFilters} setImmeublesFilters={setImmeublesFilters} />
+    </section>
+    <section className="my-2 md:my-4 flex justify-center">
+      {immeubles.length !== 0 ? <ImmeubleList immeubles={immeubles} /> : <div>Aucun immeuble.</div> }
+    </section>
+  </div>
     )
   }
   

@@ -40,7 +40,7 @@ const LocationListItem: React.FC<Props> = ({ id, immeubleId, photos, available, 
           {available ? <span className="text-green-600">Disponible</span> : <span className="text-red-600">Non disponible</span>}
         </Link>
       </div>
-  </li>
+    </li>
   )
 }
 

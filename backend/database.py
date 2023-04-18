@@ -67,15 +67,15 @@ def get_user_favorites(userId, search=None):
 def get_immeubles(immeubleId=None, search=None, typeImm=None):
     # Cette fonction retourne un ou plusieurs immeubles
     if immeubleId is not None:
-        sqlRequest = f"""SELECT i.*, l.price FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = {immeubleId} AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"""
+        sqlRequest = f"""SELECT i.*, l.price AS minPrice FROM Immeuble AS i INNER JOIN Logement AS l ON i.iid = l.contient WHERE i.iid = {immeubleId} AND l.price = (SELECT MIN(price) FROM Logement WHERE contient = l.contient);"""
     elif typeImm[0] != "" and search != "":
-        sqlRequest = f"""SELECT i.*, MIN(l.price) AS price FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient WHERE i.type IN ("{'","'.join(typeImm)}") AND (i.nom LIKE '%{search}%' OR i.address LIKE '%{search}%' OR i.secteur LIKE '%{search}%') GROUP BY i.iid;"""
+        sqlRequest = f"""SELECT i.*, MIN(l.price) AS minPrice FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient WHERE i.type IN ("{'","'.join(typeImm)}") AND (i.nom LIKE '%{search}%' OR i.address LIKE '%{search}%' OR i.secteur LIKE '%{search}%') GROUP BY i.iid;"""
     elif search != "":
-        sqlRequest = f"""SELECT i.*, MIN(l.price) AS price FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient WHERE i.nom LIKE '%{search}%' OR i.address LIKE '%{search}%' OR i.secteur LIKE '%{search}%' GROUP BY i.iid;"""
+        sqlRequest = f"""SELECT i.*, MIN(l.price) AS minPrice FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient WHERE i.nom LIKE '%{search}%' OR i.address LIKE '%{search}%' OR i.secteur LIKE '%{search}%' GROUP BY i.iid;"""
     elif typeImm[0] != "":
-        sqlRequest = f"""SELECT i.*, MIN(l.price) AS price FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient AND i.type IN ("{'","'.join(typeImm)}") GROUP BY i.iid;"""
+        sqlRequest = f"""SELECT i.*, MIN(l.price) AS minPrice FROM Immeuble i INNER JOIN Logement l ON i.iid = l.contient AND i.type IN ("{'","'.join(typeImm)}") GROUP BY i.iid;"""
     else:
-        sqlRequest = "SELECT i.*, price FROM Immeuble AS i INNER JOIN (SELECT contient, MIN(price) AS price FROM Logement GROUP BY contient) AS l ON l.contient = i.iid;"
+        sqlRequest = "SELECT i.*, minPrice FROM Immeuble AS i INNER JOIN (SELECT contient, MIN(price) AS minPrice FROM Logement GROUP BY contient) AS l ON l.contient = i.iid;"
     cursor.execute(sqlRequest)
     immeubles = cursor.fetchall()
     return immeubles

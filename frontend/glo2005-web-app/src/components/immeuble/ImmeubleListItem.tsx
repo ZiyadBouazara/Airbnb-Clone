@@ -16,7 +16,7 @@ const ImmeubleListItem: React.FC<Props> = ({ immeuble }) => {
           </div>
           <span>📍 {immeuble.address}, {immeuble.secteur}</span>
           <span>{immeuble.type}</span>
-          <span>À partir de {immeuble.price}$/mois</span>
+          <span>À partir de {immeuble.minPrice}$/mois</span>
         </div>
       </Link>
     </li>

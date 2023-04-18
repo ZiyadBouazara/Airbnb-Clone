@@ -74,30 +74,30 @@ const Account: React.FC = () => {
   }, [favoritesSearch])
 
   return (
-    <div className="flex flex-col mx-3 md:px-10 lg:px-20">
-      <section className="flex flex-col items-center mt-6">
-        {user ? <AccountInfo user={user} /> : null}
-      </section>
-      <section className="flex flex-col items-center mt-6">
+  <div className="flex flex-col mx-3 md:px-10 lg:px-20">
+    <section className="flex flex-col items-center mt-6">
+      {user ? <AccountInfo user={user} /> : null}
+    </section>
+    <section className="flex flex-col items-center mt-6">
+      <div className="mb-2 md:mb-4">
         <div className="mb-2 md:mb-4">
-          <div className="mb-2 md:mb-4">
-            <h1 className="font-semibold text-xl flex justify-center">Locations ({locations.length})</h1>
-          </div>
-          {locations.length !== 0 ? <LocationList locations={locations} /> : <div>Aucune location.</div> }
+          <h1 className="font-semibold text-xl flex justify-center">Locations ({locations.length})</h1>
         </div>
-      </section>
-      <section className="mt-2 md:mt-4">
-        <div className="flex flex-col">
-          <div className="mb-2 md:mb-4">
-            <h1 className="font-semibold text-xl flex justify-center">Favoris ({favorites.length})</h1>
-          </div>
-          <Search setState={setFavoritesSearch} id="favoris-search" placeholder="Rechercher un favori..." />
+        {locations.length !== 0 ? <LocationList locations={locations} /> : <div>Aucune location.</div> }
+      </div>
+    </section>
+    <section className="mt-2 md:mt-4">
+      <div className="flex flex-col">
+        <div className="mb-2 md:mb-4">
+          <h1 className="font-semibold text-xl flex justify-center">Favoris ({favorites.length})</h1>
         </div>
-        <div className="my-2 md:my-4 flex justify-center">
-          {favorites.length !== 0 ? <LogementList logements={favorites} /> : <div>Aucun favori.</div> }
-        </div>
-      </section>
-    </div>
+        <Search setState={setFavoritesSearch} id="favoris-search" placeholder="Rechercher un favori..." />
+      </div>
+      <div className="my-2 md:my-4 flex justify-center">
+        {favorites.length !== 0 ? <LogementList logements={favorites} /> : <div>Aucun favori.</div> }
+      </div>
+    </section>
+  </div>
   )
 }
 

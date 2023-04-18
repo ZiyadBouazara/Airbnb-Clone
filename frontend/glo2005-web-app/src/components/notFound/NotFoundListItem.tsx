@@ -7,9 +7,9 @@ interface Props {
 
 const NotFoundListItem: React.FC<Props> = ({ text, link }) => {
   return (
-    <li>
-        <Link className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" to={ link }><span>{ text }</span></Link>
-    </li>
+  <li>
+    <Link className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600" to={ link }><span>{ text }</span></Link>
+  </li>
   )
 }
 
