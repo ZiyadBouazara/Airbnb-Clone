@@ -33,6 +33,16 @@ namespace favorites {
         const response = await fetch(request);
         return response;
     }
+
+    export const isFavorite = async (userId: string, logementId: number): Promise<Response> => {
+        const request = new Request(
+            `${ENDPOINT}/users/${userId}/favorites/${logementId}`, {
+                method: "GET",
+            }
+        );
+        const response = await fetch(request);
+        return response;
+    }
 }
 
 export default favorites

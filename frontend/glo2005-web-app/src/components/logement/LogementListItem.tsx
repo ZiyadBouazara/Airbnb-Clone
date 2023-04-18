@@ -11,10 +11,9 @@ interface Props {
   size: number,
   number: number,
   price: number,
-  isChecked: boolean,
 }
 
-const LogementListItem: React.FC<Props> = ({ id, immeubleId, photos, available, rooms, size, number, price, isChecked, setFavoritesSearch, favoritesSearch }) => {
+const LogementListItem: React.FC<Props> = ({ id, immeubleId, photos, available, rooms, size, number, price }) => {
 
   const to = `/immeubles/${immeubleId}/logements/${id}`;
 

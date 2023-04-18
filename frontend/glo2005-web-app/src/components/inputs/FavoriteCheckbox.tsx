@@ -3,8 +3,7 @@ import Cookies from 'js-cookie'
 import Modal from "../modal/Modal";
 import LogInModal from "../modal/LoginModal";
 import SignUpModal from "../modal/SignUpModal";
-import { addFavorite, deleteFavorite } from "../../utils/api/user";
-import { getFavorites } from "../../utils/api/user";
+import { addFavorite, deleteFavorite, isFavorite } from "../../utils/api/user";
 
 interface Props {
   logementId: number;
@@ -20,14 +19,12 @@ const FavoriteCheckbox: React.FC<Props> = ({ logementId }) => {
 
   useEffect(() => {
     if(userId) {
-      getFavorites(userId, "").then(res => {
+      isFavorite(userId, logementId).then(res => {
         if (res.status === 200) {
-          res.json().then(favorites => {
-            favorites.forEach(favori => {
-              if(favori.id_logement === logementId) {
-                setChecked(true);
-              }
-            })
+          res.json().then(body => {
+            if(body.isChecked) {
+              setChecked(true)
+            }
           })
         }
       }).catch(err => {

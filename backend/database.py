@@ -64,6 +64,13 @@ def get_user_favorites(userId, search=None):
     return logements_favoris
 
 
+def get_user_isFavorite(userId, logementId):
+    sqlRequest = f"SELECT EXISTS (SELECT 1 FROM aime WHERE id_logement = {logementId} AND id = {userId}) AS isChecked;"
+    cursor.execute(sqlRequest)
+    isFavorite = cursor.fetchone()
+    return isFavorite
+
+
 def get_immeubles(immeubleId=None, search=None, typeImm=None):
     # Cette fonction retourne un ou plusieurs immeubles
     if immeubleId is not None:

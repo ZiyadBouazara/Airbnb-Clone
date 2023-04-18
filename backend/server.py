@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from database import insert_user, check_user_mdp, get_user_favorites, get_immeubles, get_logements, get_users,\
+from database import insert_user, check_user_mdp, get_user_favorites, get_user_isFavorite, get_immeubles, get_logements, get_users,\
     insert_favorite, delete_favorite, get_user_id, get_locations
 import smtplib
 from email.message import EmailMessage
@@ -63,6 +63,23 @@ def getFavorites(user_id):
         except:
             status = 500
         return jsonify(logements_favoris), status
+
+
+@app.route("/users/<user_id>/favorites/<logement_id>", methods=["GET"])
+def isFavorite(user_id, logement_id):
+    # Fonction qui retourne si le logement est dans les favoris du user
+    # Retourne status : 200 pour un succès
+    #          isChecked: si le logement est dans les favoris du user
+    #               ou
+    #          status : 500 pour un server-side error
+    if request.method == "GET":
+        isChecked = {}
+        try:
+            isChecked = get_user_isFavorite(user_id, logement_id)
+            status = 200
+        except:
+            status = 500
+        return jsonify(isChecked), status
 
 
 @app.route("/signup", methods=["POST"])

@@ -39,9 +39,6 @@ const Immeuble: React.FC = () => {
       .then(res => {
         if (res.status === 200) {
           res.json().then(logements => {
-            logements.forEach(logement => {
-              logement.isChecked = false;
-            });
             setLogements(logements)
           })
         } else {

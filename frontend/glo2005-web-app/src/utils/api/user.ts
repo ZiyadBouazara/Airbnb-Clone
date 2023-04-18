@@ -33,6 +33,10 @@ export const deleteFavorite = async (userId: string, logementId: number): Promis
     return await favorites.deleteFavorite(userId, logementId);
 }
 
+export const isFavorite = async (userId: string, logementId: number): Promise<Response> => {
+    return await favorites.isFavorite(userId, logementId);
+}
+
 export const getLocations = async (userId: string): Promise<Response> => {
     const request = new Request(
         `${ENDPOINT}/users/${userId}/locations`, {
