@@ -17,5 +17,5 @@ export const signup = async (email: string, password: string, name: string, phon
         }
     );
     const response = await fetch(request);
-    return await response.json();
+    return response;
 }

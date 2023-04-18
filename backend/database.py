@@ -4,8 +4,8 @@ from passlib.hash import pbkdf2_sha256
 
 connection = pymysql.connect(
     host="localhost",
-    user="root",
-    password="abcdef",
+    user="root",  # Utilisateur pour se connecter
+    password="abcdef",  # Mot de passe de l'utilisateur pour se connecter
     db="glo_2005_webapp",
     autocommit=True
 )

@@ -33,16 +33,26 @@ const Account: React.FC = () => {
     if (userId) {
       getUser(userId)
         .then(res => {
-          setUser(res[0] as UserType);
-        }).catch((e) => {
-          console.error(e);
+          if (res.status === 200) {
+            res.json().then(user => {
+              setUser(user[0]);
+            })
+          }
+        }).catch(err => {
+          console.error(err);
         })
       getLocations(userId)
-        .then((res) => {
-          setLocations(res);
-        }).catch((e) => {
-          setLocations([]);
-        })
+        .then(res => {
+          if (res.status === 200) {
+            res.json().then(locations => {
+              setLocations(locations);
+            })
+          } else {
+            setLocations([]);
+          }
+        }).catch(err => {
+          console.error(err)
+      })
     }
   }, [])
 
@@ -50,9 +60,15 @@ const Account: React.FC = () => {
     if (userId) {
       getFavorites(userId, favoritesSearch)
         .then(res => {
-          setFavorites(res);
-        }).catch((e) => {
-          setFavorites([]);
+          if (res.status === 200) {
+            res.json().then(favorites => {
+              setFavorites(favorites);
+            })
+          } else {
+            setFavorites([]);
+          }
+        }).catch(err => {
+          console.log(err);
         })
     }
   }, [favoritesSearch])

@@ -27,17 +27,30 @@ const SignUpModal: React.FC<Props> = ({ toggleLogin, toggleDropdownOpen, toggleO
 
     signup(email, password, name, phoneNumber, age)
         .then(res => {
-            Cookies.set("userId", res.id);
-            setEmail("");
-            setPassword("");
-            setName("");
-            setPhoneNumber("");
-            setAge(18);
-            toggleOpen();
-            if (toggleDropdownOpen) {
-                toggleDropdownOpen();
+            if (res.status === 201) {
+                res.json().then(body => {
+                    Cookies.set("userId", body.id);
+                    setEmail("");
+                    setPassword("");
+                    setName("");
+                    setPhoneNumber("");
+                    setAge(18);
+                    toggleOpen();
+                    if (toggleDropdownOpen) {
+                        toggleDropdownOpen();
+                    }
+                    location.reload();
+                })
+            } else {
+                alert("Inscription échouée");
+                setEmail("");
+                setPassword("");
+                setName("");
+                setPhoneNumber("");
+                setAge(18);
             }
-            location.reload();
+        }).catch(err => {
+            console.error(err);
         })
   }
 

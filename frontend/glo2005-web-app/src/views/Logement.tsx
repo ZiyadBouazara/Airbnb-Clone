@@ -4,6 +4,7 @@ import Carousel from '../components/carousel/Carousel';
 import { useState, useEffect } from 'react';
 import { getLogement, getImmeuble } from '../utils/api/immeuble';
 import { LogementType } from '../utils/LogementType';
+import Immeuble from './Immeuble';
 
 const Logement: React.FC = () => {
 
@@ -14,15 +15,23 @@ const Logement: React.FC = () => {
 
   useEffect(() => {
     if (immeubleId && logementId) {
-      getLogement(immeubleId, logementId).then((res) => {
-        setLogement(res[0])
-      }).catch((e) => {
-        console.error(e)
+      getLogement(immeubleId, logementId).then(res => {
+        if (res.status === 200) {
+          res.json().then(logement => {
+            setLogement(logement[0]);
+          })
+        }
+      }).catch(err => {
+        console.error(err)
       });
-      getImmeuble(immeubleId).then((res) => {
-        setImmeubleName(res[0].nom);
-      }).catch((e) => {
-        console.error(e)
+      getImmeuble(immeubleId).then(res => {
+        if (res.status === 200) {
+          res.json().then(immeuble => {
+            setImmeubleName(immeuble[0].nom);
+          })
+        }
+      }).catch(err => {
+        console.error(err);
       });
     }
   }, [])

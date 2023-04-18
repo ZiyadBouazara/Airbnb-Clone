@@ -22,9 +22,13 @@ const Immeuble: React.FC = () => {
     if (immeubleId) {
       getImmeuble(immeubleId)
         .then(res => {
-          setImmeuble(res[0] as ImmeubleType);
-        }).catch((e) => {
-          console.error(e);
+          if (res.status === 200) {
+            res.json().then(immeuble => {
+              setImmeuble(immeuble[0])
+            })
+          }
+        }).catch(err => {
+          console.error(err);
       });
     }
   }, []);
@@ -33,12 +37,18 @@ const Immeuble: React.FC = () => {
     if (immeubleId) {
       getLogements(immeubleId, logementsSearch)
       .then(res => {
-        res.forEach(logement => {
-          logement.isChecked = false;
-        })
-        setLogements(res);
-      }).catch((e) => {
-        setLogements([]);
+        if (res.status === 200) {
+          res.json().then(logements => {
+            logements.forEach(logement => {
+              logement.isChecked = false;
+            });
+            setLogements(logements)
+          })
+        } else {
+          setLogements([]);
+        }
+      }).catch(err => {
+        console.error(err);
       });
     }
   }, [logementsSearch])

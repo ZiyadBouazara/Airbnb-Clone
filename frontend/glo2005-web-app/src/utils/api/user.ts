@@ -18,7 +18,7 @@ export const getUser = async (userId: string) => {
         }
     );
     const response = await fetch(request);
-    return await response.json();
+    return response;
 }
 
 export const getFavorites = async (userId: string, search: string): Promise<Response> => {
@@ -40,5 +40,5 @@ export const getLocations = async (userId: string): Promise<Response> => {
         }
     );
     const response = await fetch(request);
-    return await response.json();
+    return response;
 }

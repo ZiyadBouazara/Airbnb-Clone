@@ -14,5 +14,5 @@ export const login = async (email: string, password: string): Promise<Response> 
         }
     );
     const response = await fetch(request);
-    return await response.json();
+    return response;
 }

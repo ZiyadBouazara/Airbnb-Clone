@@ -25,8 +25,8 @@ const ContactForm: React.FC = () => {
       } else {
         alert("Erreur lors de l'envoi du courriel");
       }
-    }).catch(e => {
-      console.error(e);
+    }).catch(err => {
+      console.error(err);
     })
   }
 

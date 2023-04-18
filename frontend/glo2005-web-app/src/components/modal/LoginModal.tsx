@@ -21,14 +21,24 @@ const LogInModal: React.FC<Props> = ({ toggleLogin, toggleOpen, toggleDropdownOp
 
     login(email, password)
         .then(res => {
-            Cookies.set("userId", res.id);
-            setEmail("");
-            setPassword("");
-            toggleOpen();
-            if (toggleDropdownOpen) {
-                toggleDropdownOpen();
+            if (res.status === 200) {
+                res.json().then(body => {
+                    Cookies.set("userId", body.id);
+                    setEmail("");
+                    setPassword("");
+                    toggleOpen();
+                    if (toggleDropdownOpen) {
+                        toggleDropdownOpen();
+                    }
+                    location.reload();
+                })
+            } else {
+                alert("Connection échouée");
+                setEmail("");
+                setPassword("");
             }
-            location.reload();
+        }).catch(err => {
+            console.error(err);
         })
   }
 

@@ -11,10 +11,16 @@ const Home: React.FC = () => {
   const [immeublesFilters, setImmeublesFilters] = useState<string[]>([]);
 
   useEffect(() => {
-    getImmeubles(immeublesSearch, immeublesFilters).then((res) => {
-      setImmeubles(res);
-    }).catch(() => {
-      setImmeubles([])
+    getImmeubles(immeublesSearch, immeublesFilters).then(res => {
+      if (res.status === 200) {
+        res.json().then(immeubles => {
+          setImmeubles(immeubles);
+        })
+      } else {
+        setImmeubles([])
+      }
+    }).catch(err => {
+      console.log(err);
     })
   }, [immeublesSearch, immeublesFilters])
 

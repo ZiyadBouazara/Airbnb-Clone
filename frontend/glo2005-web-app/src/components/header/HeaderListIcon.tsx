@@ -20,8 +20,14 @@ const HeaderListIcon: React.FC<Props> = ({ isLoggedIn }) => {
       const userId = Cookies.get("userId");
       if (userId) {
         getUser(userId)
-          .then(user => {
-            setUser(user[0]);
+          .then(res => {
+            if (res.status === 200) {
+              res.json().then(user => {
+                setUser(user[0])
+              })
+            }
+          }).catch(err => {
+            console.error(err);
           })
       }
     }

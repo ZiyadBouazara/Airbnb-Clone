@@ -21,11 +21,17 @@ const FavoriteCheckbox: React.FC<Props> = ({ logementId }) => {
   useEffect(() => {
     if(userId) {
       getFavorites(userId, "").then(res => {
-        res.forEach(favori => {
-          if(favori.id_logement === logementId) {
-            setChecked(true);
-          }
-        })
+        if (res.status === 200) {
+          res.json().then(favorites => {
+            favorites.forEach(favori => {
+              if(favori.id_logement === logementId) {
+                setChecked(true);
+              }
+            })
+          })
+        }
+      }).catch(err => {
+        console.error(err);
       })
     }
   }, [])
@@ -47,11 +53,19 @@ const FavoriteCheckbox: React.FC<Props> = ({ logementId }) => {
     if (userId) {
       if (!isChecked) {
         addFavorite(userId, logementId).then(res => {
-          setChecked(true);
+          if (res.status === 201) {
+            setChecked(true);
+          }
+        }).catch(err => {
+          console.error(err);
         })
       } else {
         deleteFavorite(userId, logementId).then(res => {
-          setChecked(false);
+          if (res.status === 204) {
+            setChecked(false);
+          }
+        }).catch(err => {
+          console.error(err);
         })
       }
     } else {

@@ -1,13 +1,15 @@
-import pymysql, pymysql.cursors
+import pymysql
+import pymysql.cursors
 import csv
 from passlib.hash import pbkdf2_sha256
 import random
 
+
 def db_connection():
     conn = pymysql.connect(
         host="localhost",
-        user="root",
-        password="abcdef",
+        user="root",  # Utilisateur pour se connecter
+        password="abcdef",  # Mot de passe de l'utilisateur pour se connecter
         db="glo_2005_webapp",
         autocommit=True
     )
@@ -59,7 +61,7 @@ def create_tables():
     cursor.execute(r1)
     cursor.execute(r2)
     cursor.execute(r3)
-    #cursor.execute(r4)
+    # cursor.execute(r4)
     cursor.execute(r5)
     cursor.execute(r6)
     cursor.execute(r7)
@@ -92,6 +94,7 @@ def create_indexes():
     cursor.execute(i6)
     cursor.execute(i7)
 
+
 def create_triggers():
     # Cette fonction crée les triggers nécéssaires à la BD
 
@@ -107,7 +110,6 @@ def create_triggers():
     # Cette trigger set available a FALSE (0) lorsque l'on Loue un logement
     # Donc le logement n'est plus disponible, il est loue
 
-
     t2 = """
     CREATE TRIGGER EndOfLocation
     AFTER DELETE ON Louer
@@ -120,7 +122,6 @@ def create_triggers():
     """
     # Cette trigger set a available le logement qui a ete libere par le locataire dans tout les cas
 
-
     t3 = """
     CREATE TRIGGER SupprimeLogement
     AFTER DELETE ON Logement
@@ -132,7 +133,6 @@ def create_triggers():
     END
     """
     # Cette trigger update le compte de nombre_logement apres suppression de logement en decrementant
-
 
     t4 = """
     CREATE TRIGGER AjoutLogement
@@ -150,7 +150,6 @@ def create_triggers():
     # Update le compte de nombre_logement en incrementant (Voir t3 pour decrement)
     # Pour chaque ajout de logement AjoutLogement ajoute le tuple a Contient
 
-
     t5 = """
     CREATE TRIGGER AucunLogementVerif
     BEFORE DELETE ON Contient
@@ -163,10 +162,9 @@ def create_triggers():
         END IF ;
     END
     """
-    #Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.
-    #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
+    # Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.
+    # En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
     # renovations et enlever des logements. Donc c'est une precaution.
-
 
     t6 = """
     CREATE TRIGGER ImmeubleExisteVerif
@@ -180,11 +178,10 @@ def create_triggers():
         END IF ;
     END
     """
-    #Avant d'ajouter un tuple a Contient, on s'assure que l'immeuble pour lequel on ajoute ces tuples existes. On ne doit jamais avoir des logements sans Immeuble.
+    # Avant d'ajouter un tuple a Contient, on s'assure que l'immeuble pour lequel on ajoute ces tuples existes. On ne doit jamais avoir des logements sans Immeuble.
     # ADD ORDER : 1-Immeuble, 2-Logements, 3-Contient
     # DELETE ORDER: 1-Immeuble -> Cascade (Les tuples dans contient et logements seront automatiquement supprime)
     # Si on supprime un Logement, les tuples dans Contient de ce logement seront supprime automatiquement
-
 
     t7 = """
     CREATE TRIGGER AucunLogementVerif2
@@ -198,10 +195,9 @@ def create_triggers():
         END IF ;
     END
     """
-    #Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.
-    #En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
+    # Avant de supprimer le dernier logement d'un immeuble, on signale que c'est le dernier et que l'immeuble n'est plus profitable.
+    # En tant que telle on va seulement supprimer un logement de notre immeuble si par exemple on decide de faire des
     # renovations et enlever des logements. Donc c'est une precaution. On defend ce type de suppression sur Logement et Contient
-
 
     cursor.execute(t1)
     cursor.execute(t2)
@@ -261,7 +257,7 @@ def init():
         "https://images.pexels.com/photos/2082087/pexels-photo-2082087.jpeg?auto=compress&cs=tinysrgb&w=600,",
         "https://images.pexels.com/photos/3144580/pexels-photo-3144580.jpeg?auto=compress&cs=tinysrgb&w=600,",
         "https://images.pexels.com/photos/3209035/pexels-photo-3209035.jpeg?auto=compress&cs=tinysrgb&w=600,"
-                      ]
+    ]
     photos_cuisine = [
         "https://images.pexels.com/photos/275484/pexels-photo-275484.jpeg?auto=compress&cs=tinysrgb&w=600,",
         "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=600,",
@@ -280,7 +276,8 @@ def init():
     with open('logements.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
-            photos = random.choice(photos_chambre)+random.choice(photos_cuisine)+random.choice(photos_toilettes)
+            photos = random.choice(
+                photos_chambre)+random.choice(photos_cuisine)+random.choice(photos_toilettes)
             row.append(photos)
             logements.append(row)
 
@@ -297,7 +294,7 @@ def init():
     sqlUsers = "INSERT INTO User (id, email, phone, nom, age) " \
                "VALUES (NULL, %s, %s, %s, %s)"
     sqlSafe = "INSERT INTO Safe (email, mdp) " \
-               "VALUES (%s, %s)"
+        "VALUES (%s, %s)"
 
     louer = []
     #locataire = []
@@ -305,7 +302,7 @@ def init():
         spamreader = csv.reader(csvfile, delimiter=',')
         for row in spamreader:
             louer.append(row)
-            #locataire.append(row[0])
+            # locataire.append(row[0])
 
     sqlLouer = "INSERT INTO Louer (id, id_logement, date_debut, date_fin) " \
                "VALUES (%s, %s, %s, %s)"
@@ -319,11 +316,9 @@ def init():
     cursor.executemany(sqlLouer, louer)
 
 
-
 if __name__ == '__main__':
     connection, cursor = db_connection()
     create_tables()
     create_indexes()
     create_triggers()
     init()
-

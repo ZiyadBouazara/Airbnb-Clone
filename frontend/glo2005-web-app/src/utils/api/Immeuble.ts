@@ -11,7 +11,7 @@ export const getImmeubles = async (search: string, type: string[]): Promise<Resp
         }
     );
     const response = await fetch(request);
-    return await response.json();
+    return response;
 }
 
 export const getImmeuble = async (immeubleId: string): Promise<Response> => {
@@ -21,7 +21,7 @@ export const getImmeuble = async (immeubleId: string): Promise<Response> => {
         }
     );
     const response = await fetch(request);
-    return await response.json();
+    return response;
 }
 
 export const getLogements = async (immeubleId: string, search: string): Promise<Response> => {

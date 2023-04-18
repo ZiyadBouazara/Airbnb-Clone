@@ -11,7 +11,7 @@ namespace favorites {
             }
         );
         const response = await fetch(request);
-        return await response.json();
+        return response;
     }
 
     export const addFavorite = async (userId: string, logementId: number): Promise<Response> => {
