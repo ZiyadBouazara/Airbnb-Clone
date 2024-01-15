@@ -1,4 +1,18 @@
 # GLO-2005 Web App - ImmoFab
+# Web App Pictures
+## Main Page
+![Screenshot 2024-01-15 at 2 39 09 PM](https://github.com/ZiyadBouazara/Real-Estate-WebApp/assets/97689339/3fa4ebde-c57d-458b-ada9-ad48f4691581)
+![Screenshot 2024-01-15 at 2 39 38 PM](https://github.com/ZiyadBouazara/Real-Estate-WebApp/assets/97689339/b0d99471-26ce-423e-8543-73854ab6098c)
+
+## Registering Menu
+![Screenshot 2024-01-15 at 2 40 02 PM](https://github.com/ZiyadBouazara/Real-Estate-WebApp/assets/97689339/65ee1995-f918-49c8-8157-3531d5407d11)
+
+## Show Building and the Apartments
+![Screenshot 2024-01-15 at 2 41 27 PM](https://github.com/ZiyadBouazara/Real-Estate-WebApp/assets/97689339/cd3307b5-3c61-4902-876e-9f92ee47fb6e)
+
+## Contact Company page by Email
+![Screenshot 2024-01-15 at 2 42 30 PM](https://github.com/ZiyadBouazara/Real-Estate-WebApp/assets/97689339/f1ce1bea-dc0d-4ec6-88cc-21df5779c7f2)
+
 ## Backend
 ### init.py
 
